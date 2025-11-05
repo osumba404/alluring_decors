@@ -91,7 +91,7 @@
                 <version>9.4.53.v20231009</version>
                 <configuration>
                     <httpConnector>
-                        <port>8081</port>
+                        <port>8082</port>
                     </httpConnector>
                     <webApp>
                         <contextPath>/alluring-decors</contextPath>
