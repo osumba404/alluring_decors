@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alluring Decors - Transforming Spaces, Creating Dreams</title>
+    <title>Contact Us - Alluring Decors</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -30,36 +30,22 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h2>Elegance Redefined</h2>
-                <p>Transforming ordinary spaces into extraordinary experiences with bespoke interior and exterior designs. Where imagination meets craftsmanship, and every detail reflects your unique vision.</p>
-                <a href="services.jsp" class="btn">Explore Our Services</a>
+                <h2>Contact Us</h2>
             </div>
         </section>
 
         <section class="services-preview">
-            <h3>Our Services</h3>
             <div class="services-grid">
-                <c:forEach var="domain" items="${domains}">
-                    <div class="service-card">
-                        <h4>${domain.name}</h4>
-                        <p>${domain.description}</p>
-                    </div>
-                </c:forEach>
-            </div>
-        </section>
-
-        <section class="projects-preview">
-            <h3>Ongoing Projects</h3>
-            <div class="projects-grid">
-                <c:forEach var="project" items="${ongoingProjects}" varStatus="status">
-                    <c:if test="${status.index < 3}">
-                        <div class="project-card">
-                            <h4>${project.title}</h4>
-                            <p>${project.shortDescription}</p>
-                            <p><strong>Location:</strong> ${project.location}</p>
-                        </div>
-                    </c:if>
-                </c:forEach>
+                <div class="service-card">
+                    <h4>Head Office</h4>
+                    <p><strong>Address:</strong> 123 Mfangano Street, Nairobi, CC 400001</p>
+                    <p><strong>Phone:</strong> +123 98765 43210</p>
+                    <p><strong>Email:</strong> info@alluringdecors.com</p>
+                </div>
+                <div class="service-card">
+                    <h4>Get In Touch</h4>
+                    <p>Ready to transform your space? Contact us today for a consultation and let us bring your vision to life.</p>
+                </div>
             </div>
         </section>
     </main>

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alluring Decors - Transforming Spaces, Creating Dreams</title>
+    <title>Services - Alluring Decors</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -30,36 +30,28 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h2>Elegance Redefined</h2>
-                <p>Transforming ordinary spaces into extraordinary experiences with bespoke interior and exterior designs. Where imagination meets craftsmanship, and every detail reflects your unique vision.</p>
-                <a href="services.jsp" class="btn">Explore Our Services</a>
+                <h2>Our Services</h2>
             </div>
         </section>
 
         <section class="services-preview">
-            <h3>Our Services</h3>
             <div class="services-grid">
-                <c:forEach var="domain" items="${domains}">
-                    <div class="service-card">
-                        <h4>${domain.name}</h4>
-                        <p>${domain.description}</p>
-                    </div>
-                </c:forEach>
-            </div>
-        </section>
-
-        <section class="projects-preview">
-            <h3>Ongoing Projects</h3>
-            <div class="projects-grid">
-                <c:forEach var="project" items="${ongoingProjects}" varStatus="status">
-                    <c:if test="${status.index < 3}">
-                        <div class="project-card">
-                            <h4>${project.title}</h4>
-                            <p>${project.shortDescription}</p>
-                            <p><strong>Location:</strong> ${project.location}</p>
-                        </div>
-                    </c:if>
-                </c:forEach>
+                <div class="service-card">
+                    <h4>Home Decoration</h4>
+                    <p>Complete interior and exterior design for residential spaces including furniture, kitchen design, lighting effects, and more.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Office Decoration</h4>
+                    <p>Professional and modern office interiors with partitioning, lighting, and ergonomic design solutions.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Banquet & Function Halls</h4>
+                    <p>Elegant decoration for events, weddings, seminars, and corporate functions.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Restaurant Decoration</h4>
+                    <p>Stylish and functional restaurant interiors that enhance dining experiences.</p>
+                </div>
             </div>
         </section>
     </main>

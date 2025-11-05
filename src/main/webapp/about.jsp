@@ -6,17 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Alluring Decors</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-brand">
-                <h1><a href="home">Alluring Decors</a></h1>
+                <h1><a href="home">Alluring <span style="color: var(--accent);">Decors</span></a></h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="home">Home</a></li>
-                <li><a href="about.jsp">About Us</a></li>
+                <li><a href="about.jsp">About</a></li>
                 <li><a href="projects.jsp">Projects</a></li>
                 <li><a href="services.jsp">Services</a></li>
                 <li><a href="contact.jsp">Contact</a></li>
@@ -36,7 +37,9 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Alluring Decors. All rights reserved.</p>
+        <div class="container">
+            <p>&copy; 2024 Alluring Decors. All rights reserved. | Designed with elegance.</p>
+        </div>
     </footer>
 </body>
 </html>

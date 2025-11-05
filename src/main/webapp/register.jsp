@@ -6,13 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Alluring Decors</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-brand">
-                <h1><a href="home">Alluring Decors</a></h1>
+                <h1><a href="home">Alluring <span style="color: var(--accent);">Decors</span></a></h1>
             </div>
         </nav>
     </header>

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alluring Decors - Transforming Spaces, Creating Dreams</title>
+    <title>Projects - Alluring Decors</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -30,36 +30,27 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h2>Elegance Redefined</h2>
-                <p>Transforming ordinary spaces into extraordinary experiences with bespoke interior and exterior designs. Where imagination meets craftsmanship, and every detail reflects your unique vision.</p>
-                <a href="services.jsp" class="btn">Explore Our Services</a>
-            </div>
-        </section>
-
-        <section class="services-preview">
-            <h3>Our Services</h3>
-            <div class="services-grid">
-                <c:forEach var="domain" items="${domains}">
-                    <div class="service-card">
-                        <h4>${domain.name}</h4>
-                        <p>${domain.description}</p>
-                    </div>
-                </c:forEach>
+                <h2>Our Projects</h2>
             </div>
         </section>
 
         <section class="projects-preview">
             <h3>Ongoing Projects</h3>
             <div class="projects-grid">
-                <c:forEach var="project" items="${ongoingProjects}" varStatus="status">
-                    <c:if test="${status.index < 3}">
-                        <div class="project-card">
-                            <h4>${project.title}</h4>
-                            <p>${project.shortDescription}</p>
-                            <p><strong>Location:</strong> ${project.location}</p>
-                        </div>
-                    </c:if>
-                </c:forEach>
+                <div class="project-card">
+                    <h4>Modern Villa Interior</h4>
+                    <p>Complete home makeover with contemporary design</p>
+                    <p><strong>Location:</strong> Nairobi, Kenya</p>
+                </div>
+            </div>
+
+            <h3>Accomplished Projects</h3>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h4>Corporate Office Design</h4>
+                    <p>Professional workspace renovation</p>
+                    <p><strong>Location:</strong> Mombasa, Kenya</p>
+                </div>
             </div>
         </section>
     </main>
