@@ -3,12 +3,10 @@ package com.alluringdecors.bean;
 import com.alluringdecors.model.Domain;
 import com.alluringdecors.util.DatabaseUtil;
 
-import javax.ejb.Stateless;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
 public class DomainBean {
     
     public List<Domain> getAllActiveDomains() {

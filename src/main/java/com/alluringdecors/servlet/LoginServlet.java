@@ -3,7 +3,6 @@ package com.alluringdecors.servlet;
 import com.alluringdecors.bean.UserBean;
 import com.alluringdecors.model.User;
 
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,8 +14,13 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     
-    @EJB
     private UserBean userBean;
+    
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        userBean = new UserBean();
+    }
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 

@@ -5,7 +5,6 @@ import com.alluringdecors.bean.ProjectBean;
 import com.alluringdecors.model.Domain;
 import com.alluringdecors.model.Project;
 
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,11 +16,15 @@ import java.util.List;
 @WebServlet({"", "/home"})
 public class HomeServlet extends HttpServlet {
     
-    @EJB
     private DomainBean domainBean;
-    
-    @EJB
     private ProjectBean projectBean;
+    
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        domainBean = new DomainBean();
+        projectBean = new ProjectBean();
+    }
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 

@@ -3,12 +3,10 @@ package com.alluringdecors.bean;
 import com.alluringdecors.model.User;
 import com.alluringdecors.util.DatabaseUtil;
 
-import javax.ejb.Stateless;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
 public class UserBean {
     
     public User authenticate(String username, String password) {

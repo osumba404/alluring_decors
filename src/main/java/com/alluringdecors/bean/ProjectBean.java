@@ -3,12 +3,10 @@ package com.alluringdecors.bean;
 import com.alluringdecors.model.Project;
 import com.alluringdecors.util.DatabaseUtil;
 
-import javax.ejb.Stateless;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
 public class ProjectBean {
     
     public List<Project> getProjectsByCategory(String category) {
