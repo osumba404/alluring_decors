@@ -394,11 +394,27 @@
         function loadContent(section) {
             const mainContent = document.getElementById('mainContent');
             
+            // Save current section to localStorage
+            localStorage.setItem('adminCurrentSection', section);
+            
             // Update active menu item
             document.querySelectorAll('.sidebar-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.closest('.sidebar-item').classList.add('active');
+            
+            // Find and activate the correct menu item
+            if (event && event.target) {
+                event.target.closest('.sidebar-item').classList.add('active');
+            } else {
+                // For programmatic calls, find the menu item by section name
+                const menuItems = document.querySelectorAll('.sidebar-item');
+                menuItems.forEach(item => {
+                    const onclick = item.getAttribute('onclick');
+                    if (onclick && onclick.includes("'" + section + "'")) {
+                        item.classList.add('active');
+                    }
+                });
+            }
             
             // Load content based on section
             fetch(section + '?ajax=true')
@@ -457,10 +473,9 @@
                     closeModal();
                     showSuccessMessage('Operation completed successfully!');
                     // Refresh the current section
-                    const activeSection = document.querySelector('.sidebar-item.active');
-                    if (activeSection) {
-                        const sectionName = activeSection.onclick.toString().match(/loadContent\('(.+?)'\)/)[1];
-                        loadContent(sectionName);
+                    const currentSection = localStorage.getItem('adminCurrentSection');
+                    if (currentSection) {
+                        loadContent(currentSection);
                     }
                 } else {
                     throw new Error('Server error');
@@ -526,6 +541,12 @@
                 modalContent.addEventListener('click', function(event) {
                     event.stopPropagation();
                 });
+            }
+            
+            // Restore last viewed section on page load
+            const savedSection = localStorage.getItem('adminCurrentSection');
+            if (savedSection) {
+                loadContent(savedSection);
             }
         });
     </script>

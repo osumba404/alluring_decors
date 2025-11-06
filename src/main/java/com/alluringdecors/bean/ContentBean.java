@@ -39,4 +39,20 @@ public class ContentBean {
         }
         return false;
     }
+    
+    public boolean addContent(String sectionKey, String title, String content) {
+        String sql = "INSERT INTO content_sections (section_key, title, content) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, sectionKey);
+            stmt.setString(2, title);
+            stmt.setString(3, content);
+            
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
