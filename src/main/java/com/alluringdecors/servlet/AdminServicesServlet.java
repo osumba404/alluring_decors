@@ -85,15 +85,19 @@ public class AdminServicesServlet extends HttpServlet {
         String description = request.getParameter("description");
         double pricePerSqft = Double.parseDouble(request.getParameter("pricePerSqft"));
         
+        Service service = new Service();
+        service.setName(name);
+        service.setDescription(description);
+        service.setPricePerSqft(java.math.BigDecimal.valueOf(pricePerSqft));
+        service.setDomainId(1); // Default domain
+        
         if (serviceIdStr != null && !serviceIdStr.isEmpty()) {
             // Update existing service
             int serviceId = Integer.parseInt(serviceIdStr);
-            Service service = new Service(name, description, pricePerSqft);
             service.setServiceId(serviceId);
             serviceBean.updateService(service);
         } else {
             // Add new service
-            Service service = new Service(name, description, pricePerSqft);
             serviceBean.addService(service);
         }
         

@@ -120,59 +120,156 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 15px rgba(212, 160, 23, 0.3);
 }
 
-/* Hero Section */
-.hero {
-    background: var(--gradient-primary);
-    color: white;
-    padding: 8rem 5% 6rem;
-    text-align: center;
+/* Hero Carousel */
+.hero-carousel {
     position: relative;
+    height: 100vh;
+    min-height: 600px;
     overflow: hidden;
-    min-height: 70vh;
-    display: flex;
-    align-items: center;
 }
 
-.hero::before {
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.hero-slide.active {
+    opacity: 1;
+}
+
+.hero-slide::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(212, 160, 23, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="%23ffffff" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
-    opacity: 1;
+    background: rgba(22, 78, 49, 0.6);
+    z-index: 1;
 }
 
 .hero-content {
     position: relative;
     z-index: 2;
-    max-width: 900px;
-    margin: 0 auto;
+    text-align: center;
+    color: var(--white);
+    max-width: 800px;
+    padding: 0 2rem;
     animation: fadeInUp 1s ease-out;
 }
 
-.hero-content h2 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    margin-bottom: 2rem;
-    color: white;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.2;
+.hero-subtitle {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
 }
 
-.hero-content p {
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.hero-text {
     font-size: clamp(1.1rem, 2vw, 1.4rem);
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
     opacity: 0.95;
-    line-height: 1.8;
-    font-weight: 300;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+}
+
+.btn-secondary:hover {
+    background: var(--accent);
+    color: var(--primary);
+}
+
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+}
+
+.carousel-btn {
+    background: rgba(212, 160, 23, 0.8);
+    border: none;
+    color: var(--white);
+    font-size: 2rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.carousel-btn:hover {
+    background: var(--accent);
+    transform: scale(1.1);
+}
+
+.carousel-btn.prev {
+    left: 2rem;
+}
+
+.carousel-btn.next {
+    right: 2rem;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    z-index: 3;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--accent);
+    transform: scale(1.2);
 }
 
 @keyframes fadeInUp {
@@ -574,9 +671,27 @@ footer p {
         display: none;
     }
     
-    .hero {
-        padding: 6rem 3% 4rem;
-        min-height: 60vh;
+    .hero-carousel {
+        height: 70vh;
+        min-height: 500px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .carousel-btn {
+        font-size: 1.5rem;
+        padding: 0.8rem 1.2rem;
+    }
+    
+    .carousel-btn.prev {
+        left: 1rem;
+    }
+    
+    .carousel-btn.next {
+        right: 1rem;
     }
     
     .services-preview, .projects-preview {

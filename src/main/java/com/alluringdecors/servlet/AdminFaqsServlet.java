@@ -86,15 +86,18 @@ public class AdminFaqsServlet extends HttpServlet {
         String answer = request.getParameter("answer");
         int displayOrder = Integer.parseInt(request.getParameter("displayOrder"));
         
+        Faq faq = new Faq();
+        faq.setQuestion(question);
+        faq.setAnswer(answer);
+        faq.setDisplayOrder(displayOrder);
+        
         if (faqIdStr != null && !faqIdStr.isEmpty()) {
             // Update existing FAQ
             int faqId = Integer.parseInt(faqIdStr);
-            Faq faq = new Faq(question, answer, displayOrder);
             faq.setFaqId(faqId);
             faqBean.updateFaq(faq);
         } else {
             // Add new FAQ
-            Faq faq = new Faq(question, answer, displayOrder);
             faqBean.addFaq(faq);
         }
         

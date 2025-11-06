@@ -325,6 +325,10 @@
                     <span class="sidebar-item-icon"><i class="fas fa-envelope"></i></span>
                     <span class="sidebar-item-text">Service Requests</span>
                 </a>
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('heroes')">
+                    <span class="sidebar-item-icon"><i class="fas fa-images"></i></span>
+                    <span class="sidebar-item-text">Hero Carousel</span>
+                </a>
             </nav>
         </aside>
         
@@ -415,6 +419,15 @@
                         <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Service Requests</h4>
                     </div>
                     <p>View and manage customer service requests</p>
+                </div>
+                <div class="admin-card" onclick="loadContent('heroes')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-images" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Hero Carousel</h4>
+                    </div>
+                    <p>Manage home page hero slides and carousel</p>
                 </div>
             </div>
         </main>
@@ -641,6 +654,39 @@
                 '<div class="form-group"><label>Email:</label><input type="email" value="' + email + '" readonly></div>' +
                 '<div class="form-group"><label>Phone:</label><input type="text" value="' + phone + '" readonly></div>' +
                 '<div class="form-group"><label>Role:</label><input type="text" value="' + role + '" readonly></div>'
+            );
+        }
+        
+        function showAddHeroForm() {
+            openModal('Add Hero Slide', 
+                '<form method="post" action="heroes">' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
+                '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle"></div>' +
+                '<div class="form-group"><label>Body Text:</label><textarea name="bodyText" rows="3" required></textarea></div>' +
+                '<div class="form-group"><label>Background Image URL:</label><input type="url" name="backgroundImage"></div>' +
+                '<div class="form-group"><label>Primary Button Text:</label><input type="text" name="primaryButton"></div>' +
+                '<div class="form-group"><label>Primary Button Link:</label><input type="text" name="primaryButtonLink"></div>' +
+                '<div class="form-group"><label>Secondary Button Text:</label><input type="text" name="secondaryButton"></div>' +
+                '<div class="form-group"><label>Secondary Button Link:</label><input type="text" name="secondaryButtonLink"></div>' +
+                '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="1" required></div>' +
+                '<button type="submit" class="btn-primary">Add Hero Slide</button></form>'
+            );
+        }
+        
+        function showEditHeroForm(id, title, subtitle, bodyText, backgroundImage, primaryButton, primaryButtonLink, secondaryButton, secondaryButtonLink, displayOrder) {
+            openModal('Edit Hero Slide', 
+                '<form method="post" action="heroes">' +
+                '<input type="hidden" name="heroId" value="' + id + '">' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
+                '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle" value="' + subtitle + '"></div>' +
+                '<div class="form-group"><label>Body Text:</label><textarea name="bodyText" rows="3" required>' + bodyText + '</textarea></div>' +
+                '<div class="form-group"><label>Background Image URL:</label><input type="url" name="backgroundImage" value="' + backgroundImage + '"></div>' +
+                '<div class="form-group"><label>Primary Button Text:</label><input type="text" name="primaryButton" value="' + primaryButton + '"></div>' +
+                '<div class="form-group"><label>Primary Button Link:</label><input type="text" name="primaryButtonLink" value="' + primaryButtonLink + '"></div>' +
+                '<div class="form-group"><label>Secondary Button Text:</label><input type="text" name="secondaryButton" value="' + secondaryButton + '"></div>' +
+                '<div class="form-group"><label>Secondary Button Link:</label><input type="text" name="secondaryButtonLink" value="' + secondaryButtonLink + '"></div>' +
+                '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="' + displayOrder + '" required></div>' +
+                '<button type="submit" class="btn-primary">Update Hero Slide</button></form>'
             );
         }
         

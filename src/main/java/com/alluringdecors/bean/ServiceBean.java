@@ -45,6 +45,23 @@ public class ServiceBean {
         return false;
     }
     
+    public boolean updateService(Service service) {
+        String sql = "UPDATE services SET name = ?, description = ?, price_per_sqft = ? WHERE service_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, service.getName());
+            stmt.setString(2, service.getDescription());
+            stmt.setBigDecimal(3, service.getPricePerSqft());
+            stmt.setInt(4, service.getServiceId());
+            
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean deleteService(int serviceId) {
         String sql = "UPDATE services SET is_active = 0 WHERE service_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();

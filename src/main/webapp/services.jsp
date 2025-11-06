@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services - Alluring Decors</title>
+    <title>Our Services - Alluring Decors</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,29 +15,38 @@
         <section class="hero">
             <div class="hero-content">
                 <h2>Our Services</h2>
+                <p>Comprehensive interior and exterior design solutions tailored to your unique vision and lifestyle.</p>
             </div>
         </section>
 
         <section class="services-preview">
+            <h3>Service Domains</h3>
             <div class="services-grid">
-                <div class="service-card">
-                    <h4>Home Decoration</h4>
-                    <p>Complete interior and exterior design for residential spaces including furniture, kitchen design, lighting effects, and more.</p>
-                </div>
-                <div class="service-card">
-                    <h4>Office Decoration</h4>
-                    <p>Professional and modern office interiors with partitioning, lighting, and ergonomic design solutions.</p>
-                </div>
-                <div class="service-card">
-                    <h4>Banquet & Function Halls</h4>
-                    <p>Elegant decoration for events, weddings, seminars, and corporate functions.</p>
-                </div>
-                <div class="service-card">
-                    <h4>Restaurant Decoration</h4>
-                    <p>Stylish and functional restaurant interiors that enhance dining experiences.</p>
-                </div>
+                <c:forEach var="domain" items="${domains}">
+                    <div class="service-card">
+                        <h4>${domain.name}</h4>
+                        <p>${domain.description}</p>
+                    </div>
+                </c:forEach>
             </div>
         </section>
+
+        <c:if test="${not empty services}">
+            <section class="services-preview">
+                <h3>Available Services</h3>
+                <div class="services-grid">
+                    <c:forEach var="service" items="${services}">
+                        <div class="service-card">
+                            <h4>${service.name}</h4>
+                            <p>${service.description}</p>
+                            <c:if test="${service.pricePerSqft != null}">
+                                <p><strong>Starting from: $${service.pricePerSqft}/sqft</strong></p>
+                            </c:if>
+                        </div>
+                    </c:forEach>
+                </div>
+            </section>
+        </c:if>
     </main>
 
     <footer>

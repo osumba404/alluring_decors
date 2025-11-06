@@ -42,6 +42,23 @@ public class FaqBean {
         return false;
     }
     
+    public boolean updateFaq(Faq faq) {
+        String sql = "UPDATE faqs SET question = ?, answer = ?, display_order = ? WHERE faq_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, faq.getQuestion());
+            stmt.setString(2, faq.getAnswer());
+            stmt.setInt(3, faq.getDisplayOrder());
+            stmt.setInt(4, faq.getFaqId());
+            
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean deleteFaq(int faqId) {
         String sql = "UPDATE faqs SET is_active = 0 WHERE faq_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();

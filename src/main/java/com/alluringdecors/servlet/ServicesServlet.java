@@ -1,11 +1,9 @@
 package com.alluringdecors.servlet;
 
+import com.alluringdecors.bean.ServiceBean;
 import com.alluringdecors.bean.DomainBean;
-import com.alluringdecors.bean.ProjectBean;
-import com.alluringdecors.bean.HeroBean;
+import com.alluringdecors.model.Service;
 import com.alluringdecors.model.Domain;
-import com.alluringdecors.model.Project;
-import com.alluringdecors.model.Hero;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,33 +13,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet({"", "/home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet("/services")
+public class ServicesServlet extends HttpServlet {
     
+    private ServiceBean serviceBean;
     private DomainBean domainBean;
-    private ProjectBean projectBean;
-    private HeroBean heroBean;
     
     @Override
     public void init() throws ServletException {
         super.init();
+        serviceBean = new ServiceBean();
         domainBean = new DomainBean();
-        projectBean = new ProjectBean();
-        heroBean = new HeroBean();
     }
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        List<Service> services = serviceBean.getAllServices();
         List<Domain> domains = domainBean.getAllActiveDomains();
-        List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
-        List<Hero> heroes = heroBean.getAllActiveHeroes();
         
+        request.setAttribute("services", services);
         request.setAttribute("domains", domains);
-        request.setAttribute("ongoingProjects", ongoingProjects);
-        request.setAttribute("heroes", heroes);
         
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/services.jsp").forward(request, response);
     }
 }

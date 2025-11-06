@@ -193,3 +193,23 @@ i.fas, i.far, i.fab {
 .sidebar-item.active .sidebar-item-icon {
     color: #D4A017;
 }
+
+/* Ensure sidebar icons are visible */
+.sidebar-item-icon i.fas {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    display: inline-block !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    color: #164e31 !important;
+    font-size: 1.1rem !important;
+}
+
+.sidebar-item:hover .sidebar-item-icon i.fas {
+    color: #D4A017 !important;
+}
+
+.sidebar-item.active .sidebar-item-icon i.fas {
+    color: #D4A017 !important;
+}
