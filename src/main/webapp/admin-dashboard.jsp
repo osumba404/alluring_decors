@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin-sidebar.css">
+    <style>
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fff; margin: 5% auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 600px; position: relative; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #000; }
+        .modal h3 { margin-top: 0; }
+    </style>
 </head>
 <body>
     <jsp:include page="WEB-INF/navigation.jsp" />
@@ -106,6 +113,14 @@
         </main>
     </div>
 
+    <!-- Modal for forms -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('collapsed');
@@ -134,6 +149,22 @@
                         </div>
                     `;
                 });
+        }
+        
+        function openModal(title, formHtml) {
+            document.getElementById('modalBody').innerHTML = '<h3>' + title + '</h3>' + formHtml;
+            document.getElementById('formModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('formModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('formModal');
+            if (event.target == modal) {
+                closeModal();
+            }
         }
     </script>
 </body>

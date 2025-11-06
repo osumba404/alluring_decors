@@ -34,12 +34,12 @@ public class AdminContentServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<div class='dashboard-header'><h1 class='dashboard-title'>Edit Content</h1></div>" +
-                "<div class='auth-form' style='max-width: 800px; margin-bottom: 3rem;'>" +
-                "<h3>Home Page Content</h3><form method='post' action='content'>" +
-                "<div class='form-group'><label>Home Center Content:</label><textarea name='homeContent' rows='6' required>" + homeContent + "</textarea></div>" +
-                "<div class='form-group'><label>About Us Content:</label><textarea name='aboutContent' rows='6' required>" + aboutContent + "</textarea></div>" +
-                "<button type='submit' class='btn-primary'>Update Content</button></form></div>"
+                "<div class='dashboard-header'><h1 class='dashboard-title'>Edit Content</h1>" +
+                "<button class='btn-primary' onclick=\"openModal('Edit Content', '" +
+                "<form method=\\\"post\\\" action=\\\"content\\\">" +
+                "<div class=\\\"form-group\\\"><label>Home Center Content:</label><textarea name=\\\"homeContent\\\" rows=\\\"6\\\" required>" + homeContent + "</textarea></div>" +
+                "<div class=\\\"form-group\\\"><label>About Us Content:</label><textarea name=\\\"aboutContent\\\" rows=\\\"6\\\" required>" + aboutContent + "</textarea></div>" +
+                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Content</button></form>')\">Edit Content</button></div>"
             );
         } else {
             request.setAttribute("content", content);

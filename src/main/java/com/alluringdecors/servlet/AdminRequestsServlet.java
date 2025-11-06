@@ -61,7 +61,12 @@ public class AdminRequestsServlet extends HttpServlet {
                     response.getWriter().println(
                         "<tr><td>" + req.getRequestId() + "</td><td>" + req.getClientName() + "</td><td>" + req.getRequestCode() + 
                         "</td><td>" + req.getLocation() + "</td><td>" + req.getAreaSqft() + "</td><td>" + req.getStatusName() + 
-                        "</td><td>" + date + "</td><td><a href='requests?action=approve&id=" + req.getRequestId() + 
+                        "</td><td>" + date + "</td><td><button onclick=\"openModal('Request Details', '" +
+                        "<div class=\\\"form-group\\\"><label>Client:</label><input type=\\\"text\\\" value=\\\"" + req.getClientName() + "\\\" readonly></div>" +
+                        "<div class=\\\"form-group\\\"><label>Code:</label><input type=\\\"text\\\" value=\\\"" + req.getRequestCode() + "\\\" readonly></div>" +
+                        "<div class=\\\"form-group\\\"><label>Location:</label><textarea rows=\\\"3\\\" readonly>" + req.getLocation() + "</textarea></div>" +
+                        "<div class=\\\"form-group\\\"><label>Area:</label><input type=\\\"text\\\" value=\\\"" + req.getAreaSqft() + " sqft\\\" readonly></div>')\">View</button> " +
+                        "<a href='requests?action=approve&id=" + req.getRequestId() + 
                         "'>Approve</a> | <a href='requests?action=reject&id=" + req.getRequestId() + 
                         "' onclick='return confirm(\"Reject this request?\")'>Reject</a></td></tr>"
                     );

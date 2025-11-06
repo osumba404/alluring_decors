@@ -54,7 +54,11 @@ public class AdminFeedbackServlet extends HttpServlet {
                     response.getWriter().println(
                         "<tr><td>" + feedback.getFeedbackId() + "</td><td>" + feedback.getName() + "</td><td>" + feedback.getEmail() + 
                         "</td><td>" + feedback.getType() + "</td><td>" + message + "</td><td>" + date + 
-                        "</td><td><a href='feedback?action=delete&id=" + feedback.getFeedbackId() + 
+                        "</td><td><button onclick=\"openModal('View Feedback', '" +
+                        "<div class=\\\"form-group\\\"><label>Name:</label><input type=\\\"text\\\" value=\\\"" + feedback.getName() + "\\\" readonly></div>" +
+                        "<div class=\\\"form-group\\\"><label>Email:</label><input type=\\\"email\\\" value=\\\"" + feedback.getEmail() + "\\\" readonly></div>" +
+                        "<div class=\\\"form-group\\\"><label>Message:</label><textarea rows=\\\"4\\\" readonly>" + feedback.getMessage() + "</textarea></div>')\">View</button> " +
+                        "<a href='feedback?action=delete&id=" + feedback.getFeedbackId() + 
                         "' onclick='return confirm(\"Delete this feedback?\")'>Delete</a></td></tr>"
                     );
                 }

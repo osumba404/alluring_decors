@@ -41,15 +41,14 @@ public class AdminServicesServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<!-- AdminServicesServlet AJAX Response -->" +
-                "<div class='dashboard-header'><h1 class='dashboard-title'>Manage Services</h1></div>" +
-                "<div class='auth-form' style='max-width: 600px; margin-bottom: 3rem;'>" +
-                "<h3>Add New Service</h3><form method='post' action='services'>" +
-                "<div class='form-group'><label>Service Name:</label><input type='text' name='name' required></div>" +
-                "<div class='form-group'><label>Description:</label><textarea name='description' rows='3' required></textarea></div>" +
-                "<div class='form-group'><label>Price per Sqft:</label><input type='number' name='pricePerSqft' step='0.01' required></div>" +
-                "<button type='submit' class='btn-primary'>Add Service</button></form></div>" +
-                "<h3>Existing Services</h3><table><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price/Sqft</th><th>Actions</th></tr></thead><tbody>"
+                "<div class='dashboard-header'><h1 class='dashboard-title'>Manage Services</h1>" +
+                "<button class='btn-primary' onclick=\"openModal('Add New Service', '" +
+                "<form method=\\\"post\\\" action=\\\"services\\\">" +
+                "<div class=\\\"form-group\\\"><label>Service Name:</label><input type=\\\"text\\\" name=\\\"name\\\" required></div>" +
+                "<div class=\\\"form-group\\\"><label>Description:</label><textarea name=\\\"description\\\" rows=\\\"3\\\" required></textarea></div>" +
+                "<div class=\\\"form-group\\\"><label>Price per Sqft:</label><input type=\\\"number\\\" name=\\\"pricePerSqft\\\" step=\\\"0.01\\\" required></div>" +
+                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add Service</button></form>')\">Add Service</button></div>" +
+                "<h3>Services</h3><table><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price/Sqft</th><th>Actions</th></tr></thead><tbody>"
             );
             if (services.isEmpty()) {
                 response.getWriter().println("<tr><td colspan='5'>No services available. Add some services to get started.</td></tr>");
@@ -57,7 +56,15 @@ public class AdminServicesServlet extends HttpServlet {
                 for (Service service : services) {
                     response.getWriter().println(
                         "<tr><td>" + service.getServiceId() + "</td><td>" + service.getName() + "</td><td>" + service.getDescription() + 
-                        "</td><td>$" + service.getPricePerSqft() + "</td><td><a href='services?action=delete&id=" + service.getServiceId() + 
+                        "</td><td>$" + service.getPricePerSqft() + "</td><td>" +
+                        "<button onclick=\"openModal('Edit Service', '" +
+                        "<form method=\\\"post\\\" action=\\\"services\\\">" +
+                        "<input type=\\\"hidden\\\" name=\\\"serviceId\\\" value=\\\"" + service.getServiceId() + "\\\">" +
+                        "<div class=\\\"form-group\\\"><label>Service Name:</label><input type=\\\"text\\\" name=\\\"name\\\" value=\\\"" + service.getName() + "\\\" required></div>" +
+                        "<div class=\\\"form-group\\\"><label>Description:</label><textarea name=\\\"description\\\" rows=\\\"3\\\" required>" + service.getDescription() + "</textarea></div>" +
+                        "<div class=\\\"form-group\\\"><label>Price per Sqft:</label><input type=\\\"number\\\" name=\\\"pricePerSqft\\\" step=\\\"0.01\\\" value=\\\"" + service.getPricePerSqft() + "\\\" required></div>" +
+                        "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Service</button></form>')\">Edit</button> " +
+                        "<a href='services?action=delete&id=" + service.getServiceId() + 
                         "' onclick='return confirm(\"Delete this service?\")'>Delete</a></td></tr>"
                     );
                 }
