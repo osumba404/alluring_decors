@@ -10,13 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-brand">
-                <h1><a href="home">Alluring <span style="color: var(--accent);">Decors</span></a></h1>
-            </div>
-        </nav>
-    </header>
+    <jsp:include page="WEB-INF/navigation.jsp" />
 
     <main class="auth-container">
         <div class="auth-form">

@@ -10,22 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-brand">
-                <h1><a href="home">Alluring <span style="color: var(--accent);">Decors</span></a></h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="home">Home</a></li>
-                <li><a href="about.jsp">About</a></li>
-                <li><a href="projects.jsp">Projects</a></li>
-                <li><a href="services.jsp">Services</a></li>
-                <li><a href="contact.jsp">Contact</a></li>
-                <li><a href="login">Login</a></li>
-                <li><a href="register">Register</a></li>
-            </ul>
-        </nav>
-    </header>
+    <jsp:include page="WEB-INF/navigation.jsp" />
 
     <main>
         <section class="hero">

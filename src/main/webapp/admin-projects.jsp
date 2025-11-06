@@ -9,17 +9,7 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-brand">
-                <h1><a href="dashboard">Admin <span style="color: var(--accent);">Dashboard</span></a></h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="dashboard">Dashboard</a></li>
-                <li><a href="../logout">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
+    <jsp:include page="WEB-INF/navigation.jsp" />
 
     <main>
         <section class="hero">
