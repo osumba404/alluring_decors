@@ -6,9 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Alluring Decors</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/admin-sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin-sidebar.css">
     <style>
         /* Modern Modal Styles */
         .modal {
@@ -335,40 +335,85 @@
             </div>
             
             <div class="admin-grid">
-                <div class="admin-card" onclick="loadContent('users')">
-                    <h4><i class="fas fa-users"></i> Users</h4>
+                <div class="admin-card" onclick="loadContent('users')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-users" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Users</h4>
+                    </div>
                     <p>View, edit, and delete registered users</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('projects')">
-                    <h4><i class="fas fa-project-diagram"></i> Projects</h4>
+                <div class="admin-card" onclick="loadContent('projects')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-project-diagram" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Projects</h4>
+                    </div>
                     <p>Add, edit, and delete projects</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('domains')">
-                    <h4><i class="fas fa-tags"></i> Domains</h4>
+                <div class="admin-card" onclick="loadContent('domains')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-tags" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Domains</h4>
+                    </div>
                     <p>Configure service domains and categories</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('services')">
-                    <h4><i class="fas fa-cogs"></i> Services</h4>
+                <div class="admin-card" onclick="loadContent('services')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-cogs" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Services</h4>
+                    </div>
                     <p>Configure services, pricing, and models</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('content')">
-                    <h4><i class="fas fa-edit"></i> Content</h4>
+                <div class="admin-card" onclick="loadContent('content')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-edit" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Content</h4>
+                    </div>
                     <p>Update home page content and about us section</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('contacts')">
-                    <h4><i class="fas fa-phone"></i> Contacts</h4>
+                <div class="admin-card" onclick="loadContent('contacts')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-phone" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Contacts</h4>
+                    </div>
                     <p>Update contact information and addresses</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('feedback')">
-                    <h4><i class="fas fa-comments"></i> Feedback</h4>
+                <div class="admin-card" onclick="loadContent('feedback')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-comments" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Feedback</h4>
+                    </div>
                     <p>Review customer feedback and queries</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('faqs')">
-                    <h4><i class="fas fa-question-circle"></i> FAQs</h4>
+                <div class="admin-card" onclick="loadContent('faqs')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-question-circle" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">FAQs</h4>
+                    </div>
                     <p>Add, edit, and delete frequently asked questions</p>
                 </div>
-                <div class="admin-card" onclick="loadContent('requests')">
-                    <h4><i class="fas fa-envelope"></i> Service Requests</h4>
+                <div class="admin-card" onclick="loadContent('requests')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-envelope" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Service Requests</h4>
+                    </div>
                     <p>View and manage customer service requests</p>
                 </div>
             </div>
@@ -534,8 +579,9 @@
             }
         });
         
-        // Prevent modal from closing when clicking inside modal content
-        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            // Prevent modal from closing when clicking inside modal content
             const modalContent = document.querySelector('.modal-content');
             if (modalContent) {
                 modalContent.addEventListener('click', function(event) {
@@ -545,10 +591,49 @@
             
             // Restore last viewed section on page load
             const savedSection = localStorage.getItem('adminCurrentSection');
+            console.log('Saved section:', savedSection); // Debug log
             if (savedSection) {
-                loadContent(savedSection);
+                setTimeout(() => {
+                    loadContentProgrammatically(savedSection);
+                }, 100);
             }
         });
+        
+        // Separate function for programmatic loading
+        function loadContentProgrammatically(section) {
+            const mainContent = document.getElementById('mainContent');
+            
+            // Update active menu item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate the correct menu item
+            const menuItems = document.querySelectorAll('.sidebar-item');
+            menuItems.forEach(item => {
+                const onclick = item.getAttribute('onclick');
+                if (onclick && onclick.includes("'" + section + "'")) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Load content based on section
+            fetch(section + '?ajax=true')
+                .then(response => response.text())
+                .then(html => {
+                    mainContent.innerHTML = html;
+                    console.log('Content loaded for section:', section); // Debug log
+                })
+                .catch(error => {
+                    console.error('Error loading content:', error);
+                    mainContent.innerHTML = `
+                        <div class="dashboard-header">
+                            <h1 class="dashboard-title">Error</h1>
+                            <p class="dashboard-subtitle">Failed to load content</p>
+                        </div>
+                    `;
+                });
+        }
     </script>
 </body>
 </html>

@@ -50,37 +50,47 @@ public class AdminRequestsServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<div class='dashboard-header'><h1 class='dashboard-title'>Service Requests</h1></div>" +
-                "<h3>Pending Requests</h3><table style='margin-bottom: 3rem;'><thead><tr><th>ID</th><th>Client</th><th>Code</th><th>Location</th><th>Area</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>"
+                "<div class='dashboard-header'><div><h1 class='dashboard-title'>Service Requests</h1>" +
+                "<p class='dashboard-subtitle'>View and manage customer service requests</p></div></div>" +
+                "<h3 style='color: #164e31; margin: 2rem 0 1rem 0; font-size: 1.5rem;'><i class='fas fa-clock'></i> Pending Requests</h3>" +
+                "<table class='admin-table' style='margin-bottom: 3rem;'><thead><tr><th>ID</th><th>Client</th><th>Code</th><th>Location</th><th>Area (sqft)</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>"
             );
             if (pendingRequests.isEmpty()) {
-                response.getWriter().println("<tr><td colspan='8'>No pending requests.</td></tr>");
+                response.getWriter().println("<tr><td colspan='8' style='text-align:center; padding: 2rem; color: #666;'>No pending requests.</td></tr>");
             } else {
                 for (ServiceRequest req : pendingRequests) {
-                    String date = req.getRequestedAt() != null ? req.getRequestedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
+                    String date = req.getRequestedAt() != null ? req.getRequestedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "N/A";
+                    String location = req.getLocation() != null ? req.getLocation().replace("'", "\\'").replace("\"", "&quot;") : "";
                     response.getWriter().println(
-                        "<tr><td>" + req.getRequestId() + "</td><td>" + req.getClientName() + "</td><td>" + req.getRequestCode() + 
-                        "</td><td>" + req.getLocation() + "</td><td>" + req.getAreaSqft() + "</td><td>" + req.getStatusName() + 
-                        "</td><td>" + date + "</td><td><button onclick=\"openModal('Request Details', '" +
+                        "<tr><td>" + req.getRequestId() + "</td><td><strong>" + req.getClientName() + "</strong></td><td><code style='background: #f8f9fa; padding: 4px 8px; border-radius: 4px;'>" + req.getRequestCode() + 
+                        "</code></td><td>" + req.getLocation() + "</td><td>" + req.getAreaSqft() + "</td><td><span style='background: #ffc107; color: #000; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.85rem;'>" + req.getStatusName() + 
+                        "</span></td><td>" + date + "</td><td><button class='action-btn view' onclick=\"openModal('Request Details', '" +
+                        "<div class=\\\"form-group\\\"><label>Request ID:</label><input type=\\\"text\\\" value=\\\"" + req.getRequestId() + "\\\" readonly></div>" +
                         "<div class=\\\"form-group\\\"><label>Client:</label><input type=\\\"text\\\" value=\\\"" + req.getClientName() + "\\\" readonly></div>" +
                         "<div class=\\\"form-group\\\"><label>Code:</label><input type=\\\"text\\\" value=\\\"" + req.getRequestCode() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Location:</label><textarea rows=\\\"3\\\" readonly>" + req.getLocation() + "</textarea></div>" +
-                        "<div class=\\\"form-group\\\"><label>Area:</label><input type=\\\"text\\\" value=\\\"" + req.getAreaSqft() + " sqft\\\" readonly></div>')\">View</button> " +
+                        "<div class=\\\"form-group\\\"><label>Location:</label><textarea rows=\\\"3\\\" readonly>" + location + "</textarea></div>" +
+                        "<div class=\\\"form-group\\\"><label>Area:</label><input type=\\\"text\\\" value=\\\"" + req.getAreaSqft() + " sqft\\\" readonly></div>" +
+                        "<div class=\\\"form-group\\\"><label>Status:</label><input type=\\\"text\\\" value=\\\"" + req.getStatusName() + "\\\" readonly></div>" +
+                        "<div class=\\\"form-group\\\"><label>Date:</label><input type=\\\"text\\\" value=\\\"" + date + "\\\" readonly></div>')\"><i class='fas fa-eye'></i> View</button> " +
                         "<a href='requests?action=approve&id=" + req.getRequestId() + 
-                        "'>Approve</a> | <a href='requests?action=reject&id=" + req.getRequestId() + 
-                        "' onclick='return confirm(\"Reject this request?\")'>Reject</a></td></tr>"
+                        "' class='action-btn' style='background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; text-decoration:none'><i class='fas fa-check'></i> Approve</a> " +
+                        "<a href='requests?action=reject&id=" + req.getRequestId() + 
+                        "' class='action-btn delete' onclick='return confirm(\"Reject this request?\")' style='text-decoration:none'><i class='fas fa-times'></i> Reject</a></td></tr>"
                     );
                 }
             }
-            response.getWriter().println("</tbody></table><h3>Completed Requests</h3><table><thead><tr><th>ID</th><th>Client</th><th>Code</th><th>Status</th><th>Date</th></tr></thead><tbody>");
+            response.getWriter().println("</tbody></table>" +
+                "<h3 style='color: #164e31; margin: 2rem 0 1rem 0; font-size: 1.5rem;'><i class='fas fa-check-circle'></i> Completed Requests</h3>" +
+                "<table class='admin-table'><thead><tr><th>ID</th><th>Client</th><th>Code</th><th>Status</th><th>Date</th></tr></thead><tbody>");
             if (completedRequests.isEmpty()) {
-                response.getWriter().println("<tr><td colspan='5'>No completed requests.</td></tr>");
+                response.getWriter().println("<tr><td colspan='5' style='text-align:center; padding: 2rem; color: #666;'>No completed requests.</td></tr>");
             } else {
                 for (ServiceRequest req : completedRequests) {
-                    String date = req.getRequestedAt() != null ? req.getRequestedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
+                    String date = req.getRequestedAt() != null ? req.getRequestedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "N/A";
+                    String statusColor = req.getStatusId() == 5 ? "#28a745" : "#6c757d";
                     response.getWriter().println(
-                        "<tr><td>" + req.getRequestId() + "</td><td>" + req.getClientName() + "</td><td>" + req.getRequestCode() + 
-                        "</td><td>" + req.getStatusName() + "</td><td>" + date + "</td></tr>"
+                        "<tr><td>" + req.getRequestId() + "</td><td><strong>" + req.getClientName() + "</strong></td><td><code style='background: #f8f9fa; padding: 4px 8px; border-radius: 4px;'>" + req.getRequestCode() + 
+                        "</code></td><td><span style='background: " + statusColor + "; color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.85rem;'>" + req.getStatusName() + "</span></td><td>" + date + "</td></tr>"
                     );
                 }
             }

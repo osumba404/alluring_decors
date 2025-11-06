@@ -41,25 +41,31 @@ public class AdminDomainsServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<div class='dashboard-header'><h1 class='dashboard-title'>Manage Service Domains</h1>" +
-                "<button class='btn-primary' onclick=\"openModal('Add New Domain', '" +
+                "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage Service Domains</h1>" +
+                "<p class='dashboard-subtitle'>Configure service domains and categories</p></div>" +
+                "<button class='header-action-btn' onclick=\"openModal('Add New Domain', '" +
                 "<form method=\\\"post\\\" action=\\\"domains\\\">" +
                 "<div class=\\\"form-group\\\"><label>Domain Name:</label><input type=\\\"text\\\" name=\\\"name\\\" required></div>" +
                 "<div class=\\\"form-group\\\"><label>Description:</label><textarea name=\\\"description\\\" rows=\\\"3\\\" required></textarea></div>" +
-                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add Domain</button></form>')\">Add Domain</button></div>" +
-                "<h3>Domains</h3><table><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>"
+                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add Domain</button></form>')\"><i class='fas fa-plus'></i> Add Domain</button></div>" +
+                "<table class='admin-table'><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Actions</th></tr></thead><tbody>"
             );
-            for (Domain domain : domains) {
-                response.getWriter().println(
-                    "<tr><td>" + domain.getDomainId() + "</td><td>" + domain.getName() + "</td><td>" + domain.getDescription() + 
-                    "</td><td><button onclick=\"openModal('Edit Domain', '" +
-                    "<form method=\\\"post\\\" action=\\\"domains\\\">" +
-                    "<input type=\\\"hidden\\\" name=\\\"domainId\\\" value=\\\"" + domain.getDomainId() + "\\\">" +
-                    "<div class=\\\"form-group\\\"><label>Domain Name:</label><input type=\\\"text\\\" name=\\\"name\\\" value=\\\"" + domain.getName() + "\\\" required></div>" +
-                    "<div class=\\\"form-group\\\"><label>Description:</label><textarea name=\\\"description\\\" rows=\\\"3\\\" required>" + domain.getDescription() + "</textarea></div>" +
-                    "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Domain</button></form>')\">Edit</button> " +
-                    "<a href='domains?action=delete&id=" + domain.getDomainId() + "' onclick='return confirm(\"Delete this domain?\")'>Delete</a></td></tr>"
-                );
+            if (domains.isEmpty()) {
+                response.getWriter().println("<tr><td colspan='4' style='text-align:center; padding: 2rem; color: #666;'>No domains available. Click 'Add Domain' to create one.</td></tr>");
+            } else {
+                for (Domain domain : domains) {
+                    String description = domain.getDescription() != null ? domain.getDescription().replace("'", "\\'").replace("\"", "&quot;") : "";
+                    response.getWriter().println(
+                        "<tr><td>" + domain.getDomainId() + "</td><td><strong>" + domain.getName() + "</strong></td><td>" + domain.getDescription() + 
+                        "</td><td><button class='action-btn' onclick=\"openModal('Edit Domain', '" +
+                        "<form method=\\\"post\\\" action=\\\"domains\\\">" +
+                        "<input type=\\\"hidden\\\" name=\\\"domainId\\\" value=\\\"" + domain.getDomainId() + "\\\">" +
+                        "<div class=\\\"form-group\\\"><label>Domain Name:</label><input type=\\\"text\\\" name=\\\"name\\\" value=\\\"" + domain.getName() + "\\\" required></div>" +
+                        "<div class=\\\"form-group\\\"><label>Description:</label><textarea name=\\\"description\\\" rows=\\\"3\\\" required>" + description + "</textarea></div>" +
+                        "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Domain</button></form>')\"><i class='fas fa-edit'></i> Edit</button> " +
+                        "<a href='domains?action=delete&id=" + domain.getDomainId() + "' class='action-btn delete' onclick='return confirm(\"Delete this domain?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a></td></tr>"
+                    );
+                }
             }
             response.getWriter().println("</tbody></table>");
         } else {
