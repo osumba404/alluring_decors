@@ -39,13 +39,7 @@ public class AdminContactsServlet extends HttpServlet {
             response.getWriter().println(
                 "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage Contacts</h1>" +
                 "<p class='dashboard-subtitle'>Update contact information and addresses</p></div>" +
-                "<button class='header-action-btn' onclick=\"openModal('Update Contact Information', '" +
-                "<form method=\\\"post\\\" action=\\\"contacts\\\">" +
-                "<input type=\\\"hidden\\\" name=\\\"contactId\\\" value=\\\"" + primaryContact.getContactId() + "\\\">" +
-                "<div class=\\\"form-group\\\"><label>Phone Number:</label><input type=\\\"tel\\\" name=\\\"phone\\\" value=\\\"" + phone + "\\\" required></div>" +
-                "<div class=\\\"form-group\\\"><label>Email Address:</label><input type=\\\"email\\\" name=\\\"email\\\" value=\\\"" + email + "\\\" required></div>" +
-                "<div class=\\\"form-group\\\"><label>Address:</label><textarea name=\\\"address\\\" rows=\\\"3\\\" required>" + address + "</textarea></div>" +
-                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Contact Info</button></form>')\"><i class='fas fa-edit'></i> Edit Contact</button></div>" +
+                "<button class='header-action-btn' onclick='showEditContactForm()'><i class='fas fa-edit'></i> Edit Contact</button></div>" +
                 "<div style='background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-top: 2rem;'>" +
                 "<h3 style='color: #164e31; margin-bottom: 1.5rem; font-size: 1.3rem;'><i class='fas fa-address-card'></i> Current Contact Information</h3>" +
                 "<div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;'>" +

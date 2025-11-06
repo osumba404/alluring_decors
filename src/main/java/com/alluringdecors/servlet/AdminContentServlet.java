@@ -33,16 +33,16 @@ public class AdminContentServlet extends HttpServlet {
         
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println(
-                "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage Content</h1></div>" +
-                "<button class='header-action-btn' onclick=\"openModal('Add New Content', '" +
-                "<form method=\\\"post\\\" action=\\\"content\\\">" +
-                "<div class=\\\"form-group\\\"><label>Section Key:</label><input type=\\\"text\\\" name=\\\"sectionKey\\\" required></div>" +
-                "<div class=\\\"form-group\\\"><label>Title:</label><input type=\\\"text\\\" name=\\\"title\\\" required></div>" +
-                "<div class=\\\"form-group\\\"><label>Content:</label><textarea name=\\\"content\\\" rows=\\\"6\\\" required></textarea></div>" +
-                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add Content</button></form>')\"><i class='fas fa-plus'></i> Add Content</button></div>" +
-                "<table class='admin-table'><thead><tr><th>Section Key</th><th>Title</th><th>Content Preview</th><th>Actions</th></tr></thead><tbody>"
-            );
+            java.io.PrintWriter out = response.getWriter();
+            
+            out.println("<div class='dashboard-header'>");
+            out.println("<div><h1 class='dashboard-title'>Manage Content</h1></div>");
+            out.println("<button class='header-action-btn' onclick='showAddContentForm()'><i class='fas fa-plus'></i> Add Content</button>");
+            out.println("</div>");
+            
+            out.println("<table class='admin-table'>");
+            out.println("<thead><tr><th>Section Key</th><th>Title</th><th>Content Preview</th><th>Actions</th></tr></thead>");
+            out.println("<tbody>");
             
             // Display existing content sections
             for (Map.Entry<String, String> entry : content.entrySet()) {
@@ -50,19 +50,19 @@ public class AdminContentServlet extends HttpServlet {
                 String contentText = entry.getValue();
                 String preview = contentText.length() > 100 ? contentText.substring(0, 100) + "..." : contentText;
                 String title = key.equals("home_center") ? "Home Center" : "About Us";
+                String safeContent = contentText.replace("\"", "&quot;");
                 
-                response.getWriter().println(
-                    "<tr><td>" + key + "</td><td>" + title + "</td><td>" + preview + "</td><td>" +
-                    "<button class='action-btn' onclick=\"openModal('Edit Content - " + title + "', '" +
-                    "<form method=\\\"post\\\" action=\\\"content\\\">" +
-                    "<input type=\\\"hidden\\\" name=\\\"sectionKey\\\" value=\\\"" + key + "\\\">" +
-                    "<div class=\\\"form-group\\\"><label>Title:</label><input type=\\\"text\\\" name=\\\"title\\\" value=\\\"" + title + "\\\" required></div>" +
-                    "<div class=\\\"form-group\\\"><label>Content:</label><textarea name=\\\"content\\\" rows=\\\"8\\\" required>" + contentText.replace("\"", "&quot;") + "</textarea></div>" +
-                    "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Content</button></form>')\"><i class='fas fa-edit'></i> Edit</button></td></tr>"
-                );
+                out.println("<tr>");
+                out.println("<td>" + key + "</td>");
+                out.println("<td>" + title + "</td>");
+                out.println("<td>" + preview + "</td>");
+                out.println("<td>");
+                out.println("<button class='action-btn' onclick='showEditContentForm(\"" + key + "\", \"" + title + "\", \"" + safeContent + "\")'><i class='fas fa-edit'></i> Edit</button>");
+                out.println("</td>");
+                out.println("</tr>");
             }
             
-            response.getWriter().println("</tbody></table>");
+            out.println("</tbody></table>");
         } else {
             request.setAttribute("content", content);
             request.getRequestDispatcher("/admin-content.jsp").forward(request, response);

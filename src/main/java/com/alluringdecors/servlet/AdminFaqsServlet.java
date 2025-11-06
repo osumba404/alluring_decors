@@ -40,40 +40,64 @@ public class AdminFaqsServlet extends HttpServlet {
         
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println(
-                "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage FAQs</h1></div>" +
-                "<button class='header-action-btn' onclick=\"openModal('Add New FAQ', '" +
-                "<form method=\\\"post\\\" action=\\\"faqs\\\">" +
-                "<div class=\\\"form-group\\\"><label>Question:</label><input type=\\\"text\\\" name=\\\"question\\\" required></div>" +
-                "<div class=\\\"form-group\\\"><label>Answer:</label><textarea name=\\\"answer\\\" rows=\\\"4\\\" required></textarea></div>" +
-                "<div class=\\\"form-group\\\"><label>Display Order:</label><input type=\\\"number\\\" name=\\\"displayOrder\\\" value=\\\"0\\\" required></div>" +
-                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add FAQ</button></form>')\"><i class='fas fa-plus'></i> Add FAQ</button></div>" +
-                "<table class='admin-table'><thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Order</th><th>Actions</th></tr></thead><tbody>"
-            );
+            java.io.PrintWriter out = response.getWriter();
+            
+            out.println("<div class='dashboard-header'>");
+            out.println("<div><h1 class='dashboard-title'>Manage FAQs</h1></div>");
+            out.println("<button class='header-action-btn' onclick='showAddFaqForm()'><i class='fas fa-plus'></i> Add FAQ</button>");
+            out.println("</div>");
+            
+            out.println("<table class='admin-table'>");
+            out.println("<thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Order</th><th>Actions</th></tr></thead>");
+            out.println("<tbody>");
+            
             if (faqs.isEmpty()) {
-                response.getWriter().println("<tr><td colspan='5'>No FAQs available. Add some FAQs to get started.</td></tr>");
+                out.println("<tr><td colspan='5' style='text-align:center; padding: 2rem; color: #666;'>No FAQs available. Add some FAQs to get started.</td></tr>");
             } else {
                 for (Faq faq : faqs) {
                     String answer = faq.getAnswer().length() > 50 ? faq.getAnswer().substring(0, 50) + "..." : faq.getAnswer();
-                    response.getWriter().println(
-                        "<tr><td>" + faq.getFaqId() + "</td><td>" + faq.getQuestion() + "</td><td>" + answer + 
-                        "</td><td>" + faq.getDisplayOrder() + "</td><td>" +
-                        "<button class='action-btn' onclick=\"openModal('Edit FAQ', '" +
-                        "<form method=\\\"post\\\" action=\\\"faqs\\\">" +
-                        "<input type=\\\"hidden\\\" name=\\\"faqId\\\" value=\\\"" + faq.getFaqId() + "\\\">" +
-                        "<div class=\\\"form-group\\\"><label>Question:</label><input type=\\\"text\\\" name=\\\"question\\\" value=\\\"" + faq.getQuestion() + "\\\" required></div>" +
-                        "<div class=\\\"form-group\\\"><label>Answer:</label><textarea name=\\\"answer\\\" rows=\\\"4\\\" required>" + faq.getAnswer() + "</textarea></div>" +
-                        "<div class=\\\"form-group\\\"><label>Display Order:</label><input type=\\\"number\\\" name=\\\"displayOrder\\\" value=\\\"" + faq.getDisplayOrder() + "\\\" required></div>" +
-                        "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update FAQ</button></form>')\"><i class='fas fa-edit'></i> Edit</button>" +
-                        "<a href='faqs?action=delete&id=" + faq.getFaqId() + 
-                        "' class='action-btn delete' onclick='return confirm(\"Delete this FAQ?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a></td></tr>"
-                    );
+                    String safeQuestion = faq.getQuestion().replace("\"", "&quot;");
+                    String safeAnswer = faq.getAnswer().replace("\"", "&quot;");
+                    out.println("<tr>");
+                    out.println("<td>" + faq.getFaqId() + "</td>");
+                    out.println("<td>" + faq.getQuestion() + "</td>");
+                    out.println("<td>" + answer + "</td>");
+                    out.println("<td>" + faq.getDisplayOrder() + "</td>");
+                    out.println("<td>");
+                    out.println("<button class='action-btn' onclick='showEditFaqForm(" + faq.getFaqId() + ", \"" + safeQuestion + "\", \"" + safeAnswer + "\", " + faq.getDisplayOrder() + ")'><i class='fas fa-edit'></i> Edit</button> ");
+                    out.println("<a href='faqs?action=delete&id=" + faq.getFaqId() + "' class='action-btn delete' onclick='return confirm(\"Delete this FAQ?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a>");
+                    out.println("</td>");
+                    out.println("</tr>");
                 }
             }
-            response.getWriter().println("</tbody></table>");
+            out.println("</tbody></table>");
         } else {
             request.setAttribute("faqs", faqs);
             request.getRequestDispatcher("/admin-faqs.jsp").forward(request, response);
         }
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        String faqIdStr = request.getParameter("faqId");
+        String question = request.getParameter("question");
+        String answer = request.getParameter("answer");
+        int displayOrder = Integer.parseInt(request.getParameter("displayOrder"));
+        
+        if (faqIdStr != null && !faqIdStr.isEmpty()) {
+            // Update existing FAQ
+            int faqId = Integer.parseInt(faqIdStr);
+            Faq faq = new Faq(question, answer, displayOrder);
+            faq.setFaqId(faqId);
+            faqBean.updateFaq(faq);
+        } else {
+            // Add new FAQ
+            Faq faq = new Faq(question, answer, displayOrder);
+            faqBean.addFaq(faq);
+        }
+        
+        response.sendRedirect("faqs");
     }
 }

@@ -537,6 +537,123 @@
             });
         }
         
+        // Global functions for all admin forms
+        function showAddProjectForm() {
+            openModal('Add New Project', 
+                '<form method="post" action="projects">' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
+                '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
+                '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
+                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>' +
+                '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
+                '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
+                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
+                '<button type="submit" class="btn-primary">Add Project</button></form>'
+            );
+        }
+        
+        function showAddDomainForm() {
+            openModal('Add New Domain', 
+                '<form method="post" action="domains">' +
+                '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" required></div>' +
+                '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
+                '<button type="submit" class="btn-primary">Add Domain</button></form>'
+            );
+        }
+        
+        function showAddServiceForm() {
+            openModal('Add New Service', 
+                '<form method="post" action="services">' +
+                '<div class="form-group"><label>Service Name:</label><input type="text" name="name" required></div>' +
+                '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
+                '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" required></div>' +
+                '<button type="submit" class="btn-primary">Add Service</button></form>'
+            );
+        }
+        
+        function showAddContentForm() {
+            openModal('Add New Content', 
+                '<form method="post" action="content">' +
+                '<div class="form-group"><label>Section Key:</label><input type="text" name="sectionKey" required></div>' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
+                '<div class="form-group"><label>Content:</label><textarea name="content" rows="6" required></textarea></div>' +
+                '<button type="submit" class="btn-primary">Add Content</button></form>'
+            );
+        }
+        
+        function showEditContactForm() {
+            openModal('Update Contact Information', 
+                '<form method="post" action="contacts">' +
+                '<div class="form-group"><label>Phone Number:</label><input type="tel" name="phone" required></div>' +
+                '<div class="form-group"><label>Email Address:</label><input type="email" name="email" required></div>' +
+                '<div class="form-group"><label>Address:</label><textarea name="address" rows="3" required></textarea></div>' +
+                '<button type="submit" class="btn-primary">Update Contact Info</button></form>'
+            );
+        }
+        
+        function showAddFaqForm() {
+            openModal('Add New FAQ', 
+                '<form method="post" action="faqs">' +
+                '<div class="form-group"><label>Question:</label><input type="text" name="question" required></div>' +
+                '<div class="form-group"><label>Answer:</label><textarea name="answer" rows="4" required></textarea></div>' +
+                '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="0" required></div>' +
+                '<button type="submit" class="btn-primary">Add FAQ</button></form>'
+            );
+        }
+        
+        function showEditServiceForm(id, name, description, price) {
+            openModal('Edit Service', 
+                '<form method="post" action="services">' +
+                '<input type="hidden" name="serviceId" value="' + id + '">' +
+                '<div class="form-group"><label>Service Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
+                '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
+                '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" value="' + price + '" required></div>' +
+                '<button type="submit" class="btn-primary">Update Service</button></form>'
+            );
+        }
+        
+        function showEditFaqForm(id, question, answer, order) {
+            openModal('Edit FAQ', 
+                '<form method="post" action="faqs">' +
+                '<input type="hidden" name="faqId" value="' + id + '">' +
+                '<div class="form-group"><label>Question:</label><input type="text" name="question" value="' + question + '" required></div>' +
+                '<div class="form-group"><label>Answer:</label><textarea name="answer" rows="4" required>' + answer + '</textarea></div>' +
+                '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="' + order + '" required></div>' +
+                '<button type="submit" class="btn-primary">Update FAQ</button></form>'
+            );
+        }
+        
+        function showEditContentForm(key, title, content) {
+            openModal('Edit Content - ' + title, 
+                '<form method="post" action="content">' +
+                '<input type="hidden" name="sectionKey" value="' + key + '">' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
+                '<div class="form-group"><label>Content:</label><textarea name="content" rows="8" required>' + content + '</textarea></div>' +
+                '<button type="submit" class="btn-primary">Update Content</button></form>'
+            );
+        }
+        
+        function showUserDetails(id, username, fullName, email, phone, role) {
+            openModal('User Details', 
+                '<div class="form-group"><label>User ID:</label><input type="text" value="' + id + '" readonly></div>' +
+                '<div class="form-group"><label>Username:</label><input type="text" value="' + username + '" readonly></div>' +
+                '<div class="form-group"><label>Full Name:</label><input type="text" value="' + fullName + '" readonly></div>' +
+                '<div class="form-group"><label>Email:</label><input type="email" value="' + email + '" readonly></div>' +
+                '<div class="form-group"><label>Phone:</label><input type="text" value="' + phone + '" readonly></div>' +
+                '<div class="form-group"><label>Role:</label><input type="text" value="' + role + '" readonly></div>'
+            );
+        }
+        
+        function showEditDomainForm(id, name, description) {
+            openModal('Edit Domain', 
+                '<form method="post" action="domains">' +
+                '<input type="hidden" name="domainId" value="' + id + '">' +
+                '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
+                '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
+                '<button type="submit" class="btn-primary">Update Domain</button></form>'
+            );
+        }
+        
         function showSuccessMessage(message) {
             // Remove existing success message
             const existingMsg = document.querySelector('.success-message');
