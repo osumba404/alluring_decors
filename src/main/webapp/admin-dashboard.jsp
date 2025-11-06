@@ -167,6 +167,44 @@
             color: white;
         }
         
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #164e31;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .btn-loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
         /* Enhanced Tables */
         .admin-table {
             width: 100%;
@@ -383,6 +421,15 @@
             document.getElementById('modalBody').innerHTML = formHtml;
             document.getElementById('formModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
+            
+            // Add form submission handler
+            const form = document.querySelector('#modalBody form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    submitModalForm(this);
+                });
+            }
         }
         
         function closeModal() {
@@ -390,12 +437,97 @@
             document.body.style.overflow = 'auto';
         }
         
+        function submitModalForm(form) {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading"></span>Saving...';
+            submitBtn.classList.add('btn-loading');
+            
+            const formData = new FormData(form);
+            const action = form.getAttribute('action');
+            
+            fetch(action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    closeModal();
+                    showSuccessMessage('Operation completed successfully!');
+                    // Refresh the current section
+                    const activeSection = document.querySelector('.sidebar-item.active');
+                    if (activeSection) {
+                        const sectionName = activeSection.onclick.toString().match(/loadContent\('(.+?)'\)/)[1];
+                        loadContent(sectionName);
+                    }
+                } else {
+                    throw new Error('Server error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error submitting form. Please try again.');
+            })
+            .finally(() => {
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.classList.remove('btn-loading');
+            });
+        }
+        
+        function showSuccessMessage(message) {
+            // Remove existing success message
+            const existingMsg = document.querySelector('.success-message');
+            if (existingMsg) {
+                existingMsg.remove();
+            }
+            
+            // Create and show new success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.innerHTML = '<i class="fas fa-check-circle"></i> ' + message;
+            
+            const mainContent = document.getElementById('mainContent');
+            mainContent.insertBefore(successDiv, mainContent.firstChild);
+            
+            // Show the message
+            setTimeout(() => {
+                successDiv.style.display = 'block';
+            }, 100);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+                setTimeout(() => successDiv.remove(), 300);
+            }, 3000);
+        }
+        
+        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('formModal');
             if (event.target == modal) {
                 closeModal();
             }
         }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Prevent modal from closing when clicking inside modal content
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalContent = document.querySelector('.modal-content');
+            if (modalContent) {
+                modalContent.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            }
+        });
     </script>
 </body>
 </html>
