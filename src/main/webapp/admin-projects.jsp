@@ -5,20 +5,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Projects - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-sidebar.css">
 </head>
 <body>
-    <jsp:include page="WEB-INF/navigation.jsp" />
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Manage Projects</h2>
+
+    <div class="admin-layout">        
+        <main class="main-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Manage Projects</h1>
             </div>
-        </section>
-
-        <section class="services-preview">
-            <div class="auth-form" style="max-width: 600px;">
+            
+            <div class="auth-form" style="max-width: 600px; margin-bottom: 3rem;">
                 <h3>Add New Project</h3>
                 <form method="post">
                     <div class="form-group">
@@ -106,13 +106,13 @@
                     </c:forEach>
                 </tbody>
             </table>
-        </section>
-    </main>
+        </main>
+    </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Alluring Decors. All rights reserved. | Designed with elegance.</p>
-        </div>
-    </footer>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+    </script>
 </body>
 </html>

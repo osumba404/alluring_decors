@@ -27,6 +27,7 @@ public class AdminUsersServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String action = request.getParameter("action");
+        String ajax = request.getParameter("ajax");
         
         if ("delete".equals(action)) {
             int userId = Integer.parseInt(request.getParameter("id"));
@@ -36,7 +37,24 @@ public class AdminUsersServlet extends HttpServlet {
         }
         
         List<User> users = userBean.getAllUsers();
-        request.setAttribute("users", users);
-        request.getRequestDispatcher("/admin-users.jsp").forward(request, response);
+        
+        if ("true".equals(ajax)) {
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().println(
+                "<div class='dashboard-header'><h1 class='dashboard-title'>Manage Users</h1></div>" +
+                "<table><thead><tr><th>ID</th><th>Username</th><th>Full Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Actions</th></tr></thead><tbody>"
+            );
+            for (User user : users) {
+                response.getWriter().println(
+                    "<tr><td>" + user.getUserId() + "</td><td>" + user.getUsername() + "</td><td>" + user.getFullName() + 
+                    "</td><td>" + user.getEmail() + "</td><td>" + user.getPhone() + "</td><td>" + user.getRole() + 
+                    "</td><td><a href='users?action=delete&id=" + user.getUserId() + "' onclick='return confirm(\"Delete this user?\")'>Delete</a></td></tr>"
+                );
+            }
+            response.getWriter().println("</tbody></table>");
+        } else {
+            request.setAttribute("users", users);
+            request.getRequestDispatcher("/admin-users.jsp").forward(request, response);
+        }
     }
 }

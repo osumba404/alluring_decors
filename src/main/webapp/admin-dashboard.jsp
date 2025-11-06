@@ -20,39 +20,39 @@
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
             </div>
             <nav class="sidebar-menu">
-                <a href="#" class="sidebar-item" onclick="loadContent('users')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('users')">
                     <span class="sidebar-item-icon"><i class="fas fa-users"></i></span>
                     <span class="sidebar-item-text">Manage Users</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('projects')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('projects')">
                     <span class="sidebar-item-icon"><i class="fas fa-project-diagram"></i></span>
                     <span class="sidebar-item-text">Manage Projects</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('domains')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('domains')">
                     <span class="sidebar-item-icon"><i class="fas fa-tags"></i></span>
                     <span class="sidebar-item-text">Manage Domains</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('services')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('services')">
                     <span class="sidebar-item-icon"><i class="fas fa-cogs"></i></span>
                     <span class="sidebar-item-text">Manage Services</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('content')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('content')">
                     <span class="sidebar-item-icon"><i class="fas fa-edit"></i></span>
                     <span class="sidebar-item-text">Edit Content</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('contacts')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('contacts')">
                     <span class="sidebar-item-icon"><i class="fas fa-phone"></i></span>
                     <span class="sidebar-item-text">Manage Contacts</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('feedback')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('feedback')">
                     <span class="sidebar-item-icon"><i class="fas fa-comments"></i></span>
                     <span class="sidebar-item-text">View Feedback</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('faqs')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('faqs')">
                     <span class="sidebar-item-icon"><i class="fas fa-question-circle"></i></span>
                     <span class="sidebar-item-text">Manage FAQs</span>
                 </a>
-                <a href="#" class="sidebar-item" onclick="loadContent('requests')">
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('requests')">
                     <span class="sidebar-item-icon"><i class="fas fa-envelope"></i></span>
                     <span class="sidebar-item-text">Service Requests</span>
                 </a>
@@ -121,28 +121,19 @@
             event.target.closest('.sidebar-item').classList.add('active');
             
             // Load content based on section
-            switch(section) {
-                case 'users':
-                    window.location.href = '../admin/users';
-                    break;
-                case 'projects':
-                    window.location.href = '../admin/projects';
-                    break;
-                case 'domains':
-                    window.location.href = '../admin/domains';
-                    break;
-                default:
+            fetch(section + '?ajax=true')
+                .then(response => response.text())
+                .then(html => {
+                    mainContent.innerHTML = html;
+                })
+                .catch(error => {
                     mainContent.innerHTML = `
                         <div class="dashboard-header">
-                            <h1 class="dashboard-title">${section.charAt(0).toUpperCase() + section.slice(1)}</h1>
-                            <p class="dashboard-subtitle">This section is under development</p>
-                        </div>
-                        <div class="admin-card">
-                            <h4>Coming Soon</h4>
-                            <p>This feature will be available in the next update.</p>
+                            <h1 class="dashboard-title">Error</h1>
+                            <p class="dashboard-subtitle">Failed to load content</p>
                         </div>
                     `;
-            }
+                });
         }
     </script>
 </body>
