@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/admin/dashboard")
-public class AdminDashboardServlet extends HttpServlet {
+@WebServlet("/admin/feedback")
+public class AdminFeedbackServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        request.getRequestDispatcher("/admin-dashboard.jsp").forward(request, response);
+        response.getWriter().println("<h1>View Feedback</h1><p>This section is under development.</p>");
     }
 }

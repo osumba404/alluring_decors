@@ -1,3 +1,8 @@
+/* Universal serif font enforcement */
+* {
+    font-family: serif !important;
+}
+
 /* Admin Dashboard Sidebar */
 .admin-layout {
     display: flex;
@@ -30,6 +35,7 @@
     font-weight: 600;
     color: var(--primary);
     transition: opacity 0.3s ease;
+    font-family: serif !important;
 }
 
 .sidebar.collapsed .sidebar-title {
@@ -62,6 +68,7 @@
     text-decoration: none;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
+    font-family: serif !important;
 }
 
 .sidebar-item:hover {
@@ -105,11 +112,13 @@
     font-size: 2.5rem;
     color: var(--primary);
     margin-bottom: 0.5rem;
+    font-family: serif !important;
 }
 
 .dashboard-subtitle {
     color: #666;
     font-size: 1.1rem;
+    font-family: serif !important;
 }
 
 .admin-grid {
@@ -136,11 +145,13 @@
     color: var(--primary);
     margin-bottom: 1rem;
     font-size: 1.3rem;
+    font-family: serif !important;
 }
 
 .admin-card p {
     color: #666;
     margin-bottom: 1.5rem;
+    font-family: serif !important;
 }
 
 .admin-card a {
@@ -148,6 +159,7 @@
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
+    font-family: serif !important;
 }
 
 .admin-card a:hover {
