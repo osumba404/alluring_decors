@@ -33,14 +33,14 @@ public class AdminContactsServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<div class='dashboard-header'><h1 class='dashboard-title'>Manage Contacts</h1>" +
-                "<button class='btn-primary' onclick=\"openModal('Update Contact Information', '" +
+                "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage Contacts</h1></div>" +
+                "<button class='header-action-btn' onclick=\"openModal('Update Contact Information', '" +
                 "<form method=\\\"post\\\" action=\\\"contacts\\\">" +
                 "<input type=\\\"hidden\\\" name=\\\"contactId\\\" value=\\\"" + primaryContact.getContactId() + "\\\">" +
                 "<div class=\\\"form-group\\\"><label>Phone Number:</label><input type=\\\"tel\\\" name=\\\"phone\\\" value=\\\"" + (primaryContact.getPhone() != null ? primaryContact.getPhone() : "") + "\\\" required></div>" +
                 "<div class=\\\"form-group\\\"><label>Email Address:</label><input type=\\\"email\\\" name=\\\"email\\\" value=\\\"" + (primaryContact.getEmail() != null ? primaryContact.getEmail() : "") + "\\\" required></div>" +
                 "<div class=\\\"form-group\\\"><label>Address:</label><textarea name=\\\"address\\\" rows=\\\"3\\\" required>" + (primaryContact.getAddress() != null ? primaryContact.getAddress() : "") + "</textarea></div>" +
-                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Contact Info</button></form>')\">Edit Contact</button></div>"
+                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Contact Info</button></form>')\"><i class='fas fa-edit'></i> Edit Contact</button></div>"
             );
         } else {
             request.setAttribute("contacts", contacts);

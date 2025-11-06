@@ -10,11 +10,235 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin-sidebar.css">
     <style>
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: #fff; margin: 5% auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 600px; position: relative; }
-        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .close:hover { color: #000; }
-        .modal h3 { margin-top: 0; }
+        /* Modern Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(22, 78, 49, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #F8F5F0 0%, #ffffff 100%);
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 650px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(22, 78, 49, 0.3);
+            animation: slideIn 0.4s ease;
+            overflow: hidden;
+            border: 3px solid #D4A017;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%);
+            color: #D4A017;
+            padding: 25px 30px;
+            border-bottom: 3px solid #D4A017;
+            position: relative;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #D4A017;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(212, 160, 23, 0.1);
+        }
+        
+        .close:hover {
+            background: #D4A017;
+            color: #164e31;
+            transform: translateY(-50%) rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .modal .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #164e31;
+            font-size: 1.1rem;
+        }
+        
+        .modal input, .modal textarea, .modal select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .modal input:focus, .modal textarea:focus, .modal select:focus {
+            outline: none;
+            border-color: #D4A017;
+            box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .modal input[readonly] {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .modal .btn-primary {
+            background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%);
+            border: none;
+            color: #164e31;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .modal .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(212, 160, 23, 0.4);
+        }
+        
+        /* Action Buttons */
+        .action-btn {
+            background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%);
+            border: none;
+            color: #164e31;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+            box-shadow: 0 4px 12px rgba(212, 160, 23, 0.3);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(212, 160, 23, 0.4);
+        }
+        
+        .action-btn.view {
+            background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%);
+            color: #D4A017;
+        }
+        
+        .action-btn.delete {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+            color: white;
+        }
+        
+        /* Enhanced Tables */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .admin-table th {
+            background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%);
+            color: #D4A017;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        
+        .admin-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s ease;
+        }
+        
+        .admin-table tr:hover {
+            background: rgba(212, 160, 23, 0.05);
+        }
+        
+        /* Header Action Button */
+        .header-action-btn {
+            background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%);
+            border: none;
+            color: #164e31;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.3);
+            margin-left: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .header-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(212, 160, 23, 0.4);
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -113,11 +337,14 @@
         </main>
     </div>
 
-    <!-- Modal for forms -->
+    <!-- Enhanced Modal for forms -->
     <div id="formModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modalBody"></div>
+            <div class="modal-header">
+                <h3 id="modalTitle">Form</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
@@ -152,12 +379,15 @@
         }
         
         function openModal(title, formHtml) {
-            document.getElementById('modalBody').innerHTML = '<h3>' + title + '</h3>' + formHtml;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = formHtml;
             document.getElementById('formModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
         
         function closeModal() {
             document.getElementById('formModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         
         window.onclick = function(event) {

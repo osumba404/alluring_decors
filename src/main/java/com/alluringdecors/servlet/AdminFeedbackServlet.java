@@ -42,8 +42,8 @@ public class AdminFeedbackServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<div class='dashboard-header'><h1 class='dashboard-title'>View Feedback</h1></div>" +
-                "<h3>Customer Feedback</h3><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Type</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody>"
+                "<div class='dashboard-header'><div><h1 class='dashboard-title'>View Feedback</h1></div></div>" +
+                "<table class='admin-table'><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Type</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody>"
             );
             if (feedbacks.isEmpty()) {
                 response.getWriter().println("<tr><td colspan='7'>No feedback available yet.</td></tr>");
@@ -54,12 +54,12 @@ public class AdminFeedbackServlet extends HttpServlet {
                     response.getWriter().println(
                         "<tr><td>" + feedback.getFeedbackId() + "</td><td>" + feedback.getName() + "</td><td>" + feedback.getEmail() + 
                         "</td><td>" + feedback.getType() + "</td><td>" + message + "</td><td>" + date + 
-                        "</td><td><button onclick=\"openModal('View Feedback', '" +
+                        "</td><td><button class='action-btn view' onclick=\"openModal('View Feedback', '" +
                         "<div class=\\\"form-group\\\"><label>Name:</label><input type=\\\"text\\\" value=\\\"" + feedback.getName() + "\\\" readonly></div>" +
                         "<div class=\\\"form-group\\\"><label>Email:</label><input type=\\\"email\\\" value=\\\"" + feedback.getEmail() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Message:</label><textarea rows=\\\"4\\\" readonly>" + feedback.getMessage() + "</textarea></div>')\">View</button> " +
+                        "<div class=\\\"form-group\\\"><label>Message:</label><textarea rows=\\\"4\\\" readonly>" + feedback.getMessage() + "</textarea></div>')\"><i class='fas fa-eye'></i> View</button>" +
                         "<a href='feedback?action=delete&id=" + feedback.getFeedbackId() + 
-                        "' onclick='return confirm(\"Delete this feedback?\")'>Delete</a></td></tr>"
+                        "' class='action-btn delete' onclick='return confirm(\"Delete this feedback?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a></td></tr>"
                     );
                 }
             }

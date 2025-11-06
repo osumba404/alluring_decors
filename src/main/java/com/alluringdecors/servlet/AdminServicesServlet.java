@@ -41,14 +41,14 @@ public class AdminServicesServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<div class='dashboard-header'><h1 class='dashboard-title'>Manage Services</h1>" +
-                "<button class='btn-primary' onclick=\"openModal('Add New Service', '" +
+                "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage Services</h1></div>" +
+                "<button class='header-action-btn' onclick=\"openModal('Add New Service', '" +
                 "<form method=\\\"post\\\" action=\\\"services\\\">" +
                 "<div class=\\\"form-group\\\"><label>Service Name:</label><input type=\\\"text\\\" name=\\\"name\\\" required></div>" +
                 "<div class=\\\"form-group\\\"><label>Description:</label><textarea name=\\\"description\\\" rows=\\\"3\\\" required></textarea></div>" +
                 "<div class=\\\"form-group\\\"><label>Price per Sqft:</label><input type=\\\"number\\\" name=\\\"pricePerSqft\\\" step=\\\"0.01\\\" required></div>" +
-                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add Service</button></form>')\">Add Service</button></div>" +
-                "<h3>Services</h3><table><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price/Sqft</th><th>Actions</th></tr></thead><tbody>"
+                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add Service</button></form>')\"><i class='fas fa-plus'></i> Add Service</button></div>" +
+                "<table class='admin-table'><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price/Sqft</th><th>Actions</th></tr></thead><tbody>"
             );
             if (services.isEmpty()) {
                 response.getWriter().println("<tr><td colspan='5'>No services available. Add some services to get started.</td></tr>");
@@ -57,15 +57,15 @@ public class AdminServicesServlet extends HttpServlet {
                     response.getWriter().println(
                         "<tr><td>" + service.getServiceId() + "</td><td>" + service.getName() + "</td><td>" + service.getDescription() + 
                         "</td><td>$" + service.getPricePerSqft() + "</td><td>" +
-                        "<button onclick=\"openModal('Edit Service', '" +
+                        "<button class='action-btn' onclick=\"openModal('Edit Service', '" +
                         "<form method=\\\"post\\\" action=\\\"services\\\">" +
                         "<input type=\\\"hidden\\\" name=\\\"serviceId\\\" value=\\\"" + service.getServiceId() + "\\\">" +
                         "<div class=\\\"form-group\\\"><label>Service Name:</label><input type=\\\"text\\\" name=\\\"name\\\" value=\\\"" + service.getName() + "\\\" required></div>" +
                         "<div class=\\\"form-group\\\"><label>Description:</label><textarea name=\\\"description\\\" rows=\\\"3\\\" required>" + service.getDescription() + "</textarea></div>" +
                         "<div class=\\\"form-group\\\"><label>Price per Sqft:</label><input type=\\\"number\\\" name=\\\"pricePerSqft\\\" step=\\\"0.01\\\" value=\\\"" + service.getPricePerSqft() + "\\\" required></div>" +
-                        "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Service</button></form>')\">Edit</button> " +
+                        "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update Service</button></form>')\"><i class='fas fa-edit'></i> Edit</button>" +
                         "<a href='services?action=delete&id=" + service.getServiceId() + 
-                        "' onclick='return confirm(\"Delete this service?\")'>Delete</a></td></tr>"
+                        "' class='action-btn delete' onclick='return confirm(\"Delete this service?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a></td></tr>"
                     );
                 }
             }

@@ -41,14 +41,14 @@ public class AdminFaqsServlet extends HttpServlet {
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
-                "<div class='dashboard-header'><h1 class='dashboard-title'>Manage FAQs</h1>" +
-                "<button class='btn-primary' onclick=\"openModal('Add New FAQ', '" +
+                "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage FAQs</h1></div>" +
+                "<button class='header-action-btn' onclick=\"openModal('Add New FAQ', '" +
                 "<form method=\\\"post\\\" action=\\\"faqs\\\">" +
                 "<div class=\\\"form-group\\\"><label>Question:</label><input type=\\\"text\\\" name=\\\"question\\\" required></div>" +
                 "<div class=\\\"form-group\\\"><label>Answer:</label><textarea name=\\\"answer\\\" rows=\\\"4\\\" required></textarea></div>" +
                 "<div class=\\\"form-group\\\"><label>Display Order:</label><input type=\\\"number\\\" name=\\\"displayOrder\\\" value=\\\"0\\\" required></div>" +
-                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add FAQ</button></form>')\">Add FAQ</button></div>" +
-                "<h3>FAQs</h3><table><thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Order</th><th>Actions</th></tr></thead><tbody>"
+                "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Add FAQ</button></form>')\"><i class='fas fa-plus'></i> Add FAQ</button></div>" +
+                "<table class='admin-table'><thead><tr><th>ID</th><th>Question</th><th>Answer</th><th>Order</th><th>Actions</th></tr></thead><tbody>"
             );
             if (faqs.isEmpty()) {
                 response.getWriter().println("<tr><td colspan='5'>No FAQs available. Add some FAQs to get started.</td></tr>");
@@ -58,15 +58,15 @@ public class AdminFaqsServlet extends HttpServlet {
                     response.getWriter().println(
                         "<tr><td>" + faq.getFaqId() + "</td><td>" + faq.getQuestion() + "</td><td>" + answer + 
                         "</td><td>" + faq.getDisplayOrder() + "</td><td>" +
-                        "<button onclick=\"openModal('Edit FAQ', '" +
+                        "<button class='action-btn' onclick=\"openModal('Edit FAQ', '" +
                         "<form method=\\\"post\\\" action=\\\"faqs\\\">" +
                         "<input type=\\\"hidden\\\" name=\\\"faqId\\\" value=\\\"" + faq.getFaqId() + "\\\">" +
                         "<div class=\\\"form-group\\\"><label>Question:</label><input type=\\\"text\\\" name=\\\"question\\\" value=\\\"" + faq.getQuestion() + "\\\" required></div>" +
                         "<div class=\\\"form-group\\\"><label>Answer:</label><textarea name=\\\"answer\\\" rows=\\\"4\\\" required>" + faq.getAnswer() + "</textarea></div>" +
                         "<div class=\\\"form-group\\\"><label>Display Order:</label><input type=\\\"number\\\" name=\\\"displayOrder\\\" value=\\\"" + faq.getDisplayOrder() + "\\\" required></div>" +
-                        "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update FAQ</button></form>')\">Edit</button> " +
+                        "<button type=\\\"submit\\\" class=\\\"btn-primary\\\">Update FAQ</button></form>')\"><i class='fas fa-edit'></i> Edit</button>" +
                         "<a href='faqs?action=delete&id=" + faq.getFaqId() + 
-                        "' onclick='return confirm(\"Delete this FAQ?\")'>Delete</a></td></tr>"
+                        "' class='action-btn delete' onclick='return confirm(\"Delete this FAQ?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a></td></tr>"
                     );
                 }
             }
