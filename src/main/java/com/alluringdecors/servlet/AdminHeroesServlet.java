@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/heroes")
+@WebServlet("/admin/heroes")
 public class AdminHeroesServlet extends HttpServlet {
     
     private HeroBean heroBean;
