@@ -8,6 +8,7 @@
     <title>Admin Dashboard - Alluring Decors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/navbar-override.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin-sidebar.css">
     <style>
         /* Modern Modal Styles */
@@ -280,7 +281,7 @@
     </style>
 </head>
 <body>
-    <jsp:include page="WEB-INF/navigation.jsp" />
+    <jsp:include page="includes/navbar.jsp" />
 
     <div class="admin-layout">
         <aside class="sidebar" id="sidebar">
@@ -496,14 +497,7 @@
             document.getElementById('formModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Add form submission handler
-            const form = document.querySelector('#modalBody form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    submitModalForm(this);
-                });
-            }
+            // Forms now submit directly
         }
         
         function closeModal() {
@@ -522,11 +516,15 @@
             const formData = new FormData(form);
             const action = form.getAttribute('action');
             
+            console.log('Submitting form to:', action);
+            console.log('Form data:', Array.from(formData.entries()));
+            
             fetch(action, {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
+                console.log('Response status:', response.status);
                 if (response.ok) {
                     closeModal();
                     showSuccessMessage('Operation completed successfully!');
@@ -536,12 +534,14 @@
                         loadContent(currentSection);
                     }
                 } else {
-                    throw new Error('Server error');
+                    return response.text().then(text => {
+                        throw new Error(`Server error (${response.status}): ${text}`);
+                    });
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error submitting form. Please try again.');
+                alert('Error submitting form: ' + error.message);
             })
             .finally(() => {
                 // Reset button state
@@ -552,22 +552,28 @@
         
         // Global functions for all admin forms
         function showAddProjectForm() {
-            openModal('Add New Project', 
-                '<form method="post" action="projects">' +
-                '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
-                '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
-                '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
-                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>' +
-                '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
-                '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
-                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
-                '<button type="submit" class="btn-primary">Add Project</button></form>'
-            );
+            const formHtml = `
+                <form method="post" action="admin/projects" onsubmit="return submitDirectForm(this)">
+                    <div class="form-group"><label>Title:</label><input type="text" name="title" required></div>
+                    <div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>
+                    <div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>
+                    <div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>
+                    <div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>
+                    <div class="form-group"><label>Location:</label><input type="text" name="location" required></div>
+                    <div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>
+                    <button type="submit" class="btn-primary">Add Project</button>
+                </form>`;
+            openModal('Add New Project', formHtml);
+        }
+        
+        function submitDirectForm(form) {
+            form.submit();
+            return false;
         }
         
         function showAddDomainForm() {
             openModal('Add New Domain', 
-                '<form method="post" action="domains">' +
+                '<form method="post" action="admin/domains">' +
                 '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
                 '<button type="submit" class="btn-primary">Add Domain</button></form>'
@@ -576,7 +582,7 @@
         
         function showAddServiceForm() {
             openModal('Add New Service', 
-                '<form method="post" action="services">' +
+                '<form method="post" action="admin/services">' +
                 '<div class="form-group"><label>Service Name:</label><input type="text" name="name" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
                 '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" required></div>' +
@@ -616,7 +622,7 @@
         
         function showEditServiceForm(id, name, description, price) {
             openModal('Edit Service', 
-                '<form method="post" action="services">' +
+                '<form method="post" action="admin/services">' +
                 '<input type="hidden" name="serviceId" value="' + id + '">' +
                 '<div class="form-group"><label>Service Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
@@ -659,7 +665,7 @@
         
         function showAddHeroForm() {
             openModal('Add Hero Slide', 
-                '<form method="post" action="heroes">' +
+                '<form method="post" action="admin/heroes">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle"></div>' +
                 '<div class="form-group"><label>Body Text:</label><textarea name="bodyText" rows="3" required></textarea></div>' +
@@ -675,7 +681,7 @@
         
         function showEditHeroForm(id, title, subtitle, bodyText, backgroundImage, primaryButton, primaryButtonLink, secondaryButton, secondaryButtonLink, displayOrder) {
             openModal('Edit Hero Slide', 
-                '<form method="post" action="heroes">' +
+                '<form method="post" action="admin/heroes">' +
                 '<input type="hidden" name="heroId" value="' + id + '">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
                 '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle" value="' + subtitle + '"></div>' +
@@ -692,7 +698,7 @@
         
         function showEditDomainForm(id, name, description) {
             openModal('Edit Domain', 
-                '<form method="post" action="domains">' +
+                '<form method="post" action="admin/domains">' +
                 '<input type="hidden" name="domainId" value="' + id + '">' +
                 '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +

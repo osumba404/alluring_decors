@@ -20,6 +20,34 @@ public class AdminHeroesServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         heroBean = new HeroBean();
+        
+        // Create heroes table if it doesn't exist
+        try (java.sql.Connection conn = com.alluringdecors.util.DatabaseUtil.getConnection();
+             java.sql.Statement stmt = conn.createStatement()) {
+            
+            String createTable = "CREATE TABLE IF NOT EXISTS heroes (" +
+                "hero_id INT AUTO_INCREMENT PRIMARY KEY," +
+                "title VARCHAR(255) NOT NULL," +
+                "subtitle VARCHAR(255)," +
+                "body_text TEXT NOT NULL," +
+                "background_image VARCHAR(500)," +
+                "primary_button VARCHAR(100)," +
+                "primary_button_link VARCHAR(500)," +
+                "secondary_button VARCHAR(100)," +
+                "secondary_button_link VARCHAR(500)," +
+                "display_order INT DEFAULT 1," +
+                "is_active BOOLEAN DEFAULT TRUE," +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
+                ")";
+            
+            stmt.executeUpdate(createTable);
+            System.out.println("Heroes table created/verified successfully");
+            
+        } catch (Exception e) {
+            System.err.println("Error creating heroes table: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     
     @Override
@@ -32,7 +60,7 @@ public class AdminHeroesServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int heroId = Integer.parseInt(request.getParameter("id"));
             heroBean.deleteHero(heroId);
-            response.sendRedirect("heroes");
+            response.sendRedirect(request.getContextPath() + "/admin/heroes");
             return;
         }
         
@@ -88,39 +116,80 @@ public class AdminHeroesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        String heroIdStr = request.getParameter("heroId");
-        String title = request.getParameter("title");
-        String subtitle = request.getParameter("subtitle");
-        String bodyText = request.getParameter("bodyText");
-        String backgroundImage = request.getParameter("backgroundImage");
-        String primaryButton = request.getParameter("primaryButton");
-        String primaryButtonLink = request.getParameter("primaryButtonLink");
-        String secondaryButton = request.getParameter("secondaryButton");
-        String secondaryButtonLink = request.getParameter("secondaryButtonLink");
-        int displayOrder = Integer.parseInt(request.getParameter("displayOrder"));
+        System.out.println("AdminHeroesServlet doPost called");
         
-        if (heroIdStr != null && !heroIdStr.isEmpty()) {
-            // Update existing hero
-            int heroId = Integer.parseInt(heroIdStr);
-            Hero hero = new Hero(title, subtitle, bodyText, backgroundImage);
-            hero.setHeroId(heroId);
-            hero.setPrimaryButton(primaryButton);
-            hero.setPrimaryButtonLink(primaryButtonLink);
-            hero.setSecondaryButton(secondaryButton);
-            hero.setSecondaryButtonLink(secondaryButtonLink);
-            hero.setDisplayOrder(displayOrder);
-            heroBean.updateHero(hero);
-        } else {
-            // Add new hero
-            Hero hero = new Hero(title, subtitle, bodyText, backgroundImage);
-            hero.setPrimaryButton(primaryButton);
-            hero.setPrimaryButtonLink(primaryButtonLink);
-            hero.setSecondaryButton(secondaryButton);
-            hero.setSecondaryButtonLink(secondaryButtonLink);
-            hero.setDisplayOrder(displayOrder);
-            heroBean.addHero(hero);
+        try {
+            String heroIdStr = request.getParameter("heroId");
+            String title = request.getParameter("title");
+            String subtitle = request.getParameter("subtitle");
+            String bodyText = request.getParameter("bodyText");
+            String backgroundImage = request.getParameter("backgroundImage");
+            String primaryButton = request.getParameter("primaryButton");
+            String primaryButtonLink = request.getParameter("primaryButtonLink");
+            String secondaryButton = request.getParameter("secondaryButton");
+            String secondaryButtonLink = request.getParameter("secondaryButtonLink");
+            String displayOrderStr = request.getParameter("displayOrder");
+            
+            System.out.println("Form parameters - Title: " + title + ", BodyText: " + bodyText + ", DisplayOrder: " + displayOrderStr);
+            
+            // Validate required fields
+            if (title == null || title.trim().isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Title is required");
+                return;
+            }
+            if (bodyText == null || bodyText.trim().isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Body text is required");
+                return;
+            }
+            if (displayOrderStr == null || displayOrderStr.trim().isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Display order is required");
+                return;
+            }
+            
+            int displayOrder;
+            try {
+                displayOrder = Integer.parseInt(displayOrderStr);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid display order");
+                return;
+            }
+            
+            boolean success;
+            if (heroIdStr != null && !heroIdStr.isEmpty()) {
+                // Update existing hero
+                int heroId = Integer.parseInt(heroIdStr);
+                Hero hero = new Hero(title, subtitle, bodyText, backgroundImage);
+                hero.setHeroId(heroId);
+                hero.setPrimaryButton(primaryButton);
+                hero.setPrimaryButtonLink(primaryButtonLink);
+                hero.setSecondaryButton(secondaryButton);
+                hero.setSecondaryButtonLink(secondaryButtonLink);
+                hero.setDisplayOrder(displayOrder);
+                success = heroBean.updateHero(hero);
+            } else {
+                // Add new hero
+                Hero hero = new Hero(title, subtitle, bodyText, backgroundImage);
+                hero.setPrimaryButton(primaryButton);
+                hero.setPrimaryButtonLink(primaryButtonLink);
+                hero.setSecondaryButton(secondaryButton);
+                hero.setSecondaryButtonLink(secondaryButtonLink);
+                hero.setDisplayOrder(displayOrder);
+                success = heroBean.addHero(hero);
+            }
+            
+            if (!success) {
+                System.out.println("Database operation failed");
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database operation failed");
+                return;
+            }
+            
+            System.out.println("Hero operation successful, redirecting...");
+            response.sendRedirect(request.getContextPath() + "/admin/heroes");
+            
+        } catch (Exception e) {
+            System.out.println("Exception in doPost: " + e.getMessage());
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
-        
-        response.sendRedirect("heroes");
     }
 }

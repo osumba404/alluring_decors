@@ -8,9 +8,10 @@
     <title>Login - Alluring Decors</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar-override.css">
 </head>
 <body>
-    <jsp:include page="WEB-INF/navigation.jsp" />
+    <jsp:include page="includes/navbar.jsp" />
 
     <main class="auth-container">
         <div class="auth-form">

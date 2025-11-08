@@ -32,7 +32,7 @@ public class AdminFaqsServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int faqId = Integer.parseInt(request.getParameter("id"));
             faqBean.deleteFaq(faqId);
-            response.sendRedirect("faqs");
+            response.sendRedirect(request.getContextPath() + "/admin/faqs");
             return;
         }
         
@@ -101,6 +101,6 @@ public class AdminFaqsServlet extends HttpServlet {
             faqBean.addFaq(faq);
         }
         
-        response.sendRedirect("faqs");
+        response.sendRedirect(request.getContextPath() + "/admin/faqs");
     }
 }

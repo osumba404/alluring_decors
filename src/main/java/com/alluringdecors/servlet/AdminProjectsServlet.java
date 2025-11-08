@@ -33,7 +33,7 @@ public class AdminProjectsServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int projectId = Integer.parseInt(request.getParameter("id"));
             projectBean.deleteProject(projectId);
-            response.sendRedirect("projects");
+            response.sendRedirect(request.getContextPath() + "/admin/projects");
             return;
         }
         
@@ -125,7 +125,7 @@ public class AdminProjectsServlet extends HttpServlet {
                 "<script>" +
                 "function showAddProjectForm() {" +
                 "openModal('Add New Project', '" +
-                "<form method=\"post\" action=\"projects\">" +
+                "<form method=\"post\" action=\"admin/projects\">" +
                 "<div class=\"form-group\"><label>Title:</label><input type=\"text\" name=\"title\" required></div>" +
                 "<div class=\"form-group\"><label>Short Description:</label><textarea name=\"shortDescription\" rows=\"3\" required></textarea></div>" +
                 "<div class=\"form-group\"><label>Full Description:</label><textarea name=\"fullDescription\" rows=\"4\"></textarea></div>" +
@@ -148,7 +148,14 @@ public class AdminProjectsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        System.out.println("AdminProjectsServlet doPost called");
+        System.out.println("All parameters:");
+        request.getParameterMap().forEach((key, values) -> {
+            System.out.println(key + " = " + String.join(", ", values));
+        });
+        
         String title = request.getParameter("title");
+        System.out.println("Form parameters - Title: " + title);
         String shortDescription = request.getParameter("shortDescription");
         String fullDescription = request.getParameter("fullDescription");
         String category = request.getParameter("category");
@@ -164,7 +171,16 @@ public class AdminProjectsServlet extends HttpServlet {
             project.setStartDate(LocalDate.parse(startDateStr));
         }
         
-        projectBean.addProject(project);
-        response.sendRedirect("projects");
+        // Validate required fields
+        if (title == null || title.trim().isEmpty()) {
+            System.out.println("Title is null or empty!");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Title is required");
+            return;
+        }
+        
+        System.out.println("Adding project with title: " + title);
+        boolean success = projectBean.addProject(project);
+        System.out.println("Project add result: " + success);
+        response.sendRedirect(request.getContextPath() + "/admin/projects");
     }
 }

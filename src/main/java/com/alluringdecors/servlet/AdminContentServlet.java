@@ -87,6 +87,6 @@ public class AdminContentServlet extends HttpServlet {
             }
         }
         
-        response.sendRedirect("content");
+        response.sendRedirect(request.getContextPath() + "/admin/content");
     }
 }

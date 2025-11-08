@@ -7,9 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Alluring Decors</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar-override.css">
 </head>
 <body>
-    <jsp:include page="WEB-INF/navigation.jsp" />
+    <jsp:include page="includes/navbar.jsp" />
 
     <main>
         <section class="hero">

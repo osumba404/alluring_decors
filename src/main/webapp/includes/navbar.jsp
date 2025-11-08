@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- Debug: User = ${sessionScope.user}, Role = ${sessionScope.user.role} -->
 <header>
     <nav class="navbar">
         <div class="nav-brand">
