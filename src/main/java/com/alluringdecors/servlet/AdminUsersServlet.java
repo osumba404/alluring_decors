@@ -32,7 +32,7 @@ public class AdminUsersServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int userId = Integer.parseInt(request.getParameter("id"));
             userBean.deleteUser(userId);
-            response.sendRedirect(request.getContextPath() + "/admin/users");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         

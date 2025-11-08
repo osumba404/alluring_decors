@@ -32,7 +32,7 @@ public class AdminDomainsServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int domainId = Integer.parseInt(request.getParameter("id"));
             domainBean.deleteDomain(domainId);
-            response.sendRedirect(request.getContextPath() + "/admin/domains");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         
@@ -100,6 +100,6 @@ public class AdminDomainsServlet extends HttpServlet {
             domainBean.addDomain(domain);
         }
         
-        response.sendRedirect(request.getContextPath() + "/admin/domains");
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
     }
 }

@@ -496,8 +496,6 @@
             document.getElementById('modalBody').innerHTML = formHtml;
             document.getElementById('formModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
-            
-            // Forms now submit directly
         }
         
         function closeModal() {
@@ -552,17 +550,15 @@
         
         // Global functions for all admin forms
         function showAddProjectForm() {
-            const formHtml = `
-                <form method="post" action="admin/projects" onsubmit="return submitDirectForm(this)">
-                    <div class="form-group"><label>Title:</label><input type="text" name="title" required></div>
-                    <div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>
-                    <div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>
-                    <div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>
-                    <div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>
-                    <div class="form-group"><label>Location:</label><input type="text" name="location" required></div>
-                    <div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>
-                    <button type="submit" class="btn-primary">Add Project</button>
-                </form>`;
+            const formHtml = '<form method="post" action="/alluring-decors/admin/projects">' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
+                '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
+                '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
+                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>' +
+                '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
+                '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
+                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
+                '<button type="submit" class="btn-primary">Add Project</button></form>';
             openModal('Add New Project', formHtml);
         }
         
@@ -571,9 +567,33 @@
             return false;
         }
         
+        function showViewProjectForm(id, title, client, location, startDate, shortDesc, fullDesc) {
+            const formHtml = '<div class="form-group"><label>Title:</label><input type="text" value="' + title + '" readonly></div>' +
+                '<div class="form-group"><label>Client:</label><input type="text" value="' + client + '" readonly></div>' +
+                '<div class="form-group"><label>Location:</label><input type="text" value="' + location + '" readonly></div>' +
+                '<div class="form-group"><label>Start Date:</label><input type="text" value="' + startDate + '" readonly></div>' +
+                '<div class="form-group"><label>Short Description:</label><textarea rows="3" readonly>' + shortDesc + '</textarea></div>' +
+                (fullDesc ? '<div class="form-group"><label>Full Description:</label><textarea rows="4" readonly>' + fullDesc + '</textarea></div>' : '');
+            openModal('Project Details', formHtml);
+        }
+        
+        function showEditProjectForm(id, title, client, location, category, shortDesc, fullDesc, startDate) {
+            const formHtml = '<form method="post" action="/alluring-decors/admin/projects">' +
+                '<input type="hidden" name="projectId" value="' + id + '">' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
+                '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" value="' + client + '" required></div>' +
+                '<div class="form-group"><label>Location:</label><input type="text" name="location" value="' + location + '" required></div>' +
+                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing"' + (category === 'ongoing' ? ' selected' : '') + '>Ongoing</option><option value="accomplished"' + (category === 'accomplished' ? ' selected' : '') + '>Accomplished</option></select></div>' +
+                '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required>' + shortDesc + '</textarea></div>' +
+                '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4">' + (fullDesc || '') + '</textarea></div>' +
+                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (startDate !== 'N/A' ? startDate : '') + '"></div>' +
+                '<button type="submit" class="btn-primary">Update Project</button></form>';
+            openModal('Edit Project', formHtml);
+        }
+        
         function showAddDomainForm() {
             openModal('Add New Domain', 
-                '<form method="post" action="admin/domains">' +
+                '<form method="post" action="/alluring-decors/admin/domains">' +
                 '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
                 '<button type="submit" class="btn-primary">Add Domain</button></form>'
@@ -582,7 +602,7 @@
         
         function showAddServiceForm() {
             openModal('Add New Service', 
-                '<form method="post" action="admin/services">' +
+                '<form method="post" action="/alluring-decors/admin/services">' +
                 '<div class="form-group"><label>Service Name:</label><input type="text" name="name" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
                 '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" required></div>' +
@@ -622,7 +642,7 @@
         
         function showEditServiceForm(id, name, description, price) {
             openModal('Edit Service', 
-                '<form method="post" action="admin/services">' +
+                '<form method="post" action="/alluring-decors/admin/services">' +
                 '<input type="hidden" name="serviceId" value="' + id + '">' +
                 '<div class="form-group"><label>Service Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
@@ -665,7 +685,7 @@
         
         function showAddHeroForm() {
             openModal('Add Hero Slide', 
-                '<form method="post" action="admin/heroes">' +
+                '<form method="post" action="/alluring-decors/admin/heroes">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle"></div>' +
                 '<div class="form-group"><label>Body Text:</label><textarea name="bodyText" rows="3" required></textarea></div>' +
@@ -681,7 +701,7 @@
         
         function showEditHeroForm(id, title, subtitle, bodyText, backgroundImage, primaryButton, primaryButtonLink, secondaryButton, secondaryButtonLink, displayOrder) {
             openModal('Edit Hero Slide', 
-                '<form method="post" action="admin/heroes">' +
+                '<form method="post" action="/alluring-decors/admin/heroes">' +
                 '<input type="hidden" name="heroId" value="' + id + '">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
                 '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle" value="' + subtitle + '"></div>' +
@@ -698,7 +718,7 @@
         
         function showEditDomainForm(id, name, description) {
             openModal('Edit Domain', 
-                '<form method="post" action="admin/domains">' +
+                '<form method="post" action="/alluring-decors/admin/domains">' +
                 '<input type="hidden" name="domainId" value="' + id + '">' +
                 '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +

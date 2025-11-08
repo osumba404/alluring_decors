@@ -33,7 +33,7 @@ public class AdminProjectsServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int projectId = Integer.parseInt(request.getParameter("id"));
             projectBean.deleteProject(projectId);
-            response.sendRedirect(request.getContextPath() + "/admin/projects");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         
@@ -181,6 +181,6 @@ public class AdminProjectsServlet extends HttpServlet {
         System.out.println("Adding project with title: " + title);
         boolean success = projectBean.addProject(project);
         System.out.println("Project add result: " + success);
-        response.sendRedirect(request.getContextPath() + "/admin/projects");
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
     }
 }

@@ -32,7 +32,7 @@ public class AdminServicesServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int serviceId = Integer.parseInt(request.getParameter("id"));
             serviceBean.deleteService(serviceId);
-            response.sendRedirect(request.getContextPath() + "/admin/services");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         
@@ -101,6 +101,6 @@ public class AdminServicesServlet extends HttpServlet {
             serviceBean.addService(service);
         }
         
-        response.sendRedirect(request.getContextPath() + "/admin/services");
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
     }
 }

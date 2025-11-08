@@ -60,7 +60,7 @@ public class AdminHeroesServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int heroId = Integer.parseInt(request.getParameter("id"));
             heroBean.deleteHero(heroId);
-            response.sendRedirect(request.getContextPath() + "/admin/heroes");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         
@@ -184,7 +184,7 @@ public class AdminHeroesServlet extends HttpServlet {
             }
             
             System.out.println("Hero operation successful, redirecting...");
-            response.sendRedirect(request.getContextPath() + "/admin/heroes");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             
         } catch (Exception e) {
             System.out.println("Exception in doPost: " + e.getMessage());
