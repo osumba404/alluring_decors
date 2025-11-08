@@ -1,5 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.alluringdecors.bean.ProjectBean" %>
+<%@ page import="com.alluringdecors.model.Project" %>
+<%@ page import="java.util.List" %>
+<%
+    ProjectBean projectBean = new ProjectBean();
+    List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
+    List<Project> accomplishedProjects = projectBean.getProjectsByCategory("accomplished");
+    request.setAttribute("ongoingProjects", ongoingProjects);
+    request.setAttribute("accomplishedProjects", accomplishedProjects);
+%>
 <!DOCTYPE html>
 <html>
 <head>

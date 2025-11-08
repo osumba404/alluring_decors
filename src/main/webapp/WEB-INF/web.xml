@@ -15,4 +15,14 @@
         <session-timeout>30</session-timeout>
     </session-config>
     
+    <servlet>
+        <servlet-name>ProjectsServlet</servlet-name>
+        <servlet-class>com.alluringdecors.servlet.ProjectsServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>ProjectsServlet</servlet-name>
+        <url-pattern>/projects</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
