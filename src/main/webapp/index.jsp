@@ -13,78 +13,35 @@
     <jsp:include page="includes/navbar.jsp" />
 
     <main>
-        <section class="hero-carousel">
-            <c:choose>
-                <c:when test="${not empty heroes}">
-                    <c:forEach var="hero" items="${heroes}" varStatus="status">
-                        <div class="hero-slide ${status.index == 0 ? 'active' : ''}" style="background-image: url('${hero.backgroundImage}')">
-                            <div class="hero-content">
-                                <c:if test="${not empty hero.subtitle}"><span class="hero-subtitle">${hero.subtitle}</span></c:if>
-                                <h2 class="hero-title">${hero.title}</h2>
-                                <p class="hero-text">${hero.bodyText}</p>
-                                <div class="hero-buttons">
-                                    <c:if test="${not empty hero.primaryButton}">
-                                        <a href="${hero.primaryButtonLink}" class="btn btn-primary">${hero.primaryButton}</a>
-                                    </c:if>
-                                    <c:if test="${not empty hero.secondaryButton}">
-                                        <a href="${hero.secondaryButtonLink}" class="btn btn-secondary">${hero.secondaryButton}</a>
-                                    </c:if>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-                    <c:if test="${heroes.size() > 1}">
-                        <div class="carousel-controls">
-                            <button class="carousel-btn prev" onclick="changeSlide(-1)">❮</button>
-                            <button class="carousel-btn next" onclick="changeSlide(1)">❯</button>
-                        </div>
-                        <div class="carousel-dots">
-                            <c:forEach var="hero" items="${heroes}" varStatus="status">
-                                <span class="dot ${status.index == 0 ? 'active' : ''}" onclick="currentSlide(${status.index + 1})"></span>
-                            </c:forEach>
-                        </div>
-                    </c:if>
-                </c:when>
-                <c:otherwise>
-                    <div class="hero-slide active" style="background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%)">
-                        <div class="hero-content">
-                            <span class="hero-subtitle">Welcome to</span>
-                            <h2 class="hero-title">Elegance Redefined</h2>
-                            <p class="hero-text">Transforming ordinary spaces into extraordinary experiences with bespoke interior and exterior designs.</p>
-                            <div class="hero-buttons">
-                                <a href="services" class="btn btn-primary">Explore Services</a>
-                                <a href="contact" class="btn btn-secondary">Get Quote</a>
-                            </div>
-                        </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Elegance Redefined</h2>
+                <p>Transforming ordinary spaces into extraordinary experiences with bespoke interior and exterior designs.</p>
+            </div>
         </section>
 
         <section class="services-preview">
             <h3>Our Services</h3>
             <div class="services-grid">
-                <c:forEach var="domain" items="${domains}">
-                    <div class="service-card">
-                        <h4>${domain.name}</h4>
-                        <p>${domain.description}</p>
-                    </div>
-                </c:forEach>
+                <div class="service-card">
+                    <h4>Interior Design</h4>
+                    <p>Complete interior transformation with modern aesthetics</p>
+                </div>
+                <div class="service-card">
+                    <h4>Exterior Design</h4>
+                    <p>Beautiful outdoor spaces and facade improvements</p>
+                </div>
             </div>
         </section>
 
         <section class="projects-preview">
-            <h3>Ongoing Projects</h3>
+            <h3>Recent Projects</h3>
             <div class="projects-grid">
-                <c:forEach var="project" items="${ongoingProjects}" varStatus="status">
-                    <c:if test="${status.index < 3}">
-                        <div class="project-card">
-                            <h4>${project.title}</h4>
-                            <p>${project.shortDescription}</p>
-                            <p><strong>Location:</strong> ${project.location}</p>
-                        </div>
-                    </c:if>
-                </c:forEach>
+                <div class="project-card">
+                    <h4>Modern Villa</h4>
+                    <p>Contemporary design with elegant finishes</p>
+                    <p><strong>Location:</strong> Nairobi</p>
+                </div>
             </div>
         </section>
     </main>

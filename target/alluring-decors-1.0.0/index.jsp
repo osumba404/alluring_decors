@@ -7,63 +7,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alluring Decors - Transforming Spaces, Creating Dreams</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar-override.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-brand">
-                <h1>Alluring Decors</h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="home">Home</a></li>
-                <li><a href="about.jsp">About Us</a></li>
-                <li><a href="projects.jsp">Projects</a></li>
-                <li><a href="services.jsp">Services</a></li>
-                <li><a href="contact.jsp">Contact</a></li>
-                <li><a href="login">Login</a></li>
-                <li><a href="register">Register</a></li>
-            </ul>
-        </nav>
-    </header>
+    <jsp:include page="includes/navbar.jsp" />
 
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h2>Why Choose Alluring Decors?</h2>
-                <p>Welcome to <strong>Alluring Decors</strong> — where imagination meets craftsmanship. With over 5 years of excellence in interior and exterior design, we transform ordinary spaces into breathtaking environments. Our team of creative designers and skilled artisans ensures every project reflects your unique style and vision. From luxurious homes to professional offices and grand banquet halls, we deliver perfection in every detail. Choose us for unmatched quality, timely delivery, and personalized service that turns your dreams into reality.</p>
+                <h2>Elegance Redefined</h2>
+                <p>Transforming ordinary spaces into extraordinary experiences with bespoke interior and exterior designs.</p>
             </div>
         </section>
 
         <section class="services-preview">
             <h3>Our Services</h3>
             <div class="services-grid">
-                <c:forEach var="domain" items="${domains}">
-                    <div class="service-card">
-                        <h4>${domain.name}</h4>
-                        <p>${domain.description}</p>
-                    </div>
-                </c:forEach>
+                <div class="service-card">
+                    <h4>Interior Design</h4>
+                    <p>Complete interior transformation with modern aesthetics</p>
+                </div>
+                <div class="service-card">
+                    <h4>Exterior Design</h4>
+                    <p>Beautiful outdoor spaces and facade improvements</p>
+                </div>
             </div>
         </section>
 
         <section class="projects-preview">
-            <h3>Ongoing Projects</h3>
+            <h3>Recent Projects</h3>
             <div class="projects-grid">
-                <c:forEach var="project" items="${ongoingProjects}" varStatus="status">
-                    <c:if test="${status.index < 3}">
-                        <div class="project-card">
-                            <h4>${project.title}</h4>
-                            <p>${project.shortDescription}</p>
-                            <p><strong>Location:</strong> ${project.location}</p>
-                        </div>
-                    </c:if>
-                </c:forEach>
+                <div class="project-card">
+                    <h4>Modern Villa</h4>
+                    <p>Contemporary design with elegant finishes</p>
+                    <p><strong>Location:</strong> Nairobi</p>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Alluring Decors. All rights reserved.</p>
+        <div class="container">
+            <p>&copy; 2024 Alluring Decors. All rights reserved. | Designed with elegance.</p>
+        </div>
     </footer>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.dot');
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (slides[index]) {
+                slides[index].classList.add('active');
+                if (dots[index]) dots[index].classList.add('active');
+            }
+        }
+        
+        function changeSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
+            if (currentSlideIndex < 0) currentSlideIndex = slides.length - 1;
+            showSlide(currentSlideIndex);
+        }
+        
+        function currentSlide(index) {
+            currentSlideIndex = index - 1;
+            showSlide(currentSlideIndex);
+        }
+        
+        // Auto-advance carousel
+        if (slides.length > 1) {
+            setInterval(() => {
+                changeSlide(1);
+            }, 5000);
+        }
+    </script>
 </body>
 </html>

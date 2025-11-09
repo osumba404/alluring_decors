@@ -1,17 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="com.alluringdecors.bean.ProjectBean" %>
-<%@ page import="com.alluringdecors.model.Project" %>
-<%@ page import="java.util.List" %>
-<%
-    ProjectBean projectBean = new ProjectBean();
-    List<Project> upcomingProjects = projectBean.getProjectsByCategory("upcoming");
-    List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
-    List<Project> accomplishedProjects = projectBean.getProjectsByCategory("accomplished");
-    request.setAttribute("upcomingProjects", upcomingProjects);
-    request.setAttribute("ongoingProjects", ongoingProjects);
-    request.setAttribute("accomplishedProjects", accomplishedProjects);
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,88 +19,20 @@
         </section>
 
         <section class="projects-preview">
-            <h3>Upcoming Projects</h3>
+            <h3>Our Projects</h3>
             <div class="projects-grid">
-                <c:choose>
-                    <c:when test="${not empty upcomingProjects}">
-                        <c:forEach var="project" items="${upcomingProjects}">
-                            <div class="project-card">
-                                <c:if test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
-                                    <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
-                                </c:if>
-                                <h4>${project.title}</h4>
-                                <p>${project.shortDescription}</p>
-                                <p><strong>Client:</strong> ${project.clientName}</p>
-                                <p><strong>Location:</strong> ${project.location}</p>
-                                <c:if test="${project.startDate != null}">
-                                    <p><strong>Starts:</strong> ${project.startDate}</p>
-                                </c:if>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="project-card">
-                            <h4>No Upcoming Projects</h4>
-                            <p>We currently have no upcoming projects scheduled.</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-
-            <h3>Ongoing Projects</h3>
-            <div class="projects-grid">
-                <c:choose>
-                    <c:when test="${not empty ongoingProjects}">
-                        <c:forEach var="project" items="${ongoingProjects}">
-                            <div class="project-card">
-                                <c:if test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
-                                    <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
-                                </c:if>
-                                <h4>${project.title}</h4>
-                                <p>${project.shortDescription}</p>
-                                <p><strong>Client:</strong> ${project.clientName}</p>
-                                <p><strong>Location:</strong> ${project.location}</p>
-                                <c:if test="${project.startDate != null}">
-                                    <p><strong>Started:</strong> ${project.startDate}</p>
-                                </c:if>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="project-card">
-                            <h4>No Ongoing Projects</h4>
-                            <p>We currently have no ongoing projects. Check back soon for updates!</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-
-            <h3>Accomplished Projects</h3>
-            <div class="projects-grid">
-                <c:choose>
-                    <c:when test="${not empty accomplishedProjects}">
-                        <c:forEach var="project" items="${accomplishedProjects}">
-                            <div class="project-card">
-                                <c:if test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
-                                    <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
-                                </c:if>
-                                <h4>${project.title}</h4>
-                                <p>${project.shortDescription}</p>
-                                <p><strong>Client:</strong> ${project.clientName}</p>
-                                <p><strong>Location:</strong> ${project.location}</p>
-                                <c:if test="${project.startDate != null}">
-                                    <p><strong>Completed:</strong> ${project.startDate}</p>
-                                </c:if>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="project-card">
-                            <h4>No Accomplished Projects</h4>
-                            <p>We haven't completed any projects yet. Stay tuned for our portfolio!</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <div class="project-card">
+                    <h4>Modern Villa Interior</h4>
+                    <p>Complete home makeover with contemporary design</p>
+                    <p><strong>Client:</strong> Private Residence</p>
+                    <p><strong>Location:</strong> Nairobi, Kenya</p>
+                </div>
+                <div class="project-card">
+                    <h4>Corporate Office Design</h4>
+                    <p>Professional workspace renovation</p>
+                    <p><strong>Client:</strong> Tech Company</p>
+                    <p><strong>Location:</strong> Mombasa, Kenya</p>
+                </div>
             </div>
         </section>
     </main>

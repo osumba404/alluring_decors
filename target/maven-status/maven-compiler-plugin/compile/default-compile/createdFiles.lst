@@ -18,4 +18,3 @@ com\alluringdecors\bean\UserBean.class
 com\alluringdecors\servlet\AdminDashboardServlet.class
 com\alluringdecors\servlet\AdminUsersServlet.class
 com\alluringdecors\servlet\AdminContactsServlet.class
-com\alluringdecors\servlet\AdminProjectsServlet.class

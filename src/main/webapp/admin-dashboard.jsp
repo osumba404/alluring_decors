@@ -298,6 +298,7 @@
                     <span class="sidebar-item-icon"><i class="fas fa-project-diagram"></i></span>
                     <span class="sidebar-item-text">Manage Projects</span>
                 </a>
+
                 <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('domains')">
                     <span class="sidebar-item-icon"><i class="fas fa-tags"></i></span>
                     <span class="sidebar-item-text">Manage Domains</span>
@@ -358,6 +359,7 @@
                     </div>
                     <p>Add, edit, and delete projects</p>
                 </div>
+
                 <div class="admin-card" onclick="loadContent('domains')" style="cursor: pointer;">
                     <div style="display: flex; align-items: center; margin-bottom: 1rem;">
                         <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
@@ -550,7 +552,7 @@
         
         // Global functions for all admin forms
         function showAddProjectForm() {
-            const formHtml = '<form method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
+            const formHtml = '<form method="post" action="/alluring-decors/admin/projects">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
                 '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
@@ -558,8 +560,7 @@
                 '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
                 '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" required></div>' +
                 '<div class="form-group"><label>End Date:</label><input type="date" name="endDate"></div>' +
-                '<div class="form-group"><label>Project Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
-                '<div class="form-group"><label>Image URL (alternative):</label><input type="url" name="thumbnailUrl" placeholder="https://example.com/image.jpg"></div>' +
+                '<div class="form-group"><label>Image URL:</label><input type="url" name="thumbnailUrl" placeholder="https://example.com/image.jpg"></div>' +
                 '<button type="submit" class="btn-primary">Add Project</button></form>';
             openModal('Add New Project', formHtml);
         }
@@ -580,7 +581,7 @@
         }
         
         function showEditProjectForm(id, title, client, location, category, shortDesc, fullDesc, startDate, endDate, thumbnailUrl) {
-            const formHtml = '<form method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
+            const formHtml = '<form method="post" action="/alluring-decors/admin/projects">' +
                 '<input type="hidden" name="projectId" value="' + id + '">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
                 '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" value="' + client + '" required></div>' +
@@ -589,8 +590,7 @@
                 '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4">' + (fullDesc || '') + '</textarea></div>' +
                 '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (startDate !== 'N/A' ? startDate : '') + '" required></div>' +
                 '<div class="form-group"><label>End Date:</label><input type="date" name="endDate" value="' + (endDate || '') + '"></div>' +
-                '<div class="form-group"><label>Project Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
-                '<div class="form-group"><label>Current Image URL:</label><input type="url" name="thumbnailUrl" value="' + (thumbnailUrl || '') + '" placeholder="https://example.com/image.jpg"></div>' +
+                '<div class="form-group"><label>Image URL:</label><input type="url" name="thumbnailUrl" value="' + (thumbnailUrl || '') + '" placeholder="https://example.com/image.jpg"></div>' +
                 '<button type="submit" class="btn-primary">Update Project</button></form>';
             openModal('Edit Project', formHtml);
         }
@@ -730,6 +730,62 @@
                 '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="1" required></div>' +
                 '<button type="submit" class="btn-primary">Add Hero Slide</button></form>'
             );
+        }
+        
+        // Project management functions
+        function showAddProjectForm() {
+            openModal('Add New Project', 
+                '<form method="post" action="/alluring-decors/admin/projects">' +
+                '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
+                '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
+                '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
+                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>' +
+                '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
+                '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
+                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
+                '<div class="form-group"><label>Image URL:</label><input type="url" name="thumbnailUrl" placeholder="https://example.com/image.jpg"></div>' +
+                '<button type="submit" class="btn-primary">Add Project</button></form>'
+            );
+        }
+        
+        function viewProject(id) {
+            // Simple view - fetch project data and display
+            fetch('/alluring-decors/admin/projects?action=view&id=' + id)
+                .then(response => response.json())
+                .then(project => {
+                    openModal('Project Details', 
+                        '<div class="form-group"><label>Title:</label><input type="text" value="' + project.title + '" readonly></div>' +
+                        '<div class="form-group"><label>Client:</label><input type="text" value="' + project.clientName + '" readonly></div>' +
+                        '<div class="form-group"><label>Location:</label><input type="text" value="' + project.location + '" readonly></div>' +
+                        '<div class="form-group"><label>Category:</label><input type="text" value="' + project.category + '" readonly></div>' +
+                        '<div class="form-group"><label>Short Description:</label><textarea rows="3" readonly>' + project.shortDescription + '</textarea></div>' +
+                        (project.fullDescription ? '<div class="form-group"><label>Full Description:</label><textarea rows="4" readonly>' + project.fullDescription + '</textarea></div>' : '') +
+                        (project.startDate ? '<div class="form-group"><label>Start Date:</label><input type="text" value="' + project.startDate + '" readonly></div>' : '')
+                    );
+                })
+                .catch(error => alert('Error loading project details'));
+        }
+        
+        function editProject(id) {
+            // Simple edit - fetch project data and show edit form
+            fetch('/alluring-decors/admin/projects?action=view&id=' + id)
+                .then(response => response.json())
+                .then(project => {
+                    openModal('Edit Project', 
+                        '<form method="post" action="/alluring-decors/admin/projects">' +
+                        '<input type="hidden" name="projectId" value="' + project.projectId + '">' +
+                        '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + project.title + '" required></div>' +
+                        '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required>' + project.shortDescription + '</textarea></div>' +
+                        '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4">' + (project.fullDescription || '') + '</textarea></div>' +
+                        '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing"' + (project.category === 'ongoing' ? ' selected' : '') + '>Ongoing</option><option value="accomplished"' + (project.category === 'accomplished' ? ' selected' : '') + '>Accomplished</option></select></div>' +
+                        '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" value="' + project.clientName + '" required></div>' +
+                        '<div class="form-group"><label>Location:</label><input type="text" name="location" value="' + project.location + '" required></div>' +
+                        '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (project.startDate || '') + '"></div>' +
+                        '<div class="form-group"><label>Image URL:</label><input type="url" name="thumbnailUrl" value="' + (project.thumbnailUrl || '') + '" placeholder="https://example.com/image.jpg"></div>' +
+                        '<button type="submit" class="btn-primary">Update Project</button></form>'
+                    );
+                })
+                .catch(error => alert('Error loading project details'));
         }
         
         function showEditHeroForm(id, title, subtitle, bodyText, backgroundImage, primaryButton, primaryButtonLink, secondaryButton, secondaryButtonLink, displayOrder) {
