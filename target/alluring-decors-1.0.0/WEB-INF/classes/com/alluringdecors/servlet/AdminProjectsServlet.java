@@ -37,7 +37,7 @@ public class AdminProjectsServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int projectId = Integer.parseInt(request.getParameter("id"));
             projectBean.deleteProject(projectId);
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            response.sendRedirect("http://localhost:8082/alluring-decors/admin/dashboard");
             return;
         }
         
@@ -73,15 +73,18 @@ public class AdminProjectsServlet extends HttpServlet {
                 "<p class='dashboard-subtitle'>View and manage all projects</p></div>" +
                 "<button class='header-action-btn' onclick='showAddProjectForm()'><i class='fas fa-plus'></i> Add Project</button></div>" +
                 "<h3 style='color: #164e31; margin: 2rem 0 1rem 0; font-size: 1.5rem;'><i class='fas fa-tasks'></i> Ongoing Projects</h3>" +
-                "<table class='admin-table' style='margin-bottom: 3rem;'><thead><tr><th>Title</th><th>Client</th><th>Location</th><th>Start Date</th><th>Actions</th></tr></thead><tbody>"
+                "<table class='admin-table' style='margin-bottom: 3rem;'><thead><tr><th>Thumbnail</th><th>Title</th><th>Client</th><th>Location</th><th>Start Date</th><th>Actions</th></tr></thead><tbody>"
             );
             if (ongoingProjects.isEmpty()) {
-                response.getWriter().println("<tr><td colspan='5' style='text-align:center; padding: 2rem; color: #666;'>No ongoing projects. Click 'Add Project' to create one.</td></tr>");
+                response.getWriter().println("<tr><td colspan='6' style='text-align:center; padding: 2rem; color: #666;'>No ongoing projects. Click 'Add Project' to create one.</td></tr>");
             } else {
                 for (Project project : ongoingProjects) {
                     String startDate = project.getStartDate() != null ? project.getStartDate().toString() : "N/A";
+                    String thumbnailHtml = project.getThumbnailUrl() != null && !project.getThumbnailUrl().isEmpty() 
+                        ? "<img src='" + project.getThumbnailUrl() + "' style='width: 60px; height: 60px; object-fit: cover; border-radius: 8px;'>" 
+                        : "<div style='width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;'><i class='fas fa-image'></i></div>";
                     response.getWriter().println(
-                        "<tr><td><strong>" + project.getTitle() + "</strong></td><td>" + project.getClientName() + "</td><td>" + project.getLocation() + 
+                        "<tr><td>" + thumbnailHtml + "</td><td><strong>" + project.getTitle() + "</strong></td><td>" + project.getClientName() + "</td><td>" + project.getLocation() + 
                         "</td><td>" + startDate + "</td><td>" +
                         "<button class='action-btn view' onclick='viewProject(" + project.getProjectId() + ")'><i class='fas fa-eye'></i> View</button> " +
                         "<button class='action-btn' onclick='editProject(" + project.getProjectId() + ")'><i class='fas fa-edit'></i> Edit</button> " +
@@ -93,15 +96,18 @@ public class AdminProjectsServlet extends HttpServlet {
             
             response.getWriter().println(
                 "<h3 style='color: #164e31; margin: 2rem 0 1rem 0; font-size: 1.5rem;'><i class='fas fa-check-circle'></i> Accomplished Projects</h3>" +
-                "<table class='admin-table'><thead><tr><th>Title</th><th>Client</th><th>Location</th><th>Start Date</th><th>Actions</th></tr></thead><tbody>"
+                "<table class='admin-table'><thead><tr><th>Thumbnail</th><th>Title</th><th>Client</th><th>Location</th><th>Start Date</th><th>Actions</th></tr></thead><tbody>"
             );
             if (accomplishedProjects.isEmpty()) {
-                response.getWriter().println("<tr><td colspan='5' style='text-align:center; padding: 2rem; color: #666;'>No accomplished projects yet.</td></tr>");
+                response.getWriter().println("<tr><td colspan='6' style='text-align:center; padding: 2rem; color: #666;'>No accomplished projects yet.</td></tr>");
             } else {
                 for (Project project : accomplishedProjects) {
                     String startDate = project.getStartDate() != null ? project.getStartDate().toString() : "N/A";
+                    String thumbnailHtml = project.getThumbnailUrl() != null && !project.getThumbnailUrl().isEmpty() 
+                        ? "<img src='" + project.getThumbnailUrl() + "' style='width: 60px; height: 60px; object-fit: cover; border-radius: 8px;'>" 
+                        : "<div style='width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;'><i class='fas fa-image'></i></div>";
                     response.getWriter().println(
-                        "<tr><td><strong>" + project.getTitle() + "</strong></td><td>" + project.getClientName() + "</td><td>" + project.getLocation() + 
+                        "<tr><td>" + thumbnailHtml + "</td><td><strong>" + project.getTitle() + "</strong></td><td>" + project.getClientName() + "</td><td>" + project.getLocation() + 
                         "</td><td>" + startDate + "</td><td>" +
                         "<button class='action-btn view' onclick='viewProject(" + project.getProjectId() + ")'><i class='fas fa-eye'></i> View</button> " +
                         "<button class='action-btn' onclick='editProject(" + project.getProjectId() + ")'><i class='fas fa-edit'></i> Edit</button> " +
@@ -128,7 +134,7 @@ public class AdminProjectsServlet extends HttpServlet {
         String category = request.getParameter("category");
         String clientName = request.getParameter("clientName");
         String location = request.getParameter("location");
-        String thumbnailUrl = request.getParameter("thumbnailUrl");
+        String thumbnailUrl = null;
         
         if (title == null || title.trim().isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Title is required");
@@ -136,20 +142,32 @@ public class AdminProjectsServlet extends HttpServlet {
         }
         
         // Handle file upload
+        System.out.println("Processing file upload...");
+        System.out.println("thumbnailUrl from form: " + thumbnailUrl);
         try {
             Part filePart = request.getPart("projectImage");
+            System.out.println("File part: " + filePart);
+            if (filePart != null) {
+                System.out.println("File size: " + filePart.getSize());
+                System.out.println("File name: " + filePart.getSubmittedFileName());
+            }
             if (filePart != null && filePart.getSize() > 0) {
                 String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
                 String uploadPath = getServletContext().getRealPath("/") + "uploads/projects/";
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
                 
+                System.out.println("Saving file to: " + uploadPath + fileName);
                 filePart.write(uploadPath + fileName);
                 thumbnailUrl = request.getContextPath() + "/uploads/projects/" + fileName;
+                System.out.println("Final thumbnailUrl: " + thumbnailUrl);
             }
         } catch (Exception e) {
-            // If file upload fails, continue with URL if provided
+            System.out.println("File upload error: " + e.getMessage());
+            e.printStackTrace();
         }
+        
+        System.out.println("Final thumbnailUrl before saving: " + thumbnailUrl);
         
         Project project = new Project(title, shortDescription, fullDescription, category);
         project.setClientName(clientName);
@@ -169,6 +187,6 @@ public class AdminProjectsServlet extends HttpServlet {
             success = projectBean.addProject(project);
         }
         
-        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+        response.sendRedirect("http://localhost:8082/alluring-decors/admin/dashboard");
     }
 }

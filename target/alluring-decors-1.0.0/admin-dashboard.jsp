@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Alluring Decors</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/icons-svg.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/navbar-override.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin-sidebar.css">
@@ -506,6 +506,13 @@
         }
         
         function submitModalForm(form) {
+            // For file uploads, use regular form submission
+            if (form.enctype === 'multipart/form-data' || form.getAttribute('enctype') === 'multipart/form-data') {
+                closeModal();
+                form.submit();
+                return;
+            }
+            
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             
@@ -516,19 +523,14 @@
             const formData = new FormData(form);
             const action = form.getAttribute('action');
             
-            console.log('Submitting form to:', action);
-            console.log('Form data:', Array.from(formData.entries()));
-            
             fetch(action, {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
-                console.log('Response status:', response.status);
                 if (response.ok) {
                     closeModal();
                     showSuccessMessage('Operation completed successfully!');
-                    // Refresh the current section
                     const currentSection = localStorage.getItem('adminCurrentSection');
                     if (currentSection) {
                         loadContent(currentSection);
@@ -540,11 +542,9 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
                 alert('Error submitting form: ' + error.message);
             })
             .finally(() => {
-                // Reset button state
                 submitBtn.innerHTML = originalText;
                 submitBtn.classList.remove('btn-loading');
             });
@@ -735,7 +735,7 @@
         // Project management functions
         function showAddProjectForm() {
             openModal('Add New Project', 
-                '<form method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
+                '<form id="addProjectForm" method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
                 '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
@@ -743,9 +743,8 @@
                 '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
                 '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
                 '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
-                '<div class="form-group"><label>Upload Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
-                '<div class="form-group"><label>Or Image URL:</label><input type="url" name="thumbnailUrl" placeholder="https://example.com/image.jpg"></div>' +
-                '<button type="submit" class="btn-primary">Add Project</button></form>'
+                '<div class="form-group"><label>Upload Image:</label><input type="file" name="projectImage" accept="image/*" required></div>' +
+                '<button type="button" onclick="submitProjectForm()" class="btn-primary">Add Project</button></form>'
             );
         }
         
@@ -784,7 +783,6 @@
                         '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (project.startDate || '') + '"></div>' +
                         (project.thumbnailUrl ? '<div class="form-group"><label>Current Image:</label><br><img src="' + project.thumbnailUrl + '" style="max-width: 200px; border-radius: 8px; margin-bottom: 10px;"></div>' : '') +
                         '<div class="form-group"><label>Upload New Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
-                        '<div class="form-group"><label>Or Image URL:</label><input type="url" name="thumbnailUrl" value="' + (project.thumbnailUrl || '') + '" placeholder="https://example.com/image.jpg"></div>' +
                         '<button type="submit" class="btn-primary">Update Project</button></form>'
                     );
                 })
@@ -818,6 +816,28 @@
             );
         }
         
+        function submitProjectForm() {
+            const form = document.getElementById('addProjectForm');
+            if (form) {
+                console.log('Form found:', form);
+                console.log('Form enctype:', form.enctype);
+                console.log('Form method:', form.method);
+                console.log('Form action:', form.action);
+                
+                const fileInput = form.querySelector('input[type="file"]');
+                if (fileInput && fileInput.files.length > 0) {
+                    console.log('File selected:', fileInput.files[0].name);
+                } else {
+                    console.log('No file selected');
+                }
+                
+                closeModal();
+                form.submit();
+            } else {
+                console.log('Form not found!');
+            }
+        }
+        
         function showSuccessMessage(message) {
             // Remove existing success message
             const existingMsg = document.querySelector('.success-message');
@@ -844,6 +864,15 @@
                 setTimeout(() => successDiv.remove(), 300);
             }, 3000);
         }
+        
+        // Handle form submissions
+        document.addEventListener('submit', function(event) {
+            const form = event.target;
+            if (form.closest('.modal')) {
+                event.preventDefault();
+                submitModalForm(form);
+            }
+        });
         
         // Close modal when clicking outside
         window.onclick = function(event) {

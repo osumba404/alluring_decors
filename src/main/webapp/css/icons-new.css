@@ -1,0 +1,36 @@
+/* FontAwesome Icons */
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2") format("woff2"),
+       url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff") format("woff");
+}
+
+.fas, .fa {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+}
+
+.fa-users:before { content: "\f0c0"; }
+.fa-project-diagram:before { content: "\f542"; }
+.fa-tags:before { content: "\f02c"; }
+.fa-cogs:before { content: "\f085"; }
+.fa-edit:before { content: "\f044"; }
+.fa-phone:before { content: "\f095"; }
+.fa-comments:before { content: "\f086"; }
+.fa-question-circle:before { content: "\f059"; }
+.fa-envelope:before { content: "\f0e0"; }
+.fa-images:before { content: "\f302"; }
+.fa-plus:before { content: "\f067"; }
+.fa-eye:before { content: "\f06e"; }
+.fa-trash:before { content: "\f1f8"; }
+.fa-check-circle:before { content: "\f058"; }
+.fa-tasks:before { content: "\f0ae"; }
+.fa-image:before { content: "\f03e"; }

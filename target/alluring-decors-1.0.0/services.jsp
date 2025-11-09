@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Services - Alluring Decors</title>
-    <link rel="stylesheet" href="css/icons-final.css">
+    <link rel="stylesheet" href="css/fontawesome.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navbar-override.css">
 </head>
