@@ -550,14 +550,16 @@
         
         // Global functions for all admin forms
         function showAddProjectForm() {
-            const formHtml = '<form method="post" action="/alluring-decors/admin/projects">' +
+            const formHtml = '<form method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
                 '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
-                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>' +
                 '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
                 '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
-                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
+                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" required></div>' +
+                '<div class="form-group"><label>End Date:</label><input type="date" name="endDate"></div>' +
+                '<div class="form-group"><label>Project Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
+                '<div class="form-group"><label>Image URL (alternative):</label><input type="url" name="thumbnailUrl" placeholder="https://example.com/image.jpg"></div>' +
                 '<button type="submit" class="btn-primary">Add Project</button></form>';
             openModal('Add New Project', formHtml);
         }
@@ -577,16 +579,18 @@
             openModal('Project Details', formHtml);
         }
         
-        function showEditProjectForm(id, title, client, location, category, shortDesc, fullDesc, startDate) {
-            const formHtml = '<form method="post" action="/alluring-decors/admin/projects">' +
+        function showEditProjectForm(id, title, client, location, category, shortDesc, fullDesc, startDate, endDate, thumbnailUrl) {
+            const formHtml = '<form method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
                 '<input type="hidden" name="projectId" value="' + id + '">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
                 '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" value="' + client + '" required></div>' +
                 '<div class="form-group"><label>Location:</label><input type="text" name="location" value="' + location + '" required></div>' +
-                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing"' + (category === 'ongoing' ? ' selected' : '') + '>Ongoing</option><option value="accomplished"' + (category === 'accomplished' ? ' selected' : '') + '>Accomplished</option></select></div>' +
                 '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required>' + shortDesc + '</textarea></div>' +
                 '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4">' + (fullDesc || '') + '</textarea></div>' +
-                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (startDate !== 'N/A' ? startDate : '') + '"></div>' +
+                '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (startDate !== 'N/A' ? startDate : '') + '" required></div>' +
+                '<div class="form-group"><label>End Date:</label><input type="date" name="endDate" value="' + (endDate || '') + '"></div>' +
+                '<div class="form-group"><label>Project Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
+                '<div class="form-group"><label>Current Image URL:</label><input type="url" name="thumbnailUrl" value="' + (thumbnailUrl || '') + '" placeholder="https://example.com/image.jpg"></div>' +
                 '<button type="submit" class="btn-primary">Update Project</button></form>';
             openModal('Edit Project', formHtml);
         }

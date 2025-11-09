@@ -5,8 +5,10 @@
 <%@ page import="java.util.List" %>
 <%
     ProjectBean projectBean = new ProjectBean();
+    List<Project> upcomingProjects = projectBean.getProjectsByCategory("upcoming");
     List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
     List<Project> accomplishedProjects = projectBean.getProjectsByCategory("accomplished");
+    request.setAttribute("upcomingProjects", upcomingProjects);
     request.setAttribute("ongoingProjects", ongoingProjects);
     request.setAttribute("accomplishedProjects", accomplishedProjects);
 %>
@@ -30,12 +32,43 @@
         </section>
 
         <section class="projects-preview">
+            <h3>Upcoming Projects</h3>
+            <div class="projects-grid">
+                <c:choose>
+                    <c:when test="${not empty upcomingProjects}">
+                        <c:forEach var="project" items="${upcomingProjects}">
+                            <div class="project-card">
+                                <c:if test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
+                                    <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+                                </c:if>
+                                <h4>${project.title}</h4>
+                                <p>${project.shortDescription}</p>
+                                <p><strong>Client:</strong> ${project.clientName}</p>
+                                <p><strong>Location:</strong> ${project.location}</p>
+                                <c:if test="${project.startDate != null}">
+                                    <p><strong>Starts:</strong> ${project.startDate}</p>
+                                </c:if>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="project-card">
+                            <h4>No Upcoming Projects</h4>
+                            <p>We currently have no upcoming projects scheduled.</p>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
             <h3>Ongoing Projects</h3>
             <div class="projects-grid">
                 <c:choose>
                     <c:when test="${not empty ongoingProjects}">
                         <c:forEach var="project" items="${ongoingProjects}">
                             <div class="project-card">
+                                <c:if test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
+                                    <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+                                </c:if>
                                 <h4>${project.title}</h4>
                                 <p>${project.shortDescription}</p>
                                 <p><strong>Client:</strong> ${project.clientName}</p>
@@ -61,6 +94,9 @@
                     <c:when test="${not empty accomplishedProjects}">
                         <c:forEach var="project" items="${accomplishedProjects}">
                             <div class="project-card">
+                                <c:if test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
+                                    <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+                                </c:if>
                                 <h4>${project.title}</h4>
                                 <p>${project.shortDescription}</p>
                                 <p><strong>Client:</strong> ${project.clientName}</p>
