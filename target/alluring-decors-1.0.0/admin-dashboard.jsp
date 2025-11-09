@@ -735,7 +735,7 @@
         // Project management functions
         function showAddProjectForm() {
             openModal('Add New Project', 
-                '<form method="post" action="/alluring-decors/admin/projects">' +
+                '<form method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
                 '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
@@ -743,7 +743,8 @@
                 '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
                 '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
                 '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
-                '<div class="form-group"><label>Image URL:</label><input type="url" name="thumbnailUrl" placeholder="https://example.com/image.jpg"></div>' +
+                '<div class="form-group"><label>Upload Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
+                '<div class="form-group"><label>Or Image URL:</label><input type="url" name="thumbnailUrl" placeholder="https://example.com/image.jpg"></div>' +
                 '<button type="submit" class="btn-primary">Add Project</button></form>'
             );
         }
@@ -772,7 +773,7 @@
                 .then(response => response.json())
                 .then(project => {
                     openModal('Edit Project', 
-                        '<form method="post" action="/alluring-decors/admin/projects">' +
+                        '<form method="post" action="/alluring-decors/admin/projects" enctype="multipart/form-data">' +
                         '<input type="hidden" name="projectId" value="' + project.projectId + '">' +
                         '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + project.title + '" required></div>' +
                         '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required>' + project.shortDescription + '</textarea></div>' +
@@ -781,7 +782,9 @@
                         '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" value="' + project.clientName + '" required></div>' +
                         '<div class="form-group"><label>Location:</label><input type="text" name="location" value="' + project.location + '" required></div>' +
                         '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (project.startDate || '') + '"></div>' +
-                        '<div class="form-group"><label>Image URL:</label><input type="url" name="thumbnailUrl" value="' + (project.thumbnailUrl || '') + '" placeholder="https://example.com/image.jpg"></div>' +
+                        (project.thumbnailUrl ? '<div class="form-group"><label>Current Image:</label><br><img src="' + project.thumbnailUrl + '" style="max-width: 200px; border-radius: 8px; margin-bottom: 10px;"></div>' : '') +
+                        '<div class="form-group"><label>Upload New Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
+                        '<div class="form-group"><label>Or Image URL:</label><input type="url" name="thumbnailUrl" value="' + (project.thumbnailUrl || '') + '" placeholder="https://example.com/image.jpg"></div>' +
                         '<button type="submit" class="btn-primary">Update Project</button></form>'
                     );
                 })

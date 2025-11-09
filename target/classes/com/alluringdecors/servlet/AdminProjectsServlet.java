@@ -4,15 +4,19 @@ import com.alluringdecors.bean.ProjectBean;
 import com.alluringdecors.model.Project;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet("/admin/projects")
+@MultipartConfig(maxFileSize = 5 * 1024 * 1024)
 public class AdminProjectsServlet extends HttpServlet {
     
     private ProjectBean projectBean;
@@ -129,6 +133,22 @@ public class AdminProjectsServlet extends HttpServlet {
         if (title == null || title.trim().isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Title is required");
             return;
+        }
+        
+        // Handle file upload
+        try {
+            Part filePart = request.getPart("projectImage");
+            if (filePart != null && filePart.getSize() > 0) {
+                String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+                String uploadPath = getServletContext().getRealPath("/") + "uploads/projects/";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) uploadDir.mkdirs();
+                
+                filePart.write(uploadPath + fileName);
+                thumbnailUrl = request.getContextPath() + "/uploads/projects/" + fileName;
+            }
+        } catch (Exception e) {
+            // If file upload fails, continue with URL if provided
         }
         
         Project project = new Project(title, shortDescription, fullDescription, category);
