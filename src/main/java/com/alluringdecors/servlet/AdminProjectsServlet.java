@@ -64,6 +64,7 @@ public class AdminProjectsServlet extends HttpServlet {
             return;
         }
         
+        List<Project> upcomingProjects = projectBean.getUpcomingProjects();
         List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
         List<Project> accomplishedProjects = projectBean.getProjectsByCategory("accomplished");
         
@@ -72,12 +73,40 @@ public class AdminProjectsServlet extends HttpServlet {
             response.getWriter().println(
                 "<div class='dashboard-header'><div><h1 class='dashboard-title'>Manage Projects</h1>" +
                 "<p class='dashboard-subtitle'>View and manage all projects</p></div>" +
-                "<button class='header-action-btn' onclick='showAddProjectForm()'><i class='fas fa-plus'></i> Add Project</button></div>" +
+                "<button class='header-action-btn' onclick='showAddProjectForm()'><i class='fas fa-plus'></i> Add Project</button></div>"
+            );
+            
+            // Upcoming Projects
+            response.getWriter().println(
+                "<h3 style='color: #164e31; margin: 2rem 0 1rem 0; font-size: 1.5rem;'><i class='fas fa-clock'></i> Upcoming Projects</h3>" +
+                "<table class='admin-table' style='margin-bottom: 3rem;'><thead><tr><th>Thumbnail</th><th>Title</th><th>Client</th><th>Location</th><th>Start Date</th><th>Actions</th></tr></thead><tbody>"
+            );
+            if (upcomingProjects.isEmpty()) {
+                response.getWriter().println("<tr><td colspan='6' style='text-align:center; padding: 2rem; color: #666;'>No upcoming projects.</td></tr>");
+            } else {
+                for (Project project : upcomingProjects) {
+                    String startDate = project.getStartDate() != null ? project.getStartDate().toString() : "N/A";
+                    String thumbnailHtml = project.getThumbnailUrl() != null && !project.getThumbnailUrl().isEmpty() 
+                        ? "<img src='" + project.getThumbnailUrl() + "' style='width: 60px; height: 60px; object-fit: cover; border-radius: 8px;'>" 
+                        : "<div style='width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;'><i class='fas fa-image'></i></div>";
+                    response.getWriter().println(
+                        "<tr><td>" + thumbnailHtml + "</td><td><strong>" + project.getTitle() + "</strong></td><td>" + project.getClientName() + "</td><td>" + project.getLocation() + 
+                        "</td><td>" + startDate + "</td><td>" +
+                        "<button class='action-btn view' onclick='viewProject(" + project.getProjectId() + ")'><i class='fas fa-eye'></i> View</button> " +
+                        "<button class='action-btn' onclick='editProject(" + project.getProjectId() + ")'><i class='fas fa-edit'></i> Edit</button> " +
+                        "<a href='projects?action=delete&id=" + project.getProjectId() + "' class='action-btn delete' onclick='return confirm(\"Delete this project?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a></td></tr>"
+                    );
+                }
+            }
+            response.getWriter().println("</tbody></table>");
+            
+            // Ongoing Projects
+            response.getWriter().println(
                 "<h3 style='color: #164e31; margin: 2rem 0 1rem 0; font-size: 1.5rem;'><i class='fas fa-tasks'></i> Ongoing Projects</h3>" +
                 "<table class='admin-table' style='margin-bottom: 3rem;'><thead><tr><th>Thumbnail</th><th>Title</th><th>Client</th><th>Location</th><th>Start Date</th><th>Actions</th></tr></thead><tbody>"
             );
             if (ongoingProjects.isEmpty()) {
-                response.getWriter().println("<tr><td colspan='6' style='text-align:center; padding: 2rem; color: #666;'>No ongoing projects. Click 'Add Project' to create one.</td></tr>");
+                response.getWriter().println("<tr><td colspan='6' style='text-align:center; padding: 2rem; color: #666;'>No ongoing projects.</td></tr>");
             } else {
                 for (Project project : ongoingProjects) {
                     String startDate = project.getStartDate() != null ? project.getStartDate().toString() : "N/A";
@@ -95,6 +124,7 @@ public class AdminProjectsServlet extends HttpServlet {
             }
             response.getWriter().println("</tbody></table>");
             
+            // Accomplished Projects
             response.getWriter().println(
                 "<h3 style='color: #164e31; margin: 2rem 0 1rem 0; font-size: 1.5rem;'><i class='fas fa-check-circle'></i> Accomplished Projects</h3>" +
                 "<table class='admin-table'><thead><tr><th>Thumbnail</th><th>Title</th><th>Client</th><th>Location</th><th>Start Date</th><th>Actions</th></tr></thead><tbody>"
@@ -133,23 +163,38 @@ public class AdminProjectsServlet extends HttpServlet {
         String shortDescription = request.getParameter("shortDescription");
         String fullDescription = request.getParameter("fullDescription");
         String endDateStr = request.getParameter("endDate");
+        String clientName = request.getParameter("clientName");
+        String location = request.getParameter("location");
         
         System.out.println("=== PROJECT FORM DEBUG ===");
         System.out.println("Title: " + title);
-        System.out.println("Start Date: " + request.getParameter("startDate"));
+        System.out.println("Start Date: " + startDateStr);
         System.out.println("End Date: " + endDateStr);
         System.out.println("Client: " + clientName);
+        System.out.println("Category: " + category);
         
         // Determine category based on dates
         String category = "ongoing"; // default
-        if (endDateStr != null && !endDateStr.isEmpty()) {
-            category = "accomplished";
-            System.out.println("Category set to: accomplished (end date provided)");
-        } else {
-            System.out.println("Category set to: ongoing (no end date)");
+        LocalDate today = LocalDate.now();
+        
+        if (startDateStr != null && !startDateStr.isEmpty()) {
+            LocalDate startDate = LocalDate.parse(startDateStr);
+            if (startDate.isAfter(today)) {
+                category = "upcoming";
+            }
         }
-        String clientName = request.getParameter("clientName");
-        String location = request.getParameter("location");
+        
+        if (endDateStr != null && !endDateStr.isEmpty()) {
+            LocalDate endDate = LocalDate.parse(endDateStr);
+            if (endDate.isBefore(today) || endDate.isEqual(today)) {
+                category = "accomplished";
+            } else if (startDateStr != null && !startDateStr.isEmpty()) {
+                LocalDate startDate = LocalDate.parse(startDateStr);
+                if (startDate.isBefore(today) || startDate.isEqual(today)) {
+                    category = "ongoing";
+                }
+            }
+        }
         String thumbnailUrl = null;
         
         if (title == null || title.trim().isEmpty()) {

@@ -28,6 +28,24 @@ public class ProjectBean {
         return projects;
     }
     
+    public List<Project> getUpcomingProjects() {
+        List<Project> projects = new ArrayList<>();
+        String sql = "SELECT * FROM projects WHERE start_date > CURDATE() ORDER BY start_date ASC";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                projects.add(mapResultSetToProject(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return projects;
+    }
+    
     public Project getProjectById(int projectId) {
         String sql = "SELECT * FROM projects WHERE project_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();
