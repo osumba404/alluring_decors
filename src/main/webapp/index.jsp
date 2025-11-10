@@ -17,7 +17,7 @@
     <main>
         <section class="hero-carousel">
             <c:forEach var="hero" items="${heroes}" varStatus="status">
-                <div class="hero-slide ${status.index == 0 ? 'active' : ''}" style="background-image: ${hero.backgroundImage != null ? 'url(' += hero.backgroundImage += ')' : 'linear-gradient(135deg, #164e31 0%, #295c19 100%)'}">
+                <div class="hero-slide ${status.index == 0 ? 'active' : ''}" style="background-image: <c:choose><c:when test='${hero.backgroundImage != null}'>url('${hero.backgroundImage}')</c:when><c:otherwise>linear-gradient(135deg, #164e31 0%, #295c19 100%)</c:otherwise></c:choose>">
                     <div class="hero-content">
                         <c:if test="${hero.subtitle != null}">
                             <span class="hero-subtitle">${hero.subtitle}</span>

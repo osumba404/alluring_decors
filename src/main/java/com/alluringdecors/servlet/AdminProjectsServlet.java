@@ -55,7 +55,8 @@ public class AdminProjectsServlet extends HttpServlet {
                 response.getWriter().println("\"shortDescription\": \"" + (project.getShortDescription() != null ? project.getShortDescription().replace("\"", "\\\\").replace("\n", "\\n"): "") + "\",");
                 response.getWriter().println("\"fullDescription\": \"" + (project.getFullDescription() != null ? project.getFullDescription().replace("\"", "\\\\").replace("\n", "\\n"): "") + "\",");
                 response.getWriter().println("\"thumbnailUrl\": \"" + (project.getThumbnailUrl() != null ? project.getThumbnailUrl(): "") + "\",");
-                response.getWriter().println("\"startDate\": \"" + (project.getStartDate() != null ? project.getStartDate().toString(): "") + "\"");
+                response.getWriter().println("\"startDate\": \"" + (project.getStartDate() != null ? project.getStartDate().toString(): "") + "\",");
+                response.getWriter().println("\"endDate\": \"" + (project.getEndDate() != null ? project.getEndDate().toString(): "") + "\"");
                 response.getWriter().println("}");
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Project not found");
@@ -131,7 +132,22 @@ public class AdminProjectsServlet extends HttpServlet {
         String title = request.getParameter("title");
         String shortDescription = request.getParameter("shortDescription");
         String fullDescription = request.getParameter("fullDescription");
-        String category = request.getParameter("category");
+        String endDateStr = request.getParameter("endDate");
+        
+        System.out.println("=== PROJECT FORM DEBUG ===");
+        System.out.println("Title: " + title);
+        System.out.println("Start Date: " + request.getParameter("startDate"));
+        System.out.println("End Date: " + endDateStr);
+        System.out.println("Client: " + clientName);
+        
+        // Determine category based on dates
+        String category = "ongoing"; // default
+        if (endDateStr != null && !endDateStr.isEmpty()) {
+            category = "accomplished";
+            System.out.println("Category set to: accomplished (end date provided)");
+        } else {
+            System.out.println("Category set to: ongoing (no end date)");
+        }
         String clientName = request.getParameter("clientName");
         String location = request.getParameter("location");
         String thumbnailUrl = null;
@@ -173,6 +189,10 @@ public class AdminProjectsServlet extends HttpServlet {
         String startDateStr = request.getParameter("startDate");
         if (startDateStr != null && !startDateStr.isEmpty()) {
             project.setStartDate(LocalDate.parse(startDateStr));
+        }
+        
+        if (endDateStr != null && !endDateStr.isEmpty()) {
+            project.setEndDate(LocalDate.parse(endDateStr));
         }
         
         boolean success;

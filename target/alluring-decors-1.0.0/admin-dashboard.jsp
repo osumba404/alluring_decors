@@ -739,10 +739,10 @@
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required></textarea></div>' +
                 '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4"></textarea></div>' +
-                '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing">Ongoing</option><option value="accomplished">Accomplished</option></select></div>' +
                 '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
                 '<div class="form-group"><label>Location:</label><input type="text" name="location" required></div>' +
                 '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate"></div>' +
+                '<div class="form-group"><label>Completion Date:</label><input type="date" name="endDate"></div>' +
                 '<div class="form-group"><label>Upload Image:</label><input type="file" name="projectImage" accept="image/*" required></div>' +
                 '<button type="button" onclick="submitProjectForm()" class="btn-primary">Add Project</button></form>'
             );
@@ -777,10 +777,10 @@
                         '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + project.title + '" required></div>' +
                         '<div class="form-group"><label>Short Description:</label><textarea name="shortDescription" rows="3" required>' + project.shortDescription + '</textarea></div>' +
                         '<div class="form-group"><label>Full Description:</label><textarea name="fullDescription" rows="4">' + (project.fullDescription || '') + '</textarea></div>' +
-                        '<div class="form-group"><label>Category:</label><select name="category" required><option value="ongoing"' + (project.category === 'ongoing' ? ' selected' : '') + '>Ongoing</option><option value="accomplished"' + (project.category === 'accomplished' ? ' selected' : '') + '>Accomplished</option></select></div>' +
                         '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" value="' + project.clientName + '" required></div>' +
                         '<div class="form-group"><label>Location:</label><input type="text" name="location" value="' + project.location + '" required></div>' +
                         '<div class="form-group"><label>Start Date:</label><input type="date" name="startDate" value="' + (project.startDate || '') + '"></div>' +
+                        '<div class="form-group"><label>Completion Date:</label><input type="date" name="endDate" value="' + (project.endDate || '') + '"></div>' +
                         (project.thumbnailUrl ? '<div class="form-group"><label>Current Image:</label><br><img src="' + project.thumbnailUrl + '" style="max-width: 200px; border-radius: 8px; margin-bottom: 10px;"></div>' : '') +
                         '<div class="form-group"><label>Upload New Image:</label><input type="file" name="projectImage" accept="image/*"></div>' +
                         '<button type="submit" class="btn-primary">Update Project</button></form>'
