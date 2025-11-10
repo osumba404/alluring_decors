@@ -42,7 +42,7 @@ public class AdminDomainsServlet extends HttpServlet {
         
 
         
-        List<Domain> domains = domainBean.getAllActiveDomains();
+        List<Domain> domains = domainBean.getAllDomains();
         
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
@@ -55,21 +55,34 @@ public class AdminDomainsServlet extends HttpServlet {
             out.println("</div>");
             
             out.println("<table class='admin-table'>");
-            out.println("<thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Actions</th></tr></thead>");
+            out.println("<thead><tr><th>ID</th><th>Icon</th><th>Name</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>");
             out.println("<tbody>");
             
             if (domains.isEmpty()) {
-                out.println("<tr><td colspan='4' style='text-align:center; padding: 2rem; color: #666;'>No domains available. Click 'Add Domain' to create one.</td></tr>");
+                out.println("<tr><td colspan='6' style='text-align:center; padding: 2rem; color: #666;'>No domains available. Click 'Add Domain' to create one.</td></tr>");
             } else {
                 for (Domain domain : domains) {
                     String safeName = domain.getName().replace("\"", "&quot;");
                     String safeDesc = domain.getDescription().replace("\"", "&quot;");
+                    String safeIconUrl = domain.getIconUrl() != null ? domain.getIconUrl().replace("\"", "&quot;") : "";
+                    String status = domain.isActive() ? "Active" : "Inactive";
+                    String statusColor = domain.isActive() ? "color: green; font-weight: bold;" : "color: red; font-weight: bold;";
+                    
                     out.println("<tr>");
                     out.println("<td>" + domain.getDomainId() + "</td>");
+                    
+                    // Icon column
+                    if (domain.getIconUrl() != null && !domain.getIconUrl().isEmpty()) {
+                        out.println("<td><img src='" + domain.getIconUrl() + "' style='width: 40px; height: 40px; object-fit: cover; border-radius: 8px;'></td>");
+                    } else {
+                        out.println("<td><div style='width: 40px; height: 40px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;'><i class='fas fa-image'></i></div></td>");
+                    }
+                    
                     out.println("<td><strong>" + domain.getName() + "</strong></td>");
                     out.println("<td>" + domain.getDescription() + "</td>");
+                    out.println("<td><span style='" + statusColor + "'>" + status + "</span></td>");
                     out.println("<td>");
-                    out.println("<button class='action-btn' onclick='showEditDomainForm(" + domain.getDomainId() + ", \"" + safeName + "\", \"" + safeDesc + "\")'><i class='fas fa-edit'></i> Edit</button> ");
+                    out.println("<button class='action-btn' onclick='showEditDomainForm(" + domain.getDomainId() + ", \"" + safeName + "\", \"" + safeDesc + "\", \"" + safeIconUrl + "\", " + domain.isActive() + ")'><i class='fas fa-edit'></i> Edit</button> ");
                     out.println("<a href='domains?action=delete&id=" + domain.getDomainId() + "' class='action-btn delete' onclick='return confirm(\"Delete this domain?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a>");
                     out.println("</td>");
                     out.println("</tr>");

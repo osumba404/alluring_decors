@@ -26,6 +26,23 @@ public class DomainBean {
         return domains;
     }
     
+    public List<Domain> getAllDomains() {
+        List<Domain> domains = new ArrayList<>();
+        String sql = "SELECT * FROM domains ORDER BY name";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                domains.add(mapResultSetToDomain(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return domains;
+    }
+    
     public Domain getDomainById(int domainId) {
         String sql = "SELECT * FROM domains WHERE domain_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();
