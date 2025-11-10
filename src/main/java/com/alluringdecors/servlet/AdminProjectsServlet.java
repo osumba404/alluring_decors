@@ -37,7 +37,7 @@ public class AdminProjectsServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int projectId = Integer.parseInt(request.getParameter("id"));
             projectBean.deleteProject(projectId);
-            response.sendRedirect("http://localhost:8082/alluring-decors/admin/dashboard");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             return;
         }
         
@@ -65,8 +65,8 @@ public class AdminProjectsServlet extends HttpServlet {
         }
         
         List<Project> upcomingProjects = projectBean.getUpcomingProjects();
-        List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
-        List<Project> accomplishedProjects = projectBean.getProjectsByCategory("accomplished");
+        List<Project> ongoingProjects = projectBean.getOngoingProjects();
+        List<Project> accomplishedProjects = projectBean.getAccomplishedProjects();
         
         if ("true".equals(ajax)) {
             response.setContentType("text/html;charset=UTF-8");
@@ -162,9 +162,33 @@ public class AdminProjectsServlet extends HttpServlet {
         String title = request.getParameter("title");
         String shortDescription = request.getParameter("shortDescription");
         String fullDescription = request.getParameter("fullDescription");
+        String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
         String clientName = request.getParameter("clientName");
         String location = request.getParameter("location");
+        
+        // Determine category based on dates
+        String category = "ongoing"; // default
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        
+        if (startDateStr != null && !startDateStr.isEmpty()) {
+            startDate = LocalDate.parse(startDateStr);
+        }
+        
+        if (endDateStr != null && !endDateStr.isEmpty()) {
+            endDate = LocalDate.parse(endDateStr);
+        }
+        
+        // Priority: accomplished > upcoming > ongoing
+        if (endDate != null && (endDate.isBefore(today) || endDate.isEqual(today))) {
+            category = "accomplished";
+        } else if (startDate != null && startDate.isAfter(today)) {
+            category = "upcoming";
+        } else {
+            category = "ongoing";
+        }
         
         System.out.println("=== PROJECT FORM DEBUG ===");
         System.out.println("Title: " + title);
@@ -172,29 +196,6 @@ public class AdminProjectsServlet extends HttpServlet {
         System.out.println("End Date: " + endDateStr);
         System.out.println("Client: " + clientName);
         System.out.println("Category: " + category);
-        
-        // Determine category based on dates
-        String category = "ongoing"; // default
-        LocalDate today = LocalDate.now();
-        
-        if (startDateStr != null && !startDateStr.isEmpty()) {
-            LocalDate startDate = LocalDate.parse(startDateStr);
-            if (startDate.isAfter(today)) {
-                category = "upcoming";
-            }
-        }
-        
-        if (endDateStr != null && !endDateStr.isEmpty()) {
-            LocalDate endDate = LocalDate.parse(endDateStr);
-            if (endDate.isBefore(today) || endDate.isEqual(today)) {
-                category = "accomplished";
-            } else if (startDateStr != null && !startDateStr.isEmpty()) {
-                LocalDate startDate = LocalDate.parse(startDateStr);
-                if (startDate.isBefore(today) || startDate.isEqual(today)) {
-                    category = "ongoing";
-                }
-            }
-        }
         String thumbnailUrl = null;
         
         if (title == null || title.trim().isEmpty()) {
@@ -231,13 +232,12 @@ public class AdminProjectsServlet extends HttpServlet {
         project.setLocation(location);
         project.setThumbnailUrl(thumbnailUrl);
         
-        String startDateStr = request.getParameter("startDate");
-        if (startDateStr != null && !startDateStr.isEmpty()) {
-            project.setStartDate(LocalDate.parse(startDateStr));
+        if (startDate != null) {
+            project.setStartDate(startDate);
         }
         
-        if (endDateStr != null && !endDateStr.isEmpty()) {
-            project.setEndDate(LocalDate.parse(endDateStr));
+        if (endDate != null) {
+            project.setEndDate(endDate);
         }
         
         boolean success;
@@ -248,6 +248,6 @@ public class AdminProjectsServlet extends HttpServlet {
             success = projectBean.addProject(project);
         }
         
-        response.sendRedirect("http://localhost:8082/alluring-decors/admin/dashboard");
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
     }
 }

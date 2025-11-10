@@ -44,7 +44,7 @@ public class DomainBean {
     }
     
     public boolean addDomain(Domain domain) {
-        String sql = "INSERT INTO domains (name, description, icon_url) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO domains (name, description, icon_url, is_active) VALUES (?, ?, ?, 1)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
@@ -60,14 +60,15 @@ public class DomainBean {
     }
     
     public boolean updateDomain(Domain domain) {
-        String sql = "UPDATE domains SET name = ?, description = ?, icon_url = ? WHERE domain_id = ?";
+        String sql = "UPDATE domains SET name = ?, description = ?, icon_url = ?, is_active = ? WHERE domain_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setString(1, domain.getName());
             stmt.setString(2, domain.getDescription());
             stmt.setString(3, domain.getIconUrl());
-            stmt.setInt(4, domain.getDomainId());
+            stmt.setBoolean(4, domain.isActive());
+            stmt.setInt(5, domain.getDomainId());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

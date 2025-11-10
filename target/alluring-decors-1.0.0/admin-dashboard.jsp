@@ -626,9 +626,11 @@
         
         function showAddDomainForm() {
             openModal('Add New Domain', 
-                '<form method="post" action="/alluring-decors/admin/domains">' +
+                '<form method="post" action="domains" enctype="multipart/form-data">' +
                 '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
+                '<div class="form-group"><label>Icon Image:</label><input type="file" name="iconImage" accept="image/*"></div>' +
+                '<div class="form-group"><label><input type="checkbox" name="isActive" value="true" checked> Active</label></div>' +
                 '<button type="submit" class="btn-primary">Add Domain</button></form>'
             );
         }
@@ -807,12 +809,16 @@
             );
         }
         
-        function showEditDomainForm(id, name, description) {
+        function showEditDomainForm(id, name, description, iconUrl, isActive) {
+            const activeChecked = isActive ? 'checked' : '';
             openModal('Edit Domain', 
-                '<form method="post" action="/alluring-decors/admin/domains">' +
+                '<form method="post" action="domains" enctype="multipart/form-data">' +
                 '<input type="hidden" name="domainId" value="' + id + '">' +
                 '<div class="form-group"><label>Domain Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
                 '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
+                (iconUrl ? '<div class="form-group"><label>Current Icon:</label><br><img src="' + iconUrl + '" style="max-width: 100px; border-radius: 8px; margin-bottom: 10px;"></div>' : '') +
+                '<div class="form-group"><label>Upload New Icon:</label><input type="file" name="iconImage" accept="image/*"></div>' +
+                '<div class="form-group"><label><input type="checkbox" name="isActive" value="true" ' + activeChecked + '> Active</label></div>' +
                 '<button type="submit" class="btn-primary">Update Domain</button></form>'
             );
         }

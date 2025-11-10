@@ -28,12 +28,11 @@ public class ProjectsServlet extends HttpServlet {
         
         System.out.println("ProjectsServlet: doGet called");
         
-        List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
-        List<Project> accomplishedProjects = projectBean.getProjectsByCategory("accomplished");
+        List<Project> upcomingProjects = projectBean.getUpcomingProjects();
+        List<Project> ongoingProjects = projectBean.getOngoingProjects();
+        List<Project> accomplishedProjects = projectBean.getAccomplishedProjects();
         
-        System.out.println("Ongoing projects count: " + ongoingProjects.size());
-        System.out.println("Accomplished projects count: " + accomplishedProjects.size());
-        
+        request.setAttribute("upcomingProjects", upcomingProjects);
         request.setAttribute("ongoingProjects", ongoingProjects);
         request.setAttribute("accomplishedProjects", accomplishedProjects);
         

@@ -30,7 +30,43 @@ public class ProjectBean {
     
     public List<Project> getUpcomingProjects() {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT * FROM projects WHERE start_date > CURDATE() ORDER BY start_date ASC";
+        String sql = "SELECT * FROM projects WHERE start_date > CURDATE() AND (end_date IS NULL OR end_date > CURDATE()) ORDER BY start_date ASC";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                projects.add(mapResultSetToProject(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return projects;
+    }
+    
+    public List<Project> getOngoingProjects() {
+        List<Project> projects = new ArrayList<>();
+        String sql = "SELECT * FROM projects WHERE (start_date IS NULL OR start_date <= CURDATE()) AND (end_date IS NULL OR end_date > CURDATE()) ORDER BY created_at DESC";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                projects.add(mapResultSetToProject(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return projects;
+    }
+    
+    public List<Project> getAccomplishedProjects() {
+        List<Project> projects = new ArrayList<>();
+        String sql = "SELECT * FROM projects WHERE end_date IS NOT NULL AND end_date <= CURDATE() ORDER BY end_date DESC";
         
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
