@@ -4,14 +4,18 @@ import com.alluringdecors.bean.HeroBean;
 import com.alluringdecors.model.Hero;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/admin/heroes")
+@MultipartConfig(maxFileSize = 5 * 1024 * 1024)
 public class AdminHeroesServlet extends HttpServlet {
     
     private HeroBean heroBean;
@@ -60,7 +64,7 @@ public class AdminHeroesServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int heroId = Integer.parseInt(request.getParameter("id"));
             heroBean.deleteHero(heroId);
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            response.sendRedirect("http://localhost:8082/alluring-decors/admin/dashboard");
             return;
         }
         
@@ -119,16 +123,39 @@ public class AdminHeroesServlet extends HttpServlet {
         System.out.println("AdminHeroesServlet doPost called");
         
         try {
-            String heroIdStr = request.getParameter("heroId");
-            String title = request.getParameter("title");
-            String subtitle = request.getParameter("subtitle");
-            String bodyText = request.getParameter("bodyText");
-            String backgroundImage = request.getParameter("backgroundImage");
-            String primaryButton = request.getParameter("primaryButton");
-            String primaryButtonLink = request.getParameter("primaryButtonLink");
-            String secondaryButton = request.getParameter("secondaryButton");
-            String secondaryButtonLink = request.getParameter("secondaryButtonLink");
-            String displayOrderStr = request.getParameter("displayOrder");
+            // Extract form fields from multipart request
+            String heroIdStr = getPartValue(request, "heroId");
+            String title = getPartValue(request, "title");
+            String subtitle = getPartValue(request, "subtitle");
+            String bodyText = getPartValue(request, "bodyText");
+            String primaryButton = getPartValue(request, "primaryButton");
+            String primaryButtonLink = getPartValue(request, "primaryButtonLink");
+            String secondaryButton = getPartValue(request, "secondaryButton");
+            String secondaryButtonLink = getPartValue(request, "secondaryButtonLink");
+            String displayOrderStr = getPartValue(request, "displayOrder");
+            
+            String backgroundImage = null;
+            
+            // Handle file upload
+            try {
+                Part filePart = request.getPart("heroImage");
+                if (filePart != null && filePart.getSize() > 0 && filePart.getSubmittedFileName() != null) {
+                    String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+                    String webappPath = getServletContext().getRealPath("/");
+                    File uploadsDir = new File(webappPath, "uploads/heroes");
+                    if (!uploadsDir.exists()) uploadsDir.mkdirs();
+                    
+                    File targetFile = new File(uploadsDir, fileName);
+                    try (java.io.InputStream input = filePart.getInputStream();
+                         java.io.FileOutputStream output = new java.io.FileOutputStream(targetFile)) {
+                        input.transferTo(output);
+                    }
+                    backgroundImage = "/alluring-decors/uploads/heroes/" + fileName;
+                }
+            } catch (Exception e) {
+                System.out.println("File upload failed: " + e.getMessage());
+                e.printStackTrace();
+            }
             
             System.out.println("Form parameters - Title: " + title + ", BodyText: " + bodyText + ", DisplayOrder: " + displayOrderStr);
             
@@ -184,12 +211,25 @@ public class AdminHeroesServlet extends HttpServlet {
             }
             
             System.out.println("Hero operation successful, redirecting...");
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            response.sendRedirect("http://localhost:8082/alluring-decors/admin/dashboard");
             
         } catch (Exception e) {
             System.out.println("Exception in doPost: " + e.getMessage());
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
+    }
+    
+    private String getPartValue(HttpServletRequest request, String partName) {
+        try {
+            Part part = request.getPart(partName);
+            if (part != null) {
+                java.util.Scanner scanner = new java.util.Scanner(part.getInputStream(), "UTF-8");
+                return scanner.hasNext() ? scanner.next() : null;
+            }
+        } catch (Exception e) {
+            System.out.println("Error reading part " + partName + ": " + e.getMessage());
+        }
+        return null;
     }
 }

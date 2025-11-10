@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,11 +15,35 @@
     <jsp:include page="includes/navbar.jsp" />
 
     <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Elegance Redefined</h2>
-                <p>Transforming ordinary spaces into extraordinary experiences with bespoke interior and exterior designs.</p>
-            </div>
+        <section class="hero-carousel">
+            <c:forEach var="hero" items="${heroes}" varStatus="status">
+                <div class="hero-slide ${status.index == 0 ? 'active' : ''}" style="background-image: ${hero.backgroundImage != null ? 'url(' += hero.backgroundImage += ')' : 'linear-gradient(135deg, #164e31 0%, #295c19 100%)'}">
+                    <div class="hero-content">
+                        <c:if test="${hero.subtitle != null}">
+                            <span class="hero-subtitle">${hero.subtitle}</span>
+                        </c:if>
+                        <h2 class="hero-title">${hero.title}</h2>
+                        <p class="hero-text">${hero.bodyText}</p>
+                        <div class="hero-buttons">
+                            <c:if test="${hero.primaryButton != null}">
+                                <a href="${hero.primaryButtonLink}" class="btn btn-primary">${hero.primaryButton}</a>
+                            </c:if>
+                            <c:if test="${hero.secondaryButton != null}">
+                                <a href="${hero.secondaryButtonLink}" class="btn btn-secondary">${hero.secondaryButton}</a>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+            <c:if test="${fn:length(heroes) > 1}">
+                <button class="carousel-btn prev" onclick="changeSlide(-1)">‹</button>
+                <button class="carousel-btn next" onclick="changeSlide(1)">›</button>
+                <div class="carousel-dots">
+                    <c:forEach var="hero" items="${heroes}" varStatus="status">
+                        <span class="dot ${status.index == 0 ? 'active' : ''}" onclick="currentSlide(${status.index + 1})"></span>
+                    </c:forEach>
+                </div>
+            </c:if>
         </section>
 
         <section class="services-preview">
@@ -81,11 +106,9 @@
         }
         
         // Auto-advance carousel
-        if (slides.length > 1) {
-            setInterval(() => {
-                changeSlide(1);
-            }, 5000);
-        }
+        setInterval(() => {
+            changeSlide(1);
+        }, 4000);
     </script>
 </body>
 </html>

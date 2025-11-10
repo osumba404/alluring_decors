@@ -718,17 +718,17 @@
         
         function showAddHeroForm() {
             openModal('Add Hero Slide', 
-                '<form method="post" action="/alluring-decors/admin/heroes">' +
+                '<form id="addHeroForm" method="post" action="/alluring-decors/admin/heroes" enctype="multipart/form-data">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle"></div>' +
                 '<div class="form-group"><label>Body Text:</label><textarea name="bodyText" rows="3" required></textarea></div>' +
-                '<div class="form-group"><label>Background Image URL:</label><input type="url" name="backgroundImage"></div>' +
+                '<div class="form-group"><label>Upload Background Image:</label><input type="file" name="heroImage" accept="image/*"></div>' +
                 '<div class="form-group"><label>Primary Button Text:</label><input type="text" name="primaryButton"></div>' +
                 '<div class="form-group"><label>Primary Button Link:</label><input type="text" name="primaryButtonLink"></div>' +
                 '<div class="form-group"><label>Secondary Button Text:</label><input type="text" name="secondaryButton"></div>' +
                 '<div class="form-group"><label>Secondary Button Link:</label><input type="text" name="secondaryButtonLink"></div>' +
                 '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="1" required></div>' +
-                '<button type="submit" class="btn-primary">Add Hero Slide</button></form>'
+                '<button type="button" onclick="submitHeroForm()" class="btn-primary">Add Hero Slide</button></form>'
             );
         }
         
@@ -791,18 +791,19 @@
         
         function showEditHeroForm(id, title, subtitle, bodyText, backgroundImage, primaryButton, primaryButtonLink, secondaryButton, secondaryButtonLink, displayOrder) {
             openModal('Edit Hero Slide', 
-                '<form method="post" action="/alluring-decors/admin/heroes">' +
+                '<form id="editHeroForm" method="post" action="/alluring-decors/admin/heroes" enctype="multipart/form-data">' +
                 '<input type="hidden" name="heroId" value="' + id + '">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
                 '<div class="form-group"><label>Subtitle:</label><input type="text" name="subtitle" value="' + subtitle + '"></div>' +
                 '<div class="form-group"><label>Body Text:</label><textarea name="bodyText" rows="3" required>' + bodyText + '</textarea></div>' +
-                '<div class="form-group"><label>Background Image URL:</label><input type="url" name="backgroundImage" value="' + backgroundImage + '"></div>' +
+                (backgroundImage ? '<div class="form-group"><label>Current Image:</label><br><img src="' + backgroundImage + '" style="max-width: 200px; border-radius: 8px; margin-bottom: 10px;"></div>' : '') +
+                '<div class="form-group"><label>Upload New Background Image:</label><input type="file" name="heroImage" accept="image/*"></div>' +
                 '<div class="form-group"><label>Primary Button Text:</label><input type="text" name="primaryButton" value="' + primaryButton + '"></div>' +
                 '<div class="form-group"><label>Primary Button Link:</label><input type="text" name="primaryButtonLink" value="' + primaryButtonLink + '"></div>' +
                 '<div class="form-group"><label>Secondary Button Text:</label><input type="text" name="secondaryButton" value="' + secondaryButton + '"></div>' +
                 '<div class="form-group"><label>Secondary Button Link:</label><input type="text" name="secondaryButtonLink" value="' + secondaryButtonLink + '"></div>' +
                 '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="' + displayOrder + '" required></div>' +
-                '<button type="submit" class="btn-primary">Update Hero Slide</button></form>'
+                '<button type="button" onclick="submitHeroForm()" class="btn-primary">Update Hero Slide</button></form>'
             );
         }
         
@@ -835,6 +836,14 @@
                 form.submit();
             } else {
                 console.log('Form not found!');
+            }
+        }
+        
+        function submitHeroForm() {
+            const form = document.getElementById('addHeroForm') || document.getElementById('editHeroForm');
+            if (form) {
+                closeModal();
+                form.submit();
             }
         }
         
