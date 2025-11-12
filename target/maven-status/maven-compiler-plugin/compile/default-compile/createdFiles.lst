@@ -4,7 +4,6 @@ com\alluringdecors\servlet\ClientDashboardServlet.class
 com\alluringdecors\model\User.class
 com\alluringdecors\model\Project.class
 com\alluringdecors\servlet\HomeServlet.class
-com\alluringdecors\servlet\AdminContentServlet.class
 com\alluringdecors\servlet\LogoutServlet.class
 com\alluringdecors\servlet\LoginServlet.class
 com\alluringdecors\model\Service.class

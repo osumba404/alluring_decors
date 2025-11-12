@@ -646,13 +646,12 @@
         }
         
         function showAddContentForm() {
-            openModal('Add New Content', 
-                '<form method="post" action="content">' +
+            const formHtml = '<form method="post" action="content" data-direct-submit onsubmit="closeModal(); return true;">' +
                 '<div class="form-group"><label>Section Key:</label><input type="text" name="sectionKey" required></div>' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" required></div>' +
                 '<div class="form-group"><label>Content:</label><textarea name="content" rows="6" required></textarea></div>' +
-                '<button type="submit" class="btn-primary">Add Content</button></form>'
-            );
+                '<button type="submit" class="btn-primary">Add Content</button></form>';
+            openModal('Add New Content', formHtml);
         }
         
         function showEditContactForm() {
@@ -698,13 +697,12 @@
         }
         
         function showEditContentForm(key, title, content) {
-            openModal('Edit Content - ' + title, 
-                '<form method="post" action="content">' +
+            const formHtml = '<form method="post" action="content" data-direct-submit onsubmit="closeModal(); return true;">' +
                 '<input type="hidden" name="sectionKey" value="' + key + '">' +
                 '<div class="form-group"><label>Title:</label><input type="text" name="title" value="' + title + '" required></div>' +
                 '<div class="form-group"><label>Content:</label><textarea name="content" rows="8" required>' + content + '</textarea></div>' +
-                '<button type="submit" class="btn-primary">Update Content</button></form>'
-            );
+                '<button type="submit" class="btn-primary">Update Content</button></form>';
+            openModal('Edit Content - ' + title, formHtml);
         }
         
         function showUserDetails(id, username, fullName, email, phone, role) {
@@ -883,7 +881,7 @@
         // Handle form submissions
         document.addEventListener('submit', function(event) {
             const form = event.target;
-            if (form.closest('.modal')) {
+            if (form.closest('.modal') && !form.hasAttribute('data-direct-submit')) {
                 event.preventDefault();
                 submitModalForm(form);
             }

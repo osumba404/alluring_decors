@@ -49,7 +49,7 @@ public class AdminContentServlet extends HttpServlet {
                 String key = entry.getKey();
                 String contentText = entry.getValue();
                 String preview = contentText.length() > 100 ? contentText.substring(0, 100) + "..." : contentText;
-                String title = key.equals("home_center") ? "Home Center" : "About Us";
+                String title = key.replace("_", " ").toUpperCase();
                 String safeContent = contentText.replace("\"", "&quot;");
                 
                 out.println("<tr>");
@@ -57,7 +57,7 @@ public class AdminContentServlet extends HttpServlet {
                 out.println("<td>" + title + "</td>");
                 out.println("<td>" + preview + "</td>");
                 out.println("<td>");
-                out.println("<button class='action-btn' onclick='showEditContentForm(\"" + key + "\", \"" + title + "\", \"" + safeContent + "\")'><i class='fas fa-edit'></i> Edit</button>");
+                out.println("<button class='action-btn' onclick='showEditContentForm(\"" + key + "\", \"" + key + "\", \"" + safeContent + "\")'><i class='fas fa-edit'></i> Edit</button>");
                 out.println("</td>");
                 out.println("</tr>");
             }
@@ -77,13 +77,26 @@ public class AdminContentServlet extends HttpServlet {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
         
-        if (sectionKey != null && title != null && content != null) {
+        System.out.println("=== CONTENT FORM DEBUG ===");
+        System.out.println("sectionKey: " + sectionKey);
+        System.out.println("title: " + title);
+        System.out.println("content: " + content);
+        
+        if (sectionKey == null || sectionKey.trim().isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Section key is required");
+            return;
+        }
+        
+        boolean success = false;
+        if (sectionKey != null && content != null) {
             // Check if it's an update (existing section) or add new
             Map<String, String> existingContent = contentBean.getAllContent();
             if (existingContent.containsKey(sectionKey)) {
-                contentBean.updateContent(sectionKey, content);
+                success = contentBean.updateContent(sectionKey, content);
+                System.out.println("Update result: " + success);
             } else {
-                contentBean.addContent(sectionKey, title, content);
+                success = contentBean.addContent(sectionKey, title != null ? title : sectionKey, content);
+                System.out.println("Add result: " + success);
             }
         }
         

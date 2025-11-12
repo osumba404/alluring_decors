@@ -55,4 +55,21 @@ public class ContentBean {
         }
         return false;
     }
+    
+    public String getContentByKey(String sectionKey) {
+        String sql = "SELECT content FROM content_sections WHERE section_key = ? AND is_active = 1";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, sectionKey);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getString("content");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
