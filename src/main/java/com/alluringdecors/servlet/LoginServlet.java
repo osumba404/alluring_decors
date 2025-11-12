@@ -42,9 +42,9 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             
             if ("admin".equals(user.getRole())) {
-                response.sendRedirect("admin/dashboard");
+                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             } else {
-                response.sendRedirect("client/dashboard");
+                response.sendRedirect(request.getContextPath() + "/client/dashboard");
             }
         } else {
             request.setAttribute("error", "Invalid username or password");
