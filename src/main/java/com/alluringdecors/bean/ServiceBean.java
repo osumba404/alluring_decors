@@ -75,6 +75,25 @@ public class ServiceBean {
         return false;
     }
     
+    public List<Service> getServicesByDomainId(int domainId) {
+        List<Service> services = new ArrayList<>();
+        String sql = "SELECT * FROM services WHERE domain_id = ? AND is_active = 1 ORDER BY name";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, domainId);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                services.add(mapResultSetToService(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return services;
+    }
+    
     private Service mapResultSetToService(ResultSet rs) throws SQLException {
         Service service = new Service();
         service.setServiceId(rs.getInt("service_id"));
