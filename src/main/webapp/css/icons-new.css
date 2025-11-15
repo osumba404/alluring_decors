@@ -1,36 +1,138 @@
-/* FontAwesome Icons */
-@font-face {
-  font-family: "Font Awesome 6 Free";
-  font-style: normal;
-  font-weight: 900;
-  font-display: block;
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2") format("woff2"),
-       url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff") format("woff");
+/* ===== ICON SYSTEM - CSS SYMBOLS ONLY ===== */
+
+/* Base icon styles */
+.icon, .fas, .fa, .fab {
+    display: inline-block !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    line-height: 1 !important;
+    font-family: Arial, sans-serif !important;
+    font-weight: normal !important;
+    width: 1em !important;
+    text-align: center !important;
 }
 
-.fas, .fa {
-  font-family: "Font Awesome 6 Free" !important;
-  font-weight: 900 !important;
-  font-style: normal !important;
-  font-variant: normal !important;
-  text-rendering: auto !important;
-  line-height: 1 !important;
-  display: inline-block !important;
+/* Navigation Icons */
+.fa-home::before { content: "⌂" !important; }
+.fa-cog::before, .fa-cogs::before { content: "⚙" !important; }
+.fa-user::before, .fa-users::before { content: "◉" !important; }
+.fa-sign-out-alt::before { content: "⇥" !important; }
+
+/* Dashboard Icons */
+.fa-tachometer-alt::before { content: "⊞" !important; }
+.fa-tasks::before { content: "☰" !important; }
+.fa-project-diagram::before { content: "⊡" !important; }
+.fa-tags::before { content: "⚐" !important; }
+.fa-chart-bar::before { content: "▦" !important; }
+
+/* Action Icons */
+.fa-plus::before { content: "+" !important; }
+.fa-edit::before { content: "✎" !important; }
+.fa-trash::before, .fa-trash-alt::before { content: "×" !important; }
+.fa-eye::before { content: "◉" !important; }
+.fa-download::before { content: "⬇" !important; }
+.fa-upload::before { content: "⬆" !important; }
+.fa-save::before { content: "◉" !important; }
+.fa-print::before { content: "⎙" !important; }
+
+/* Communication Icons */
+.fa-phone::before { content: "☎" !important; }
+.fa-envelope::before { content: "✉" !important; }
+.fa-comments::before, .fa-comment::before { content: "◉" !important; }
+.fa-paper-plane::before { content: "⇧" !important; }
+
+/* Status Icons */
+.fa-check::before, .fa-check-circle::before { content: "✓" !important; }
+.fa-times::before, .fa-times-circle::before { content: "✗" !important; }
+.fa-exclamation-triangle::before { content: "⚠" !important; }
+.fa-info-circle::before { content: "ⓘ" !important; }
+.fa-question-circle::before { content: "?" !important; }
+
+/* Media Icons */
+.fa-image::before, .fa-images::before { content: "⊞" !important; }
+.fa-video::before { content: "▶" !important; }
+.fa-file::before { content: "◉" !important; }
+.fa-file-pdf::before { content: "◉" !important; }
+
+/* Navigation Arrows */
+.fa-arrow-left::before { content: "←" !important; }
+.fa-arrow-right::before { content: "→" !important; }
+.fa-arrow-up::before { content: "↑" !important; }
+.fa-arrow-down::before { content: "↓" !important; }
+.fa-chevron-left::before { content: "‹" !important; }
+.fa-chevron-right::before { content: "›" !important; }
+
+/* Business Icons */
+.fa-building::before { content: "⌂" !important; }
+.fa-home-alt::before { content: "⌂" !important; }
+.fa-utensils::before { content: "⚏" !important; }
+.fa-glass-cheers::before { content: "⚏" !important; }
+.fa-couch::before { content: "⊞" !important; }
+.fa-bed::before { content: "⊞" !important; }
+
+/* Time and Calendar */
+.fa-clock::before { content: "◉" !important; }
+.fa-calendar::before, .fa-calendar-alt::before { content: "◉" !important; }
+.fa-history::before { content: "⟲" !important; }
+
+/* Money and Payment */
+.fa-dollar-sign::before { content: "$" !important; }
+.fa-credit-card::before { content: "◉" !important; }
+.fa-money-bill::before { content: "◉" !important; }
+.fa-receipt::before { content: "⊞" !important; }
+
+/* Tools and Settings */
+.fa-wrench::before { content: "⚒" !important; }
+.fa-hammer::before { content: "⚒" !important; }
+.fa-paint-brush::before { content: "✎" !important; }
+.fa-palette::before { content: "⊞" !important; }
+
+/* Search and Filter */
+.fa-search::before { content: "⚲" !important; }
+.fa-filter::before { content: "⚟" !important; }
+.fa-sort::before { content: "↕" !important; }
+
+/* Social and Sharing */
+.fa-share::before { content: "⇧" !important; }
+.fa-link::before { content: "⚯" !important; }
+.fa-external-link-alt::before { content: "↗" !important; }
+
+/* Location */
+.fa-map-marker-alt::before { content: "⚐" !important; }
+.fa-globe::before { content: "⊕" !important; }
+
+/* Feedback Types */
+.fa-star::before { content: "★" !important; }
+.fa-heart::before { content: "♥" !important; }
+.fa-thumbs-up::before { content: "◉" !important; }
+.fa-thumbs-down::before { content: "◉" !important; }
+
+/* Additional Utility Icons */
+.fa-lightbulb::before { content: "◉" !important; }
+.fa-key::before { content: "⚿" !important; }
+.fa-lock::before { content: "◉" !important; }
+.fa-unlock::before { content: "◉" !important; }
+.fa-shield-alt::before { content: "⚔" !important; }
+
+/* Fallback for missing icons */
+.fas:not([class*="fa-"])::before,
+.fa:not([class*="fa-"])::before {
+    content: "●" !important;
 }
 
-.fa-users:before { content: "\f0c0"; }
-.fa-project-diagram:before { content: "\f542"; }
-.fa-tags:before { content: "\f02c"; }
-.fa-cogs:before { content: "\f085"; }
-.fa-edit:before { content: "\f044"; }
-.fa-phone:before { content: "\f095"; }
-.fa-comments:before { content: "\f086"; }
-.fa-question-circle:before { content: "\f059"; }
-.fa-envelope:before { content: "\f0e0"; }
-.fa-images:before { content: "\f302"; }
-.fa-plus:before { content: "\f067"; }
-.fa-eye:before { content: "\f06e"; }
-.fa-trash:before { content: "\f1f8"; }
-.fa-check-circle:before { content: "\f058"; }
-.fa-tasks:before { content: "\f0ae"; }
-.fa-image:before { content: "\f03e"; }
+/* Icon sizing classes */
+.fa-xs { font-size: 0.75em !important; }
+.fa-sm { font-size: 0.875em !important; }
+.fa-lg { font-size: 1.33em !important; }
+.fa-xl { font-size: 1.5em !important; }
+.fa-2x { font-size: 2em !important; }
+.fa-3x { font-size: 3em !important; }
+
+/* Icon colors */
+.icon-primary { color: var(--primary, #164e31) !important; }
+.icon-accent { color: var(--accent, #D4A017) !important; }
+.icon-success { color: #28a745 !important; }
+.icon-warning { color: #ffc107 !important; }
+.icon-danger { color: #dc3545 !important; }
+.icon-info { color: #17a2b8 !important; }

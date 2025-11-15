@@ -6,7 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Alluring Decors</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/icons-svg.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fontawesome-fix.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/navbar-override.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin-sidebar.css">
@@ -493,14 +495,14 @@
                 });
         }
         
-        function openModal(title, formHtml) {
+        window.openModal = function(title, formHtml) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalBody').innerHTML = formHtml;
             document.getElementById('formModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
         
-        function closeModal() {
+        window.closeModal = function() {
             document.getElementById('formModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
@@ -666,7 +668,7 @@
         
         function showAddFaqForm() {
             openModal('Add New FAQ', 
-                '<form method="post" action="faqs">' +
+                '<form method="post" action="/alluring-decors/admin/faqs">' +
                 '<div class="form-group"><label>Question:</label><input type="text" name="question" required></div>' +
                 '<div class="form-group"><label>Answer:</label><textarea name="answer" rows="4" required></textarea></div>' +
                 '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="0" required></div>' +
@@ -687,7 +689,7 @@
         
         function showEditFaqForm(id, question, answer, order) {
             openModal('Edit FAQ', 
-                '<form method="post" action="faqs">' +
+                '<form method="post" action="/alluring-decors/admin/faqs">' +
                 '<input type="hidden" name="faqId" value="' + id + '">' +
                 '<div class="form-group"><label>Question:</label><input type="text" name="question" value="' + question + '" required></div>' +
                 '<div class="form-group"><label>Answer:</label><textarea name="answer" rows="4" required>' + answer + '</textarea></div>' +

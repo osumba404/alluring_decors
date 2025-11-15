@@ -35,11 +35,19 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         
         List<Domain> domains = domainBean.getAllActiveDomains();
-        List<Project> ongoingProjects = projectBean.getProjectsByCategory("ongoing");
+        
+        // Add service count to each domain
+        com.alluringdecors.bean.ServiceBean serviceBean = new com.alluringdecors.bean.ServiceBean();
+        for (Domain domain : domains) {
+            int serviceCount = serviceBean.getServiceCountByDomainId(domain.getDomainId());
+            domain.setServiceCount(serviceCount);
+        }
+        
+        List<Project> recentProjects = projectBean.getAccomplishedProjects();
         List<Hero> heroes = heroBean.getAllActiveHeroes();
         
         request.setAttribute("domains", domains);
-        request.setAttribute("ongoingProjects", ongoingProjects);
+        request.setAttribute("recentProjects", recentProjects);
         request.setAttribute("heroes", heroes);
         
         request.getRequestDispatcher("/index.jsp").forward(request, response);

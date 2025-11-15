@@ -26,6 +26,30 @@ public class FeedbackBean {
         return feedbacks;
     }
     
+    public boolean submitFeedback(Feedback feedback) {
+        String sql = "INSERT INTO feedbacks (user_id, name, email, message, type) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setObject(1, feedback.getUserId());
+            stmt.setString(2, feedback.getName());
+            stmt.setString(3, feedback.getEmail());
+            stmt.setString(4, feedback.getMessage());
+            stmt.setString(5, feedback.getType());
+            
+            int result = stmt.executeUpdate();
+            System.out.println("Feedback insert result: " + result);
+            return result > 0;
+        } catch (SQLException e) {
+            System.err.println("Error submitting feedback: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean deleteFeedback(int feedbackId) {
         String sql = "DELETE FROM feedbacks WHERE feedback_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();

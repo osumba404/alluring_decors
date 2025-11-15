@@ -12,6 +12,8 @@
             <li><a href="${pageContext.request.contextPath}/projects.jsp">Projects</a></li>
             <li><a href="${pageContext.request.contextPath}/services">Services</a></li>
             <li><a href="${pageContext.request.contextPath}/contact">Contact</a></li>
+            <li><a href="${pageContext.request.contextPath}/feedback">Feedback</a></li>
+            <li><a href="${pageContext.request.contextPath}/faq">FAQ</a></li>
             
             <c:choose>
                 <c:when test="${sessionScope.user != null}">

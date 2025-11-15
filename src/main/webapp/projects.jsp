@@ -24,12 +24,6 @@
     <jsp:include page="includes/navbar.jsp" />
 
     <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Our Projects</h2>
-            </div>
-        </section>
-
         <section class="projects-preview">
             <h3>Ongoing Projects</h3>
             <div class="projects-grid">

@@ -37,9 +37,11 @@ C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\ser
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\bean\UserBean.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\model\Service.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\servlet\AdminAjaxServlet.java
+C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\servlet\FaqServlet.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\servlet\ViewServiceServlet.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\bean\DomainBean.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\servlet\AdminContactsServlet.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\model\Faq.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\bean\ProjectBean.java
 C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\servlet\AdminDomainsServlet.java
+C:\Users\evans\Desktop\sem4\alluring_decors\src\main\java\com\alluringdecors\servlet\FeedbackServlet.java

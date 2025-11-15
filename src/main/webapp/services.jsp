@@ -14,8 +14,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Services - Alluring Decors</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/fontawesome-fix.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -43,7 +44,7 @@
                                 </c:if>
                                 <c:if test="${empty domain.iconUrl}">
                                     <div style="width: 100%; height: 100%; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 4rem;">
-                                        <i style="font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free' !important; font-weight: 900 !important;">🏠</i>
+                                        <i class="fas fa-home"></i>
                                     </div>
                                 </c:if>
                             </div>
@@ -54,7 +55,7 @@
                                 
                                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
                                     <div style="background: var(--bg); padding: 0.8rem 1.2rem; border-radius: 8px; border: 1px solid var(--border);">
-                                        <i style="color: var(--accent); margin-right: 0.5rem; font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free' !important; font-weight: 900 !important;">📋</i>
+                                        <i class="fas fa-list" style="color: var(--accent); margin-right: 0.5rem;"></i>
                                         <span style="color: var(--accent); font-weight: 700; font-size: 1.2rem;">${domain.serviceCount}</span>
                                         <span style="color: #666; margin-left: 0.3rem;">Services</span>
                                     </div>
@@ -62,7 +63,7 @@
                                 
                                 <button class="view-services-btn" onclick="viewServices(${domain.domainId}, '${domain.name}')" 
                                         style="background: var(--gradient-primary); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.95rem; transition: all 0.3s ease; align-self: flex-start;">
-                                    <i style="margin-right: 0.5rem; font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free' !important; font-weight: 900 !important;">→</i>View Services
+                                    <span style="margin-right: 0.5rem;">→</span>View Services
                                 </button>
                             </div>
                         </div>

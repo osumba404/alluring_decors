@@ -39,33 +39,11 @@ public class AdminFeedbackServlet extends HttpServlet {
         
         List<Feedback> feedbacks = feedbackBean.getAllFeedback();
         
+        request.setAttribute("feedbacks", feedbacks);
+        
         if ("true".equals(ajax)) {
-            response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println(
-                "<div class='dashboard-header'><div><h1 class='dashboard-title'>View Feedback</h1></div></div>" +
-                "<table class='admin-table'><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Type</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody>"
-            );
-            if (feedbacks.isEmpty()) {
-                response.getWriter().println("<tr><td colspan='7'>No feedback available yet.</td></tr>");
-            } else {
-                for (Feedback feedback : feedbacks) {
-                    String date = feedback.getSubmittedAt() != null ? feedback.getSubmittedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
-                    String message = feedback.getMessage().length() > 50 ? feedback.getMessage().substring(0, 50) + "..." : feedback.getMessage();
-                    response.getWriter().println(
-                        "<tr><td>" + feedback.getFeedbackId() + "</td><td>" + feedback.getName() + "</td><td>" + feedback.getEmail() + 
-                        "</td><td>" + feedback.getType() + "</td><td>" + message + "</td><td>" + date + 
-                        "</td><td><button class='action-btn view' onclick=\"openModal('View Feedback', '" +
-                        "<div class=\\\"form-group\\\"><label>Name:</label><input type=\\\"text\\\" value=\\\"" + feedback.getName() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Email:</label><input type=\\\"email\\\" value=\\\"" + feedback.getEmail() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Message:</label><textarea rows=\\\"4\\\" readonly>" + feedback.getMessage() + "</textarea></div>')\"><i class='fas fa-eye'></i> View</button>" +
-                        "<a href='feedback?action=delete&id=" + feedback.getFeedbackId() + 
-                        "' class='action-btn delete' onclick='return confirm(\"Delete this feedback?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a></td></tr>"
-                    );
-                }
-            }
-            response.getWriter().println("</tbody></table>");
+            request.getRequestDispatcher("/admin-feedback-content.jsp").forward(request, response);
         } else {
-            request.setAttribute("feedbacks", feedbacks);
             request.getRequestDispatcher("/admin-feedback.jsp").forward(request, response);
         }
     }

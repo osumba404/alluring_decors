@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${domainName} Services - Alluring Decors</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -29,25 +30,36 @@
                 <c:when test="${not empty services}">
                     <div class="services-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
                         <c:forEach var="service" items="${services}">
-                            <div class="service-card" style="background: white; padding: 2rem; border-radius: 15px; box-shadow: var(--shadow-light); border: 1px solid var(--border); transition: all 0.3s ease;">
-                                <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">${service.name}</h4>
-                                <p style="color: #666; margin-bottom: 1.5rem; line-height: 1.6;">${service.description}</p>
+                            <div class="service-card" style="background: white; border-radius: 15px; box-shadow: var(--shadow-light); border: 1px solid var(--border); transition: all 0.3s ease; overflow: hidden;">
+                                <c:if test="${not empty service.imageUrl}">
+                                    <img src="${service.imageUrl}" alt="${service.name}" style="width: 100%; height: 200px; object-fit: cover;">
+                                </c:if>
+                                <c:if test="${empty service.imageUrl}">
+                                    <div style="width: 100%; height: 200px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                        <i class="fas fa-tools"></i>
+                                    </div>
+                                </c:if>
                                 
-                                <div style="margin-bottom: 1.5rem;">
-                                    <c:if test="${service.basePrice != null}">
-                                        <p style="color: var(--accent); font-weight: 600; margin-bottom: 0.5rem;">
-                                            <i class="fas fa-tag"></i> Base Price: KES ${service.basePrice}
+                                <div style="padding: 2rem;">
+                                    <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">${service.name}</h4>
+                                    <p style="color: #666; margin-bottom: 1.5rem; line-height: 1.6;">${service.description}</p>
+                                    
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <c:if test="${service.basePrice != null}">
+                                            <p style="color: var(--accent); font-weight: 600; margin-bottom: 0.5rem;">
+                                                <i class="fas fa-tag"></i> Base Price: KES ${service.basePrice}
+                                            </p>
+                                        </c:if>
+                                        <p style="color: var(--accent); font-weight: 600;">
+                                            <i class="fas fa-calculator"></i> KES ${service.pricePerSqft}/${service.unit}
                                         </p>
-                                    </c:if>
-                                    <p style="color: var(--accent); font-weight: 600;">
-                                        <i class="fas fa-calculator"></i> KES ${service.pricePerSqft}/${service.unit}
-                                    </p>
+                                    </div>
+                                    
+                                    <button onclick="viewService(${service.serviceId})" 
+                                            style="background: var(--gradient-primary); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.3s ease;">
+                                        <i class="fas fa-eye"></i> View Service
+                                    </button>
                                 </div>
-                                
-                                <button onclick="viewService(${service.serviceId})" 
-                                        style="background: var(--gradient-primary); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.3s ease;">
-                                    <i class="fas fa-eye"></i> View Service
-                                </button>
                             </div>
                         </c:forEach>
                     </div>
@@ -107,6 +119,15 @@
         #serviceSearch:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.1);
+        }
+        
+        /* Ensure FontAwesome icons display */
+        .fas, .far, .fab, .fa {
+            font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", "FontAwesome" !important;
+            font-weight: 900 !important;
+            display: inline-block !important;
+            font-style: normal !important;
+            margin-right: 0.5rem;
         }
     </style>
 </body>

@@ -7,9 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alluring Decors - Transforming Spaces, Creating Dreams</title>
-    <link rel="stylesheet" href="css/icons-final.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/fontawesome-fix.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/navbar-override.css">
 </head>
 <body>
     <jsp:include page="includes/navbar.jsp" />
@@ -47,27 +48,57 @@
         </section>
 
         <section class="services-preview">
-            <h3>Our Services</h3>
+            <h3>Our Service Domains</h3>
             <div class="services-grid">
-                <div class="service-card">
-                    <h4>Interior Design</h4>
-                    <p>Complete interior transformation with modern aesthetics</p>
-                </div>
-                <div class="service-card">
-                    <h4>Exterior Design</h4>
-                    <p>Beautiful outdoor spaces and facade improvements</p>
-                </div>
+                <c:forEach var="domain" items="${domains}" varStatus="status">
+                    <c:if test="${status.index < 4}">
+                        <div class="service-card" onclick="window.location.href='${pageContext.request.contextPath}/services/view-services?domainId=${domain.domainId}&domainName=${domain.name}'">
+                            <c:if test="${not empty domain.iconUrl}">
+                                <img src="${domain.iconUrl}" alt="${domain.name}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 15px 15px 0 0;">
+                            </c:if>
+                            <c:if test="${empty domain.iconUrl}">
+                                <div style="width: 100%; height: 200px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; border-radius: 15px 15px 0 0;">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                            </c:if>
+                            <div style="padding: 1.5rem;">
+                                <h4>${domain.name}</h4>
+                                <p>${domain.description}</p>
+                                <p style="color: var(--accent); font-weight: 600; margin-top: 1rem;">${domain.serviceCount} Services Available</p>
+                            </div>
+                        </div>
+                    </c:if>
+                </c:forEach>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="${pageContext.request.contextPath}/services" style="background: var(--gradient-primary); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 8px; font-weight: 600;">View All Services</a>
             </div>
         </section>
 
         <section class="projects-preview">
             <h3>Recent Projects</h3>
             <div class="projects-grid">
-                <div class="project-card">
-                    <h4>Modern Villa</h4>
-                    <p>Contemporary design with elegant finishes</p>
-                    <p><strong>Location:</strong> Nairobi</p>
-                </div>
+                <c:forEach var="project" items="${recentProjects}" varStatus="status">
+                    <c:if test="${status.index < 3}">
+                        <div class="project-card">
+                            <c:if test="${not empty project.thumbnailUrl}">
+                                <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 15px 15px 0 0;">
+                            </c:if>
+                            <c:if test="${empty project.thumbnailUrl}">
+                                <div style="width: 100%; height: 200px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; border-radius: 15px 15px 0 0;">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                            </c:if>
+                            <div style="padding: 1.5rem;">
+                                <h4>${project.title}</h4>
+                                <p>${project.shortDescription}</p>
+                                <c:if test="${not empty project.location}">
+                                    <p><strong>Location:</strong> ${project.location}</p>
+                                </c:if>
+                            </div>
+                        </div>
+                    </c:if>
+                </c:forEach>
             </div>
         </section>
     </main>
@@ -109,6 +140,19 @@
         setInterval(() => {
             changeSlide(1);
         }, 4000);
+        
+        // Add hover effects to cards
+        document.querySelectorAll('.service-card, .project-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = 'var(--shadow-medium)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'var(--shadow-light)';
+            });
+        });
     </script>
 </body>
 </html>

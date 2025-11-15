@@ -84,7 +84,8 @@ public class AdminFaqsServlet extends HttpServlet {
         String faqIdStr = request.getParameter("faqId");
         String question = request.getParameter("question");
         String answer = request.getParameter("answer");
-        int displayOrder = Integer.parseInt(request.getParameter("displayOrder"));
+        String displayOrderStr = request.getParameter("displayOrder");
+        int displayOrder = (displayOrderStr != null && !displayOrderStr.isEmpty()) ? Integer.parseInt(displayOrderStr) : 0;
         
         Faq faq = new Faq();
         faq.setQuestion(question);

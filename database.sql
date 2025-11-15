@@ -273,7 +273,7 @@ CREATE TABLE feedbacks (
     name VARCHAR(100),
     email VARCHAR(100),
     message TEXT NOT NULL,
-    type ENUM('feedback', 'query') DEFAULT 'feedback',
+    type ENUM('general', 'suggestion', 'complaint', 'question', 'compliment') DEFAULT 'general',
     is_read TINYINT(1) DEFAULT 0,
     submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
