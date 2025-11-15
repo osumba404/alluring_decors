@@ -25,6 +25,7 @@ com\alluringdecors\model\Faq.class
 com\alluringdecors\servlet\AdminRequestsServlet.class
 com\alluringdecors\model\ServiceRequest.class
 com\alluringdecors\servlet\ServicesServlet.class
+com\alluringdecors\servlet\ViewServiceServlet.class
 com\alluringdecors\bean\ProjectBean.class
 com\alluringdecors\servlet\ContactServlet.class
 com\alluringdecors\bean\DomainBean.class
@@ -34,6 +35,7 @@ com\alluringdecors\util\DatabaseUtil.class
 com\alluringdecors\bean\ContentBean.class
 com\alluringdecors\servlet\RegisterServlet.class
 com\alluringdecors\bean\UserBean.class
+com\alluringdecors\servlet\ViewServicesServlet.class
 com\alluringdecors\bean\ContactBean.class
 com\alluringdecors\servlet\AdminDashboardServlet.class
 com\alluringdecors\servlet\AdminUsersServlet.class

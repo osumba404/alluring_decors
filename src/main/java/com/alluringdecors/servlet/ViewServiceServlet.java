@@ -11,10 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/services")
-public class ServicesServlet extends HttpServlet {
+@WebServlet("/services/view-service")
+public class ViewServiceServlet extends HttpServlet {
     
     private ServiceBean serviceBean;
     private DomainBean domainBean;
@@ -30,15 +29,19 @@ public class ServicesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        List<Domain> domains = domainBean.getAllActiveDomains();
+        String serviceIdParam = request.getParameter("serviceId");
         
-        // Add service count to each domain
-        for (Domain domain : domains) {
-            int serviceCount = serviceBean.getServiceCountByDomainId(domain.getDomainId());
-            domain.setServiceCount(serviceCount);
+        if (serviceIdParam != null) {
+            int serviceId = Integer.parseInt(serviceIdParam);
+            Service service = serviceBean.getServiceById(serviceId);
+            
+            if (service != null) {
+                Domain domain = domainBean.getDomainById(service.getDomainId());
+                request.setAttribute("service", service);
+                request.setAttribute("domain", domain);
+            }
         }
         
-        request.setAttribute("domains", domains);
-        request.getRequestDispatcher("/services.jsp").forward(request, response);
+        request.getRequestDispatcher("/view-service.jsp").forward(request, response);
     }
 }

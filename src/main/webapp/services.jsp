@@ -14,49 +14,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Services - Alluring Decors</title>
-    <link rel="stylesheet" href="css/icons-final.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/navbar-override.css">
 </head>
 <body>
     <jsp:include page="includes/navbar.jsp" />
 
     <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Our Services</h2>
-                <p>Comprehensive interior and exterior design solutions tailored to your unique vision and lifestyle.</p>
-            </div>
-        </section>
+     
 
         <section class="services-domains" style="padding: 4rem 2rem;">
             <div class="container">
-                <h3 style="text-align: center; color: #164e31; margin-bottom: 3rem; font-size: 2rem;">Our Service Domains</h3>
+                <h3 style="text-align: center; color: #164e31; margin-bottom: 2rem; font-size: 2rem;">Our Service Domains</h3>
                 
-                <c:forEach var="domain" items="${domains}">
-                    <div class="domain-section" style="margin-bottom: 4rem; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <h4 style="color: #164e31; margin-bottom: 1.5rem; font-size: 1.5rem;">${domain.name}</h4>
-                        <p style="color: #666; margin-bottom: 1rem;">${domain.description}</p>
-                        
-                        <c:if test="${not empty services}">
-                            <div class="services-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                                <c:forEach var="service" items="${services}">
-                                    <c:if test="${service.domainId == domain.domainId}">
-                                        <div class="service-item" style="padding: 0.5rem; background: #f8f9fa; border-radius: 6px;">
-                                            <strong>${service.name}</strong>
-                                            <c:if test="${service.description != null}">
-                                                <br><small style="color: #666;">${service.description}</small>
-                                            </c:if>
-                                            <c:if test="${service.pricePerSqft != null}">
-                                                <br><small style="color: #D4A017; font-weight: 600;">From $${service.pricePerSqft}/sqft</small>
-                                            </c:if>
-                                        </div>
-                                    </c:if>
-                                </c:forEach>
+                <div class="search-container" style="text-align: center; margin-bottom: 3rem;">
+                    <input type="text" id="domainSearch" placeholder="Search domains..." 
+                           style="padding: 1rem 1.5rem; width: 100%; max-width: 400px; border: 2px solid #E0E0E0; border-radius: 25px; font-size: 1rem; outline: none;"
+                           onkeyup="searchDomains()">
+                </div>
+                
+                <c:forEach var="domain" items="${domains}" varStatus="status">
+                    <div class="domain-section" style="margin-bottom: 4rem; background: white; border-radius: 20px; box-shadow: var(--shadow-light); border: 1px solid var(--border); overflow: hidden; height: 300px;">
+                        <div style="display: flex; height: 100%; ${status.index % 2 == 1 ? 'flex-direction: row-reverse;' : ''}">
+                            <div style="width: 50%; height: 100%; position: relative;">
+                                <c:if test="${not empty domain.iconUrl}">
+                                    <img src="${domain.iconUrl}" alt="${domain.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </c:if>
+                                <c:if test="${empty domain.iconUrl}">
+                                    <div style="width: 100%; height: 100%; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 4rem;">
+                                        <i style="font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free' !important; font-weight: 900 !important;">🏠</i>
+                                    </div>
+                                </c:if>
                             </div>
-                        </c:if>
-                        
-                        <button class="request-btn" onclick="requestService('${domain.name}')" style="background: #D4A017; color: #164e31; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Request Service Now</button>
+                            
+                            <div style="width: 50%; padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                                <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.8rem;">${domain.name}</h4>
+                                <p style="color: #666; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">${domain.description}</p>
+                                
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <div style="background: var(--bg); padding: 0.8rem 1.2rem; border-radius: 8px; border: 1px solid var(--border);">
+                                        <i style="color: var(--accent); margin-right: 0.5rem; font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free' !important; font-weight: 900 !important;">📋</i>
+                                        <span style="color: var(--accent); font-weight: 700; font-size: 1.2rem;">${domain.serviceCount}</span>
+                                        <span style="color: #666; margin-left: 0.3rem;">Services</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="view-services-btn" onclick="viewServices(${domain.domainId}, '${domain.name}')" 
+                                        style="background: var(--gradient-primary); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.95rem; transition: all 0.3s ease; align-self: flex-start;">
+                                    <i style="margin-right: 0.5rem; font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free' !important; font-weight: 900 !important;">→</i>View Services
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </c:forEach>
                 
@@ -69,21 +78,82 @@
         </section>
         
         <script>
-            function requestService(domain) {
-                // Check if user is logged in
-                <c:choose>
-                    <c:when test="${sessionScope.user != null}">
-                        // Redirect to service request form with domain pre-selected
-                        window.location.href = '${pageContext.request.contextPath}/request-service?domain=' + encodeURIComponent(domain);
-                    </c:when>
-                    <c:otherwise>
-                        // Redirect to login page
-                        alert('Please login to request services');
-                        window.location.href = '${pageContext.request.contextPath}/login.jsp';
-                    </c:otherwise>
-                </c:choose>
+            function viewServices(domainId, domainName) {
+                window.location.href = '${pageContext.request.contextPath}/services/view-services?domainId=' + domainId + '&domainName=' + encodeURIComponent(domainName);
             }
+            
+            function searchDomains() {
+                const searchTerm = document.getElementById('domainSearch').value.toLowerCase();
+                const domainSections = document.querySelectorAll('.domain-section');
+                
+                domainSections.forEach(section => {
+                    const domainName = section.querySelector('h4').textContent.toLowerCase();
+                    const domainDesc = section.querySelector('p').textContent.toLowerCase();
+                    
+                    if (domainName.includes(searchTerm) || domainDesc.includes(searchTerm)) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Fallback icon loader
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     setTimeout(function() {
+            //         const icons = document.querySelectorAll('.fas');
+            //         icons.forEach(function(icon) {
+            //             if (icon.offsetWidth === 0 || icon.offsetHeight === 0) {
+            //                 if (icon.classList.contains('fa-home')) {
+            //                     icon.innerHTML = '🏠';
+            //                 } else if (icon.classList.contains('fa-list')) {
+            //                     icon.innerHTML = '📋';
+            //                 } else if (icon.classList.contains('fa-arrow-right')) {
+            //                     icon.innerHTML = '→';
+            //                 }
+            //             }
+            //         });
+            //     }, 1000);
+            // });
         </script>
+        
+        <style>
+            .view-services-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: var(--shadow-heavy);
+            }
+            
+            .domain-section:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--shadow-medium);
+            }
+            
+            #domainSearch:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.1);
+            }
+            
+            /* Ensure FontAwesome icons display */
+            .fas, .far, .fab, .fa {
+                font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", "FontAwesome" !important;
+                font-weight: 900 !important;
+                display: inline-block !important;
+                font-style: normal !important;
+                font-variant: normal !important;
+                text-rendering: auto !important;
+                -webkit-font-smoothing: antialiased !important;
+            }
+            
+            /* Force icon display with content fallback */
+            .fas.fa-home::before { content: "\f015" !important; }
+            .fas.fa-list::before { content: "\f03a" !important; }
+            .fas.fa-arrow-right::before { content: "\f061" !important; }
+            
+            /* Fallback if FontAwesome completely fails */
+            /* .fas.fa-home:empty::after { content: "🏠" !important; }
+            .fas.fa-list:empty::after { content: "📋" !important; }
+            .fas.fa-arrow-right:empty::after { content: "→" !important; } */
+        </style>
     </main>
 
     <footer>

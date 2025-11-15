@@ -128,6 +128,23 @@ public class ServiceBean {
         return services;
     }
     
+    public int getServiceCountByDomainId(int domainId) {
+        String sql = "SELECT COUNT(*) FROM services WHERE domain_id = ? AND is_active = 1";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, domainId);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
     private Service mapResultSetToService(ResultSet rs) throws SQLException {
         Service service = new Service();
         service.setServiceId(rs.getInt("service_id"));

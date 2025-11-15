@@ -6,6 +6,7 @@ public class Domain {
     private String description;
     private String iconUrl;
     private boolean isActive;
+    private int serviceCount;
     
     public Domain() {}
     
@@ -30,4 +31,7 @@ public class Domain {
     
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    
+    public int getServiceCount() { return serviceCount; }
+    public void setServiceCount(int serviceCount) { this.serviceCount = serviceCount; }
 }
