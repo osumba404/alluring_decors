@@ -7,7 +7,6 @@ com\alluringdecors\servlet\HomeServlet.class
 com\alluringdecors\servlet\LogoutServlet.class
 com\alluringdecors\servlet\LoginServlet.class
 com\alluringdecors\model\Service.class
-com\alluringdecors\servlet\AdminRequestsServlet.class
 com\alluringdecors\bean\ProjectBean.class
 com\alluringdecors\bean\DomainBean.class
 com\alluringdecors\servlet\AdminFeedbackServlet.class

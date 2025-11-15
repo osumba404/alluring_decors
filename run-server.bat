@@ -6,5 +6,5 @@ echo Admin Login: admin / admin123
 echo.
 echo Press Ctrl+C to stop the server
 echo.
-mvn jetty:run
+mvnd jetty:run
 pause

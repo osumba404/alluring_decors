@@ -30,6 +30,22 @@ public class ServiceRequestBean {
         return requests;
     }
     
+    public boolean createServiceRequest(ServiceRequest request) {
+        String sql = "INSERT INTO service_requests (user_id, request_code, location, area_sqft, status_id, remarks) VALUES (1, ?, ?, 0, 1, ?)";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, "REQ" + System.currentTimeMillis());
+            stmt.setString(2, request.getDomain());
+            stmt.setString(3, request.getName() + " - " + request.getEmail() + " - " + request.getPhone() + " - " + request.getDescription());
+            
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean updateRequestStatus(int requestId, int statusId) {
         String sql = "UPDATE service_requests SET status_id = ? WHERE request_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();
@@ -45,6 +61,28 @@ public class ServiceRequestBean {
         return false;
     }
     
+    public List<ServiceRequest> getUserRequests(int userId) {
+        List<ServiceRequest> requests = new ArrayList<>();
+        String sql = "SELECT sr.*, s.name as status_name " +
+                    "FROM service_requests sr " +
+                    "JOIN statuses s ON sr.status_id = s.status_id " +
+                    "WHERE sr.user_id = ? AND sr.cancelled = 0 ORDER BY sr.requested_at DESC";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                requests.add(mapResultSetToServiceRequest(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+    
     private ServiceRequest mapResultSetToServiceRequest(ResultSet rs) throws SQLException {
         ServiceRequest request = new ServiceRequest();
         request.setRequestId(rs.getInt("request_id"));
@@ -56,7 +94,6 @@ public class ServiceRequestBean {
         request.setStatusName(rs.getString("status_name"));
         request.setRemarks(rs.getString("remarks"));
         request.setCancelled(rs.getBoolean("cancelled"));
-        request.setClientName(rs.getString("client_name"));
         
         Timestamp requestedAt = rs.getTimestamp("requested_at");
         if (requestedAt != null) {

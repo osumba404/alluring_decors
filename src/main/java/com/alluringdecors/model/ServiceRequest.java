@@ -17,6 +17,11 @@ public class ServiceRequest {
     private LocalDateTime cancelledAt;
     private String cancelledReason;
     private String clientName;
+    private String name;
+    private String email;
+    private String phone;
+    private String domain;
+    private String description;
     
     public ServiceRequest() {}
     
@@ -59,4 +64,19 @@ public class ServiceRequest {
     
     public String getClientName() { return clientName; }
     public void setClientName(String clientName) { this.clientName = clientName; }
+    
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+    
+    public String getDomain() { return domain; }
+    public void setDomain(String domain) { this.domain = domain; }
+    
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 }
