@@ -11,14 +11,20 @@ public class ServiceBean {
     
     public List<Service> getAllServices() {
         List<Service> services = new ArrayList<>();
-        String sql = "SELECT * FROM services WHERE is_active = 1 ORDER BY name";
+        String sql = "SELECT s.*, d.name as domain_name FROM services s LEFT JOIN domains d ON s.domain_id = d.domain_id ORDER BY s.name";
         
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
-                services.add(mapResultSetToService(rs));
+                Service service = mapResultSetToServiceSafe(rs);
+                try {
+                    service.setDomainName(rs.getString("domain_name"));
+                } catch (SQLException e) {
+                    // Domain name not available
+                }
+                services.add(service);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -26,8 +32,8 @@ public class ServiceBean {
         return services;
     }
     
-    public boolean addService(Service service) {
-        String sql = "INSERT INTO services (domain_id, name, description, base_price, price_per_sqft, unit) VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean createService(Service service) {
+        String sql = "INSERT INTO services (domain_id, name, description, base_price, price_per_sqft, unit, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
@@ -37,6 +43,7 @@ public class ServiceBean {
             stmt.setBigDecimal(4, service.getBasePrice());
             stmt.setBigDecimal(5, service.getPricePerSqft());
             stmt.setString(6, service.getUnit());
+            stmt.setBoolean(7, service.isActive());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -45,21 +52,48 @@ public class ServiceBean {
         return false;
     }
     
+    public boolean addService(Service service) {
+        return createService(service);
+    }
+    
     public boolean updateService(Service service) {
-        String sql = "UPDATE services SET name = ?, description = ?, price_per_sqft = ? WHERE service_id = ?";
+        String sql = "UPDATE services SET domain_id = ?, name = ?, description = ?, base_price = ?, price_per_sqft = ?, unit = ?, is_active = ? WHERE service_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setString(1, service.getName());
-            stmt.setString(2, service.getDescription());
-            stmt.setBigDecimal(3, service.getPricePerSqft());
-            stmt.setInt(4, service.getServiceId());
+            stmt.setInt(1, service.getDomainId());
+            stmt.setString(2, service.getName());
+            stmt.setString(3, service.getDescription());
+            stmt.setBigDecimal(4, service.getBasePrice());
+            stmt.setBigDecimal(5, service.getPricePerSqft());
+            stmt.setString(6, service.getUnit());
+            stmt.setBoolean(7, service.isActive());
+            stmt.setInt(8, service.getServiceId());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    public Service getServiceById(int serviceId) {
+        String sql = "SELECT s.*, d.name as domain_name FROM services s LEFT JOIN domains d ON s.domain_id = d.domain_id WHERE s.service_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, serviceId);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                Service service = mapResultSetToService(rs);
+                service.setDomainName(rs.getString("domain_name"));
+                return service;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     
     public boolean deleteService(int serviceId) {
@@ -103,6 +137,28 @@ public class ServiceBean {
         service.setBasePrice(rs.getBigDecimal("base_price"));
         service.setPricePerSqft(rs.getBigDecimal("price_per_sqft"));
         service.setUnit(rs.getString("unit"));
+        service.setImageUrl(rs.getString("image_url"));
+        service.setActive(rs.getBoolean("is_active"));
+        return service;
+    }
+    
+    private Service mapResultSetToServiceSafe(ResultSet rs) throws SQLException {
+        Service service = new Service();
+        service.setServiceId(rs.getInt("service_id"));
+        service.setDomainId(rs.getInt("domain_id"));
+        service.setName(rs.getString("name"));
+        service.setDescription(rs.getString("description"));
+        service.setBasePrice(rs.getBigDecimal("base_price"));
+        service.setPricePerSqft(rs.getBigDecimal("price_per_sqft"));
+        service.setUnit(rs.getString("unit"));
+        
+        // Safely handle image_url column that might not exist
+        try {
+            service.setImageUrl(rs.getString("image_url"));
+        } catch (SQLException e) {
+            service.setImageUrl(null);
+        }
+        
         service.setActive(rs.getBoolean("is_active"));
         return service;
     }

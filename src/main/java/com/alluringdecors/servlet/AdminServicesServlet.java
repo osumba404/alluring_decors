@@ -1,7 +1,9 @@
 package com.alluringdecors.servlet;
 
 import com.alluringdecors.bean.ServiceBean;
+import com.alluringdecors.bean.DomainBean;
 import com.alluringdecors.model.Service;
+import com.alluringdecors.model.Domain;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,11 +17,13 @@ import java.util.List;
 public class AdminServicesServlet extends HttpServlet {
     
     private ServiceBean serviceBean;
+    private DomainBean domainBean;
     
     @Override
     public void init() throws ServletException {
         super.init();
         serviceBean = new ServiceBean();
+        domainBean = new DomainBean();
     }
     
     @Override
@@ -44,26 +48,24 @@ public class AdminServicesServlet extends HttpServlet {
             
             out.println("<div class='dashboard-header'>");
             out.println("<div><h1 class='dashboard-title'>Manage Services</h1></div>");
-            out.println("<button class='header-action-btn' onclick='showAddServiceForm()'><i class='fas fa-plus'></i> Add Service</button>");
+            out.println("<a href='add-service' class='header-action-btn'><i class='fas fa-plus'></i> Add Service</a>");
             out.println("</div>");
             
             out.println("<table class='admin-table'>");
-            out.println("<thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Price/Sqft</th><th>Actions</th></tr></thead>");
+            out.println("<thead><tr><th>ID</th><th>Name</th><th>Domain</th><th>Price/Sqft</th><th>Actions</th></tr></thead>");
             out.println("<tbody>");
             
             if (services.isEmpty()) {
                 out.println("<tr><td colspan='5' style='text-align:center; padding: 2rem; color: #666;'>No services available. Add some services to get started.</td></tr>");
             } else {
                 for (Service service : services) {
-                    String safeName = service.getName().replace("\"", "&quot;");
-                    String safeDesc = service.getDescription().replace("\"", "&quot;");
                     out.println("<tr>");
                     out.println("<td>" + service.getServiceId() + "</td>");
                     out.println("<td>" + service.getName() + "</td>");
-                    out.println("<td>" + service.getDescription() + "</td>");
-                    out.println("<td>$" + service.getPricePerSqft() + "</td>");
+                    out.println("<td>" + (service.getDomainName() != null ? service.getDomainName() : "N/A") + "</td>");
+                    out.println("<td>KES " + service.getPricePerSqft() + "</td>");
                     out.println("<td>");
-                    out.println("<button class='action-btn' onclick='showEditServiceForm(" + service.getServiceId() + ", \"" + safeName + "\", \"" + safeDesc + "\", " + service.getPricePerSqft() + ")'><i class='fas fa-edit'></i> Edit</button> ");
+                    out.println("<a href='add-service?id=" + service.getServiceId() + "' class='action-btn'><i class='fas fa-edit'></i> Edit</a> ");
                     out.println("<a href='services?action=delete&id=" + service.getServiceId() + "' class='action-btn delete' onclick='return confirm(\"Delete this service?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a>");
                     out.println("</td>");
                     out.println("</tr>");
@@ -71,7 +73,9 @@ public class AdminServicesServlet extends HttpServlet {
             }
             out.println("</tbody></table>");
         } else {
+            List<Domain> domains = domainBean.getAllDomains();
             request.setAttribute("services", services);
+            request.setAttribute("domains", domains);
             request.getRequestDispatcher("/admin-services.jsp").forward(request, response);
         }
     }
@@ -89,7 +93,8 @@ public class AdminServicesServlet extends HttpServlet {
         service.setName(name);
         service.setDescription(description);
         service.setPricePerSqft(java.math.BigDecimal.valueOf(pricePerSqft));
-        service.setDomainId(1); // Default domain
+        int domainId = Integer.parseInt(request.getParameter("domainId"));
+        service.setDomainId(domainId);
         
         if (serviceIdStr != null && !serviceIdStr.isEmpty()) {
             // Update existing service

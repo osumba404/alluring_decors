@@ -478,7 +478,7 @@
             }
             
             // Load content based on section
-            fetch(section + '?ajax=true')
+            fetch('/alluring-decors/admin/' + section + '?ajax=true')
                 .then(response => response.text())
                 .then(html => {
                     mainContent.innerHTML = html;
@@ -941,7 +941,7 @@
             });
             
             // Load content based on section
-            fetch(section + '?ajax=true')
+            fetch('/alluring-decors/admin/' + section + '?ajax=true')
                 .then(response => response.text())
                 .then(html => {
                     mainContent.innerHTML = html;

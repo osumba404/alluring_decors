@@ -10,7 +10,9 @@ public class Service {
     private BigDecimal basePrice;
     private BigDecimal pricePerSqft;
     private String unit;
+    private String imageUrl;
     private boolean isActive;
+    private String domainName;
     
     public Service() {}
     
@@ -45,6 +47,12 @@ public class Service {
     public String getUnit() { return unit; }
     public void setUnit(String unit) { this.unit = unit; }
     
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    
+    public String getDomainName() { return domainName; }
+    public void setDomainName(String domainName) { this.domainName = domainName; }
 }
