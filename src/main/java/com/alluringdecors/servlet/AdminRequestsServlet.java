@@ -64,14 +64,9 @@ public class AdminRequestsServlet extends HttpServlet {
                     response.getWriter().println(
                         "<tr><td>" + req.getRequestId() + "</td><td><strong>" + req.getClientName() + "</strong></td><td><code style='background: #f8f9fa; padding: 4px 8px; border-radius: 4px;'>" + req.getRequestCode() + 
                         "</code></td><td>" + req.getLocation() + "</td><td>" + req.getAreaSqft() + "</td><td><span style='background: #ffc107; color: #000; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.85rem;'>" + req.getStatusName() + 
-                        "</span></td><td>" + date + "</td><td><button class='action-btn view' onclick=\"openModal('Request Details', '" +
-                        "<div class=\\\"form-group\\\"><label>Request ID:</label><input type=\\\"text\\\" value=\\\"" + req.getRequestId() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Client:</label><input type=\\\"text\\\" value=\\\"" + req.getClientName() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Code:</label><input type=\\\"text\\\" value=\\\"" + req.getRequestCode() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Location:</label><textarea rows=\\\"3\\\" readonly>" + location + "</textarea></div>" +
-                        "<div class=\\\"form-group\\\"><label>Area:</label><input type=\\\"text\\\" value=\\\"" + req.getAreaSqft() + " sqft\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Status:</label><input type=\\\"text\\\" value=\\\"" + req.getStatusName() + "\\\" readonly></div>" +
-                        "<div class=\\\"form-group\\\"><label>Date:</label><input type=\\\"text\\\" value=\\\"" + date + "\\\" readonly></div>')\"><i class='fas fa-eye'></i> View</button> " +
+                        "</span></td><td>" + date + "</td><td><button class='action-btn view' onclick=\"viewServiceRequest(" + req.getRequestId() + 
+                        ", '" + req.getClientName().replace("'", "\\'") + "', '" + req.getRequestCode() + "', '" + location + "', " + req.getAreaSqft() + 
+                        ", '" + req.getStatusName() + "', '" + date + "')\"><i class='fas fa-eye'></i> View</button> " +
                         "<a href='requests?action=approve&id=" + req.getRequestId() + 
                         "' class='action-btn' style='background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; text-decoration:none'><i class='fas fa-check'></i> Approve</a> " +
                         "<a href='requests?action=reject&id=" + req.getRequestId() + 

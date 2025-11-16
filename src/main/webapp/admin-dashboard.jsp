@@ -823,6 +823,18 @@
             );
         }
         
+        function viewServiceRequest(id, clientName, code, location, area, status, date) {
+            openModal('Service Request Details', 
+                '<div class="form-group"><label>Request ID:</label><input type="text" value="' + id + '" readonly></div>' +
+                '<div class="form-group"><label>Client:</label><input type="text" value="' + clientName + '" readonly></div>' +
+                '<div class="form-group"><label>Code:</label><input type="text" value="' + code + '" readonly></div>' +
+                '<div class="form-group"><label>Location:</label><textarea rows="3" readonly>' + location + '</textarea></div>' +
+                '<div class="form-group"><label>Area:</label><input type="text" value="' + area + ' sqft" readonly></div>' +
+                '<div class="form-group"><label>Status:</label><input type="text" value="' + status + '" readonly></div>' +
+                '<div class="form-group"><label>Date:</label><input type="text" value="' + date + '" readonly></div>'
+            );
+        }
+        
         function submitProjectForm() {
             const form = document.getElementById('addProjectForm');
             if (form) {

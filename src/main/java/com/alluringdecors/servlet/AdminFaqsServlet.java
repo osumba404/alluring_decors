@@ -4,14 +4,17 @@ import com.alluringdecors.bean.FaqBean;
 import com.alluringdecors.model.Faq;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/admin/faqs")
+@MultipartConfig
 public class AdminFaqsServlet extends HttpServlet {
     
     private FaqBean faqBean;
@@ -92,10 +95,10 @@ public class AdminFaqsServlet extends HttpServlet {
             System.out.println("  " + key + " = " + java.util.Arrays.toString(values));
         });
         
-        String faqIdStr = request.getParameter("faqId");
-        String question = request.getParameter("question");
-        String answer = request.getParameter("answer");
-        String displayOrderStr = request.getParameter("displayOrder");
+        String faqIdStr = getMultipartParameter(request, "faqId");
+        String question = getMultipartParameter(request, "question");
+        String answer = getMultipartParameter(request, "answer");
+        String displayOrderStr = getMultipartParameter(request, "displayOrder");
         
         System.out.println("Parsed Parameters:");
         System.out.println("  faqIdStr: '" + faqIdStr + "'");
@@ -141,5 +144,19 @@ public class AdminFaqsServlet extends HttpServlet {
         System.out.println("=== END FAQ DEBUG ===");
         
         response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+    }
+    
+    private String getMultipartParameter(HttpServletRequest request, String paramName) {
+        try {
+            Part part = request.getPart(paramName);
+            if (part != null) {
+                java.io.InputStream inputStream = part.getInputStream();
+                java.util.Scanner scanner = new java.util.Scanner(inputStream).useDelimiter("\\A");
+                return scanner.hasNext() ? scanner.next() : null;
+            }
+        } catch (Exception e) {
+            System.out.println("Error reading multipart parameter " + paramName + ": " + e.getMessage());
+        }
+        return null;
     }
 }
