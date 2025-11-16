@@ -81,26 +81,64 @@ public class AdminFaqsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        System.out.println("=== FAQ POST REQUEST DEBUG ===");
+        System.out.println("Request Method: " + request.getMethod());
+        System.out.println("Request URI: " + request.getRequestURI());
+        System.out.println("Content Type: " + request.getContentType());
+        
+        // Debug all parameters
+        System.out.println("All Parameters:");
+        request.getParameterMap().forEach((key, values) -> {
+            System.out.println("  " + key + " = " + java.util.Arrays.toString(values));
+        });
+        
         String faqIdStr = request.getParameter("faqId");
         String question = request.getParameter("question");
         String answer = request.getParameter("answer");
         String displayOrderStr = request.getParameter("displayOrder");
+        
+        System.out.println("Parsed Parameters:");
+        System.out.println("  faqIdStr: '" + faqIdStr + "'");
+        System.out.println("  question: '" + question + "'");
+        System.out.println("  answer: '" + answer + "'");
+        System.out.println("  displayOrderStr: '" + displayOrderStr + "'");
+        
+        // Validate required parameters
+        if (question == null || question.trim().isEmpty()) {
+            System.out.println("ERROR: Question is null or empty");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Question is required");
+            return;
+        }
+        if (answer == null || answer.trim().isEmpty()) {
+            System.out.println("ERROR: Answer is null or empty");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Answer is required");
+            return;
+        }
+        
         int displayOrder = (displayOrderStr != null && !displayOrderStr.isEmpty()) ? Integer.parseInt(displayOrderStr) : 0;
+        System.out.println("Display Order: " + displayOrder);
         
         Faq faq = new Faq();
-        faq.setQuestion(question);
-        faq.setAnswer(answer);
+        faq.setQuestion(question.trim());
+        faq.setAnswer(answer.trim());
         faq.setDisplayOrder(displayOrder);
         
+        boolean success = false;
         if (faqIdStr != null && !faqIdStr.isEmpty()) {
             // Update existing FAQ
             int faqId = Integer.parseInt(faqIdStr);
             faq.setFaqId(faqId);
-            faqBean.updateFaq(faq);
+            System.out.println("Updating FAQ with ID: " + faqId);
+            success = faqBean.updateFaq(faq);
         } else {
             // Add new FAQ
-            faqBean.addFaq(faq);
+            System.out.println("Adding new FAQ");
+            success = faqBean.addFaq(faq);
         }
+        
+        System.out.println("Operation success: " + success);
+        System.out.println("Redirecting to: " + request.getContextPath() + "/admin/dashboard");
+        System.out.println("=== END FAQ DEBUG ===");
         
         response.sendRedirect(request.getContextPath() + "/admin/dashboard");
     }

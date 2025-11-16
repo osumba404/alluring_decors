@@ -668,7 +668,7 @@
         
         function showAddFaqForm() {
             openModal('Add New FAQ', 
-                '<form method="post" action="/alluring-decors/admin/faqs">' +
+                '<form method="post" action="/alluring-decors/admin/faqs" enctype="application/x-www-form-urlencoded">' +
                 '<div class="form-group"><label>Question:</label><input type="text" name="question" required></div>' +
                 '<div class="form-group"><label>Answer:</label><textarea name="answer" rows="4" required></textarea></div>' +
                 '<div class="form-group"><label>Display Order:</label><input type="number" name="displayOrder" value="0" required></div>' +
@@ -689,7 +689,7 @@
         
         function showEditFaqForm(id, question, answer, order) {
             openModal('Edit FAQ', 
-                '<form method="post" action="/alluring-decors/admin/faqs">' +
+                '<form method="post" action="/alluring-decors/admin/faqs" enctype="application/x-www-form-urlencoded">' +
                 '<input type="hidden" name="faqId" value="' + id + '">' +
                 '<div class="form-group"><label>Question:</label><input type="text" name="question" value="' + question + '" required></div>' +
                 '<div class="form-group"><label>Answer:</label><textarea name="answer" rows="4" required>' + answer + '</textarea></div>' +
