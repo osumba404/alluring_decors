@@ -329,6 +329,14 @@
                     <span class="sidebar-item-icon"><i class="fas fa-envelope"></i></span>
                     <span class="sidebar-item-text">Service Requests</span>
                 </a>
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('bills')">
+                    <span class="sidebar-item-icon"><i class="fas fa-file-invoice"></i></span>
+                    <span class="sidebar-item-text">Bill Details</span>
+                </a>
+                <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('payments')">
+                    <span class="sidebar-item-icon"><i class="fas fa-credit-card"></i></span>
+                    <span class="sidebar-item-text">Payment Details</span>
+                </a>
                 <a href="javascript:void(0)" class="sidebar-item" onclick="loadContent('heroes')">
                     <span class="sidebar-item-icon"><i class="fas fa-images"></i></span>
                     <span class="sidebar-item-text">Hero Carousel</span>
@@ -424,6 +432,24 @@
                         <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Service Requests</h4>
                     </div>
                     <p>View and manage customer service requests</p>
+                </div>
+                <div class="admin-card" onclick="loadContent('bills')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-file-invoice" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Bill Details</h4>
+                    </div>
+                    <p>Manage bills based on service requests and area</p>
+                </div>
+                <div class="admin-card" onclick="loadContent('payments')" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas fa-credit-card" style="color: #164e31; font-size: 1.5rem;"></i>
+                        </div>
+                        <h4 style="margin: 0; color: #164e31; font-size: 1.3rem;">Payment Details</h4>
+                    </div>
+                    <p>Track payments, due amounts, and balance details</p>
                 </div>
                 <div class="admin-card" onclick="loadContent('heroes')" style="cursor: pointer;">
                     <div style="display: flex; align-items: center; margin-bottom: 1rem;">
@@ -823,16 +849,158 @@
             );
         }
         
-        function viewServiceRequest(id, clientName, code, location, area, status, date) {
-            openModal('Service Request Details', 
-                '<div class="form-group"><label>Request ID:</label><input type="text" value="' + id + '" readonly></div>' +
-                '<div class="form-group"><label>Client:</label><input type="text" value="' + clientName + '" readonly></div>' +
-                '<div class="form-group"><label>Code:</label><input type="text" value="' + code + '" readonly></div>' +
-                '<div class="form-group"><label>Location:</label><textarea rows="3" readonly>' + location + '</textarea></div>' +
-                '<div class="form-group"><label>Area:</label><input type="text" value="' + area + ' sqft" readonly></div>' +
-                '<div class="form-group"><label>Status:</label><input type="text" value="' + status + '" readonly></div>' +
-                '<div class="form-group"><label>Date:</label><input type="text" value="' + date + '" readonly></div>'
+        function viewServiceRequest(id) {
+            fetch('/alluring-decors/admin/requests?action=view&id=' + id)
+                .then(response => response.json())
+                .then(request => {
+                    const modalContent = 
+                        '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">' +
+                        '<div><strong>Request ID:</strong><br>' + request.requestId + '</div>' +
+                        '<div><strong>Request Code:</strong><br>' + (request.requestCode || 'N/A') + '</div>' +
+                        '<div><strong>Client Name:</strong><br>' + (request.clientName || 'N/A') + '</div>' +
+                        '<div><strong>Service Domain:</strong><br>' + (request.location || 'N/A') + '</div>' +
+                        '<div><strong>Area (sqft):</strong><br>' + (request.areaSqft || '0') + '</div>' +
+                        '<div><strong>Status:</strong><br><span style="background: #ffc107; color: #000; padding: 4px 12px; border-radius: 12px; font-weight: 600;">' + (request.statusName || 'N/A') + '</span></div>' +
+                        '<div><strong>Request Date:</strong><br>' + (request.requestedAt || 'N/A') + '</div>' +
+                        '</div>' +
+                        '<div style="margin-bottom: 20px;"><strong>Project Description:</strong><br>' +
+                        '<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #164e31;">' + (request.description || 'No description provided') + '</div></div>' +
+                        '<form method="post" action="/alluring-decors/admin/requests" data-direct-submit onsubmit="closeModal(); return true;">' +
+                        '<input type="hidden" name="action" value="updateRemarks">' +
+                        '<input type="hidden" name="requestId" value="' + request.requestId + '">' +
+                        '<div class="form-group"><label><strong>Admin Remarks:</strong></label>' +
+                        '<textarea name="remarks" rows="4" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;" placeholder="Add or update admin remarks...">' + (request.remarks || '') + '</textarea></div>' +
+                        '<button type="submit" class="btn-primary">Update Remarks</button></form>';
+                    
+                    // Use wider modal for better desktop view
+                    document.getElementById('modalTitle').textContent = 'Service Request Details';
+                    document.getElementById('modalBody').innerHTML = modalContent;
+                    const modal = document.getElementById('formModal');
+                    const modalContentDiv = modal.querySelector('.modal-content');
+                    modalContentDiv.style.maxWidth = '800px';
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                })
+                .catch(error => alert('Error loading request details'));
+        }
+        
+        function showAddRequestForm() {
+            openModal('Add New Service Request', 
+                '<form method="post" action="/alluring-decors/admin/requests">' +
+                '<input type="hidden" name="action" value="create">' +
+                '<div class="form-group"><label>Client Name:</label><input type="text" name="clientName" required></div>' +
+                '<div class="form-group"><label>Client Email:</label><input type="email" name="clientEmail" required></div>' +
+                '<div class="form-group"><label>Client Phone:</label><input type="tel" name="clientPhone" required></div>' +
+                '<div class="form-group"><label>Service Domain:</label><input type="text" name="domain" placeholder="e.g., Home Decoration" required></div>' +
+                '<div class="form-group"><label>Area (sqft):</label><input type="number" name="areaSqft" step="0.01" value="0" required></div>' +
+                '<div class="form-group"><label>Project Description:</label><textarea name="description" rows="3" required></textarea></div>' +
+                '<div class="form-group"><label>Status:</label><select name="statusId" required>' +
+                '<option value="1" selected>Request Received</option>' +
+                '<option value="2">Rejected</option>' +
+                '<option value="3">Accepted</option>' +
+                '<option value="4">Payment Received</option>' +
+                '<option value="5">Service Began</option>' +
+                '<option value="6">Service Completed</option>' +
+                '</select></div>' +
+                '<div class="form-group"><label>Admin Remarks:</label><textarea name="remarks" rows="2" placeholder="Optional admin notes..."></textarea></div>' +
+                '<button type="submit" class="btn-primary">Create Request</button></form>'
             );
+        }
+        
+        function editServiceRequest(id) {
+            fetch('/alluring-decors/admin/requests?action=view&id=' + id)
+                .then(response => response.json())
+                .then(request => {
+                    openModal('Edit Service Request', 
+                        '<form method="post" action="/alluring-decors/admin/requests">' +
+                        '<input type="hidden" name="action" value="update">' +
+                        '<input type="hidden" name="requestId" value="' + request.requestId + '">' +
+                        '<div class="form-group"><label>Service Domain:</label><input type="text" name="domain" value="' + (request.location || '') + '" required></div>' +
+                        '<div class="form-group"><label>Area (sqft):</label><input type="number" name="areaSqft" step="0.01" value="' + (request.areaSqft || '0') + '" required></div>' +
+                        '<div class="form-group"><label>Status:</label><select name="statusId" required>' +
+                        '<option value="1"' + (request.statusId == 1 ? ' selected' : '') + '>Request Received</option>' +
+                        '<option value="2"' + (request.statusId == 2 ? ' selected' : '') + '>Rejected</option>' +
+                        '<option value="3"' + (request.statusId == 3 ? ' selected' : '') + '>Accepted</option>' +
+                        '<option value="4"' + (request.statusId == 4 ? ' selected' : '') + '>Payment Received</option>' +
+                        '<option value="5"' + (request.statusId == 5 ? ' selected' : '') + '>Service Began</option>' +
+                        '<option value="6"' + (request.statusId == 6 ? ' selected' : '') + '>Service Completed</option>' +
+                        '</select></div>' +
+                        '<div class="form-group"><label>Admin Remarks:</label><textarea name="remarks" rows="3" placeholder="Add admin notes...">' + (request.remarks || '') + '</textarea></div>' +
+                        '<button type="submit" class="btn-primary">Update Request</button></form>'
+                    );
+                })
+                .catch(error => alert('Error loading request details'));
+        }
+        
+        function updateRequestStatus(id) {
+            fetch('/alluring-decors/admin/requests?action=view&id=' + id)
+                .then(response => response.json())
+                .then(request => {
+                    openModal('Update Request Status', 
+                        '<form method="post" action="/alluring-decors/admin/requests">' +
+                        '<input type="hidden" name="action" value="update">' +
+                        '<input type="hidden" name="requestId" value="' + request.requestId + '">' +
+                        '<input type="hidden" name="location" value="' + (request.location || '') + '">' +
+                        '<input type="hidden" name="areaSqft" value="' + (request.areaSqft || '0') + '">' +
+                        '<div class="form-group"><label>Current Status:</label><input type="text" value="' + (request.statusName || 'N/A') + '" readonly></div>' +
+                        '<div class="form-group"><label>New Status:</label><select name="statusId" required>' +
+                        '<option value="1"' + (request.statusId == 1 ? ' selected' : '') + '>Request Received</option>' +
+                        '<option value="2"' + (request.statusId == 2 ? ' selected' : '') + '>Rejected</option>' +
+                        '<option value="3"' + (request.statusId == 3 ? ' selected' : '') + '>Accepted</option>' +
+                        '<option value="4"' + (request.statusId == 4 ? ' selected' : '') + '>Payment Received</option>' +
+                        '<option value="5"' + (request.statusId == 5 ? ' selected' : '') + '>Service Began</option>' +
+                        '<option value="6"' + (request.statusId == 6 ? ' selected' : '') + '>Service Completed</option>' +
+                        '</select></div>' +
+                        '<div class="form-group"><label>Remarks:</label><textarea name="remarks" rows="3" placeholder="Add remarks about status change...">' + (request.remarks || '') + '</textarea></div>' +
+                        '<button type="submit" class="btn-primary">Update Status</button></form>'
+                    );
+                })
+                .catch(error => alert('Error loading request details'));
+        }
+        
+        function approveRequest(id) {
+            if (confirm('Approve this service request?')) {
+                fetch('/alluring-decors/admin/requests?action=approve&id=' + id)
+                    .then(response => {
+                        if (response.ok) {
+                            showSuccessMessage('Request approved successfully!');
+                            loadContent('requests');
+                        } else {
+                            alert('Error approving request');
+                        }
+                    })
+                    .catch(error => alert('Error approving request'));
+            }
+        }
+        
+        function rejectRequest(id) {
+            if (confirm('Reject this service request?')) {
+                fetch('/alluring-decors/admin/requests?action=reject&id=' + id)
+                    .then(response => {
+                        if (response.ok) {
+                            showSuccessMessage('Request rejected successfully!');
+                            loadContent('requests');
+                        } else {
+                            alert('Error rejecting request');
+                        }
+                    })
+                    .catch(error => alert('Error rejecting request'));
+            }
+        }
+        
+        function deleteRequest(id) {
+            if (confirm('Delete this service request? This action cannot be undone.')) {
+                fetch('/alluring-decors/admin/requests?action=delete&id=' + id)
+                    .then(response => {
+                        if (response.ok) {
+                            showSuccessMessage('Request deleted successfully!');
+                            loadContent('requests');
+                        } else {
+                            alert('Error deleting request');
+                        }
+                    })
+                    .catch(error => alert('Error deleting request'));
+            }
         }
         
         function submitProjectForm() {

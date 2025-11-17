@@ -26,6 +26,10 @@
             </c:if>
             
             <form method="post" action="login">
+                <c:if test="${not empty param.returnUrl}">
+                    <input type="hidden" name="returnUrl" value="${param.returnUrl}">
+                </c:if>
+                
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>

@@ -22,7 +22,6 @@ com\alluringdecors\servlet\AdminAjaxServlet.class
 com\alluringdecors\model\Service.class
 com\alluringdecors\servlet\ProjectsServlet.class
 com\alluringdecors\model\Faq.class
-com\alluringdecors\servlet\AdminRequestsServlet.class
 com\alluringdecors\model\ServiceRequest.class
 com\alluringdecors\servlet\ServicesServlet.class
 com\alluringdecors\servlet\ViewServiceServlet.class
