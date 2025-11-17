@@ -667,13 +667,33 @@
         }
         
         function showAddServiceForm() {
-            openModal('Add New Service', 
-                '<form method="post" action="/alluring-decors/admin/services">' +
-                '<div class="form-group"><label>Service Name:</label><input type="text" name="name" required></div>' +
-                '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
-                '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" required></div>' +
-                '<button type="submit" class="btn-primary">Add Service</button></form>'
-            );
+            fetch('/alluring-decors/admin/services?action=getDomains')
+                .then(response => response.json())
+                .then(domains => {
+                    let domainOptions = '<option value="">Select Domain</option>';
+                    domains.forEach(domain => {
+                        domainOptions += '<option value="' + domain.domainId + '">' + domain.name + '</option>';
+                    });
+                    
+                    openModal('Add New Service', 
+                        '<form method="post" action="/alluring-decors/admin/services">' +
+                        '<div class="form-group"><label>Domain:</label><select name="domainId" required>' + domainOptions + '</select></div>' +
+                        '<div class="form-group"><label>Service Name:</label><input type="text" name="name" required></div>' +
+                        '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
+                        '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" required></div>' +
+                        '<button type="submit" class="btn-primary">Add Service</button></form>'
+                    );
+                })
+                .catch(error => {
+                    console.error('Error fetching domains:', error);
+                    openModal('Add New Service', 
+                        '<form method="post" action="/alluring-decors/admin/services">' +
+                        '<div class="form-group"><label>Service Name:</label><input type="text" name="name" required></div>' +
+                        '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required></textarea></div>' +
+                        '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" required></div>' +
+                        '<button type="submit" class="btn-primary">Add Service</button></form>'
+                    );
+                });
         }
         
         function showAddContentForm() {
@@ -706,14 +726,35 @@
         }
         
         function showEditServiceForm(id, name, description, price) {
-            openModal('Edit Service', 
-                '<form method="post" action="/alluring-decors/admin/services">' +
-                '<input type="hidden" name="serviceId" value="' + id + '">' +
-                '<div class="form-group"><label>Service Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
-                '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
-                '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" value="' + price + '" required></div>' +
-                '<button type="submit" class="btn-primary">Update Service</button></form>'
-            );
+            fetch('/alluring-decors/admin/services?action=getDomains')
+                .then(response => response.json())
+                .then(domains => {
+                    let domainOptions = '<option value="">Select Domain</option>';
+                    domains.forEach(domain => {
+                        domainOptions += '<option value="' + domain.domainId + '">' + domain.name + '</option>';
+                    });
+                    
+                    openModal('Edit Service', 
+                        '<form method="post" action="/alluring-decors/admin/services">' +
+                        '<input type="hidden" name="serviceId" value="' + id + '">' +
+                        '<div class="form-group"><label>Domain:</label><select name="domainId" required>' + domainOptions + '</select></div>' +
+                        '<div class="form-group"><label>Service Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
+                        '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
+                        '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" value="' + price + '" required></div>' +
+                        '<button type="submit" class="btn-primary">Update Service</button></form>'
+                    );
+                })
+                .catch(error => {
+                    console.error('Error fetching domains:', error);
+                    openModal('Edit Service', 
+                        '<form method="post" action="/alluring-decors/admin/services">' +
+                        '<input type="hidden" name="serviceId" value="' + id + '">' +
+                        '<div class="form-group"><label>Service Name:</label><input type="text" name="name" value="' + name + '" required></div>' +
+                        '<div class="form-group"><label>Description:</label><textarea name="description" rows="3" required>' + description + '</textarea></div>' +
+                        '<div class="form-group"><label>Price per Sqft:</label><input type="number" name="pricePerSqft" step="0.01" value="' + price + '" required></div>' +
+                        '<button type="submit" class="btn-primary">Update Service</button></form>'
+                    );
+                });
         }
         
         function showEditFaqForm(id, question, answer, order) {

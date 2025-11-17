@@ -40,6 +40,21 @@ public class AdminServicesServlet extends HttpServlet {
             return;
         }
         
+        if ("getDomains".equals(action)) {
+            response.setContentType("application/json;charset=UTF-8");
+            java.io.PrintWriter out = response.getWriter();
+            List<Domain> domains = domainBean.getAllActiveDomains();
+            
+            out.print("[");
+            for (int i = 0; i < domains.size(); i++) {
+                Domain domain = domains.get(i);
+                out.print("{\"domainId\":" + domain.getDomainId() + ",\"name\":\"" + domain.getName() + "\"}");
+                if (i < domains.size() - 1) out.print(",");
+            }
+            out.print("]");
+            return;
+        }
+        
         List<Service> services = serviceBean.getAllServices();
         
         if ("true".equals(ajax)) {
@@ -48,7 +63,7 @@ public class AdminServicesServlet extends HttpServlet {
             
             out.println("<div class='dashboard-header'>");
             out.println("<div><h1 class='dashboard-title'>Manage Services</h1></div>");
-            out.println("<a href='add-service' class='header-action-btn'><i class='fas fa-plus'></i> Add Service</a>");
+            out.println("<button onclick='showAddServiceForm()' class='header-action-btn'><i class='fas fa-plus'></i> Add Service</button>");
             out.println("</div>");
             
             out.println("<table class='admin-table'>");
@@ -65,7 +80,7 @@ public class AdminServicesServlet extends HttpServlet {
                     out.println("<td>" + (service.getDomainName() != null ? service.getDomainName() : "N/A") + "</td>");
                     out.println("<td>KES " + service.getPricePerSqft() + "</td>");
                     out.println("<td>");
-                    out.println("<a href='add-service?id=" + service.getServiceId() + "' class='action-btn'><i class='fas fa-edit'></i> Edit</a> ");
+                    out.println("<button onclick='showEditServiceForm(" + service.getServiceId() + ", \"" + service.getName().replace("\"", "&quot;") + "\", \"" + (service.getDescription() != null ? service.getDescription().replace("\"", "&quot;") : "") + "\", " + service.getPricePerSqft() + ")' class='action-btn'><i class='fas fa-edit'></i> Edit</button> ");
                     out.println("<a href='services?action=delete&id=" + service.getServiceId() + "' class='action-btn delete' onclick='return confirm(\"Delete this service?\")' style='text-decoration:none'><i class='fas fa-trash'></i> Delete</a>");
                     out.println("</td>");
                     out.println("</tr>");
