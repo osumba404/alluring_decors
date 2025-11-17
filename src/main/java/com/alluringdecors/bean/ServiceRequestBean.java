@@ -157,6 +157,49 @@ public class ServiceRequestBean {
         return requests;
     }
     
+    public List<ServiceRequest> getApprovedRequests() {
+        List<ServiceRequest> requests = new ArrayList<>();
+        String sql = "SELECT sr.*, s.name as status_name " +
+                    "FROM service_requests sr " +
+                    "JOIN statuses s ON sr.status_id = s.status_id " +
+                    "WHERE sr.status_id = 3 AND sr.cancelled = 0 " +
+                    "ORDER BY sr.requested_at DESC";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                requests.add(mapResultSetToServiceRequest(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+    
+    public ServiceRequest getRequestByCode(String requestCode) {
+        String sql = "SELECT sr.*, s.name as status_name " +
+                    "FROM service_requests sr " +
+                    "JOIN statuses s ON sr.status_id = s.status_id " +
+                    "WHERE sr.request_code = ?";
+        
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, requestCode);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return mapResultSetToServiceRequest(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     private ServiceRequest mapResultSetToServiceRequest(ResultSet rs) throws SQLException {
         ServiceRequest request = new ServiceRequest();
         request.setRequestId(rs.getInt("request_id"));

@@ -54,6 +54,7 @@
             margin: 0;
             font-size: 1.35rem;
             font-weight: 600;
+            color: #D4A017;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
@@ -686,11 +687,11 @@
         
         function showEditContactForm() {
             openModal('Update Contact Information', 
-                '<form method="post" action="contacts">' +
+                '<form method="post" action="contacts" data-direct-submit onsubmit="console.log(\'Contact form submitting...\'); closeModal(); return true;">' +
                 '<div class="form-group"><label>Phone Number:</label><input type="tel" name="phone" required></div>' +
                 '<div class="form-group"><label>Email Address:</label><input type="email" name="email" required></div>' +
                 '<div class="form-group"><label>Address:</label><textarea name="address" rows="3" required></textarea></div>' +
-                '<button type="submit" class="btn-primary">Update Contact Info</button></form>'
+                '<button type="submit" class="btn-primary" onclick="console.log(\'Contact button clicked\');">Update Contact Info</button></form>'
             );
         }
         
@@ -744,6 +745,53 @@
                 '<div class="form-group"><label>Phone:</label><input type="text" value="' + phone + '" readonly></div>' +
                 '<div class="form-group"><label>Role:</label><input type="text" value="' + role + '" readonly></div>'
             );
+        }
+        
+        function viewFeedback(id) {
+            fetch('/alluring-decors/admin/feedback?action=view&id=' + id)
+                .then(response => response.json())
+                .then(feedback => {
+                    const modalContent = 
+                        '<div style="background: white; padding: 0; border-radius: 12px;">' +
+                        '<div style="background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%); color: #D4A017; padding: 20px; border-radius: 12px 12px 0 0; text-align: center;">' +
+                        '<h3 style="margin: 0; font-size: 1.4rem;"><i class="fas fa-comment-alt"></i> Feedback Report</h3>' +
+                        '</div>' +
+                        '<div style="padding: 25px;">' +
+                        '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">' +
+                        '<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #D4A017;"><strong>Feedback ID:</strong><br>' + feedback.feedbackId + '</div>' +
+                        '<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #D4A017;"><strong>Name:</strong><br>' + (feedback.name || 'Anonymous') + '</div>' +
+                        '<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #D4A017;"><strong>Email:</strong><br>' + (feedback.email || 'Not provided') + '</div>' +
+                        '<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #D4A017;"><strong>Type:</strong><br>' + (feedback.type || 'General') + '</div>' +
+                        '</div>' +
+                        '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #164e31; margin-bottom: 20px;"><strong>Message:</strong><br>' +
+                        '<div style="margin-top: 8px; line-height: 1.6; color: #495057;">' + (feedback.message || 'No message') + '</div></div>' +
+                        '<div style="text-align: center; color: #6c757d; font-size: 0.9rem; border-top: 1px solid #e9ecef; padding-top: 15px;">Submitted on: ' + (feedback.submittedAt || 'Unknown date') + '</div>' +
+                        '</div></div>';
+                    
+                    document.getElementById('modalTitle').textContent = 'Customer Feedback Details';
+                    document.getElementById('modalBody').innerHTML = modalContent;
+                    const modal = document.getElementById('formModal');
+                    const modalContentDiv = modal.querySelector('.modal-content');
+                    modalContentDiv.style.maxWidth = '700px';
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                })
+                .catch(error => {
+                    console.error('Error loading feedback:', error);
+                    alert('Error loading feedback details');
+                });
+        }
+        
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star" style="color: #ffc107;"></i>';
+                } else {
+                    stars += '<i class="far fa-star" style="color: #dee2e6;"></i>';
+                }
+            }
+            return stars + ' (' + rating + '/5)';
         }
         
         function showAddHeroForm() {
@@ -1087,25 +1135,108 @@
         });
         
         function showAddBillForm() {
-            openModal('Generate Bill', 
-                '<form method="post" action="/alluring-decors/admin/bills">' +
-                '<input type="hidden" name="action" value="create">' +
-                '<div class="form-group"><label>Request ID:</label><input type="number" name="requestId" required placeholder="Enter approved request ID"></div>' +
-                '<div class="form-group"><label>Total Amount:</label><input type="number" name="totalAmount" step="0.01" required></div>' +
-                '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="3" required></textarea></div>' +
-                '<button type="submit" class="btn-primary">Generate Bill</button></form>'
-            );
+            // Fetch approved service requests
+            fetch('/alluring-decors/admin/bills?action=getApprovedRequests')
+                .then(response => response.json())
+                .then(requests => {
+                    let requestOptions = '<option value="">Select Approved Request</option>';
+                    requests.forEach(request => {
+                        const clientName = request.clientName || 'Unknown Client';
+                        const location = request.location || 'No Location';
+                        const area = request.areaSqft || '0';
+                        requestOptions += '<option value="' + request.requestCode + '" data-client="' + clientName + '" data-area="' + area + '" data-location="' + location + '">' + request.requestCode + ' - ' + clientName + ' (' + location + ')</option>';
+                    });
+                    
+                    openModal('Generate Bill', 
+                        '<form method="post" action="/alluring-decors/admin/bills" data-direct-submit onsubmit="closeModal(); return true;">' +
+                        '<input type="hidden" name="action" value="create">' +
+                        '<div class="form-group"><label>Request Code:</label><select name="requestCode" required onchange="updateBillDetails(this)">' + requestOptions + '</select></div>' +
+                        '<div class="form-group"><label>Client Name:</label><input type="text" id="clientName" readonly></div>' +
+                        '<div class="form-group"><label>Area (sqft):</label><input type="text" id="areaSqft" readonly></div>' +
+                        '<div class="form-group"><label>Location:</label><input type="text" id="location" readonly></div>' +
+                        '<div class="form-group"><label>Total Amount:</label><input type="number" name="totalAmount" step="0.01" required></div>' +
+                        '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="3" required></textarea></div>' +
+                        '<button type="submit" class="btn-primary">Generate Bill</button></form>'
+                    );
+                })
+                .catch(error => {
+                    console.error('Error fetching approved requests:', error);
+                    openModal('Generate Bill', 
+                        '<form method="post" action="/alluring-decors/admin/bills">' +
+                        '<input type="hidden" name="action" value="create">' +
+                        '<div class="form-group"><label>Request ID:</label><input type="number" name="requestId" required placeholder="Enter approved request ID"></div>' +
+                        '<div class="form-group"><label>Total Amount:</label><input type="number" name="totalAmount" step="0.01" required></div>' +
+                        '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="3" required></textarea></div>' +
+                        '<button type="submit" class="btn-primary">Generate Bill</button></form>'
+                    );
+                });
+        }
+        
+        function updateBillDetails(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            if (selectedOption.value) {
+                document.getElementById('clientName').value = selectedOption.getAttribute('data-client') || '';
+                document.getElementById('areaSqft').value = selectedOption.getAttribute('data-area') || '';
+                document.getElementById('location').value = selectedOption.getAttribute('data-location') || '';
+            } else {
+                document.getElementById('clientName').value = '';
+                document.getElementById('areaSqft').value = '';
+                document.getElementById('location').value = '';
+            }
         }
         
         function showAddPaymentForm() {
-            openModal('Record Payment', 
-                '<form method="post" action="/alluring-decors/admin/payments">' +
-                '<input type="hidden" name="action" value="create">' +
-                '<div class="form-group"><label>Bill ID:</label><select name="billId" required><option value="">Select Bill</option></select></div>' +
-                '<div class="form-group"><label>Amount:</label><input type="number" name="amount" step="0.01" required></div>' +
-                '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="2" placeholder="Payment notes..."></textarea></div>' +
-                '<button type="submit" class="btn-primary">Record Payment</button></form>'
-            );
+            fetch('/alluring-decors/admin/bills?action=getBills')
+                .then(response => response.json())
+                .then(bills => {
+                    let billOptions = '<option value="">Select Bill</option>';
+                    bills.forEach(bill => {
+                        const billNumber = bill.billNumber || 'BILL' + bill.billId;
+                        const requestCode = bill.requestCode || 'N/A';
+                        const clientName = bill.clientName || 'Unknown Client';
+                        const amount = bill.totalAmount || '0';
+                        billOptions += '<option value="' + bill.billId + '" data-billno="' + billNumber + '" data-request="' + requestCode + '" data-client="' + clientName + '" data-amount="' + amount + '">' + billNumber + ' - ' + clientName + ' (KES ' + amount + ')</option>';
+                    });
+                    
+                    openModal('Record Payment', 
+                        '<form method="post" action="/alluring-decors/admin/payments" data-direct-submit onsubmit="closeModal(); return true;">' +
+                        '<input type="hidden" name="action" value="create">' +
+                        '<div class="form-group"><label>Bill:</label><select name="billId" required onchange="updatePaymentDetails(this)">' + billOptions + '</select></div>' +
+                        '<div class="form-group"><label>Bill Number:</label><input type="text" id="billNumber" readonly></div>' +
+                        '<div class="form-group"><label>Request Code:</label><input type="text" id="requestCode" readonly></div>' +
+                        '<div class="form-group"><label>Client Name:</label><input type="text" id="paymentClientName" readonly></div>' +
+                        '<div class="form-group"><label>Bill Amount:</label><input type="text" id="billAmount" readonly></div>' +
+                        '<div class="form-group"><label>Payment Amount:</label><input type="number" name="amount" step="0.01" required></div>' +
+                        '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="2" placeholder="Payment notes..."></textarea></div>' +
+                        '<button type="submit" class="btn-primary">Record Payment</button></form>'
+                    );
+                })
+                .catch(error => {
+                    console.error('Error fetching bills:', error);
+                    openModal('Record Payment', 
+                        '<form method="post" action="/alluring-decors/admin/payments">' +
+                        '<input type="hidden" name="action" value="create">' +
+                        '<div class="form-group"><label>Bill ID:</label><input type="number" name="billId" required></div>' +
+                        '<div class="form-group"><label>Amount:</label><input type="number" name="amount" step="0.01" required></div>' +
+                        '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="2" placeholder="Payment notes..."></textarea></div>' +
+                        '<button type="submit" class="btn-primary">Record Payment</button></form>'
+                    );
+                });
+        }
+        
+        function updatePaymentDetails(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            if (selectedOption.value) {
+                document.getElementById('billNumber').value = selectedOption.getAttribute('data-billno') || '';
+                document.getElementById('requestCode').value = selectedOption.getAttribute('data-request') || '';
+                document.getElementById('paymentClientName').value = selectedOption.getAttribute('data-client') || '';
+                document.getElementById('billAmount').value = 'KES ' + (selectedOption.getAttribute('data-amount') || '0');
+            } else {
+                document.getElementById('billNumber').value = '';
+                document.getElementById('requestCode').value = '';
+                document.getElementById('paymentClientName').value = '';
+                document.getElementById('billAmount').value = '';
+            }
         }
         
         // Initialize on page load

@@ -34,21 +34,29 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        List<Domain> domains = domainBean.getAllActiveDomains();
-        
-        // Add service count to each domain
-        com.alluringdecors.bean.ServiceBean serviceBean = new com.alluringdecors.bean.ServiceBean();
-        for (Domain domain : domains) {
-            int serviceCount = serviceBean.getServiceCountByDomainId(domain.getDomainId());
-            domain.setServiceCount(serviceCount);
+        try {
+            List<Domain> domains = domainBean.getAllActiveDomains();
+            
+            // Add service count to each domain
+            com.alluringdecors.bean.ServiceBean serviceBean = new com.alluringdecors.bean.ServiceBean();
+            for (Domain domain : domains) {
+                int serviceCount = serviceBean.getServiceCountByDomainId(domain.getDomainId());
+                domain.setServiceCount(serviceCount);
+            }
+            
+            List<Project> recentProjects = projectBean.getAccomplishedProjects();
+            List<Hero> heroes = heroBean.getAllActiveHeroes();
+            
+            request.setAttribute("domains", domains);
+            request.setAttribute("recentProjects", recentProjects);
+            request.setAttribute("heroes", heroes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Set empty lists if database fails
+            request.setAttribute("domains", new java.util.ArrayList<>());
+            request.setAttribute("recentProjects", new java.util.ArrayList<>());
+            request.setAttribute("heroes", new java.util.ArrayList<>());
         }
-        
-        List<Project> recentProjects = projectBean.getAccomplishedProjects();
-        List<Hero> heroes = heroBean.getAllActiveHeroes();
-        
-        request.setAttribute("domains", domains);
-        request.setAttribute("recentProjects", recentProjects);
-        request.setAttribute("heroes", heroes);
         
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

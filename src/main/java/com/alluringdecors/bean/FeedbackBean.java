@@ -50,6 +50,23 @@ public class FeedbackBean {
         return false;
     }
     
+    public Feedback getFeedbackById(int feedbackId) {
+        String sql = "SELECT * FROM feedbacks WHERE feedback_id = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, feedbackId);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return mapResultSetToFeedback(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public boolean deleteFeedback(int feedbackId) {
         String sql = "DELETE FROM feedbacks WHERE feedback_id = ?";
         try (Connection conn = DatabaseUtil.getConnection();

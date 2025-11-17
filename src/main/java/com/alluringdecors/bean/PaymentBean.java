@@ -31,17 +31,42 @@ public class PaymentBean {
     }
     
     public boolean recordPayment(Payment payment) {
-        String sql = "INSERT INTO payments (bill_id, amount, method, notes) VALUES (?, ?, ?, ?)";
+        String insertSql = "INSERT INTO payments (bill_id, amount, method, notes) VALUES (?, ?, ?, ?)";
+        String checkSql = "SELECT b.total_amount, COALESCE(SUM(p.amount), 0) as total_paid FROM bills b LEFT JOIN payments p ON b.bill_id = p.bill_id WHERE b.bill_id = ? GROUP BY b.bill_id, b.total_amount";
+        String updateBillSql = "UPDATE bills SET is_paid = 1 WHERE bill_id = ?";
         
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            conn.setAutoCommit(false);
             
-            stmt.setInt(1, payment.getBillId());
-            stmt.setBigDecimal(2, payment.getAmount());
-            stmt.setString(3, payment.getMethod());
-            stmt.setString(4, payment.getNotes());
+            // Insert payment
+            try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
+                stmt.setInt(1, payment.getBillId());
+                stmt.setBigDecimal(2, payment.getAmount());
+                stmt.setString(3, payment.getMethod() != null ? payment.getMethod() : "Cash");
+                stmt.setString(4, payment.getNotes());
+                stmt.executeUpdate();
+            }
             
-            return stmt.executeUpdate() > 0;
+            // Check if bill is fully paid
+            try (PreparedStatement stmt = conn.prepareStatement(checkSql)) {
+                stmt.setInt(1, payment.getBillId());
+                ResultSet rs = stmt.executeQuery();
+                
+                if (rs.next()) {
+                    double billAmount = rs.getDouble("total_amount");
+                    double totalPaid = rs.getDouble("total_paid") + payment.getAmount().doubleValue();
+                    
+                    if (totalPaid >= billAmount) {
+                        try (PreparedStatement updateStmt = conn.prepareStatement(updateBillSql)) {
+                            updateStmt.setInt(1, payment.getBillId());
+                            updateStmt.executeUpdate();
+                        }
+                    }
+                }
+            }
+            
+            conn.commit();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }

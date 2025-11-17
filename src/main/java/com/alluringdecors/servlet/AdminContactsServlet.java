@@ -59,4 +59,25 @@ public class AdminContactsServlet extends HttpServlet {
             request.getRequestDispatcher("/admin-contacts.jsp").forward(request, response);
         }
     }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        String phone = request.getParameter("phone");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
+        
+        System.out.println("Contact form submitted - Phone: " + phone + ", Email: " + email + ", Address: " + address);
+        
+        List<Contact> contacts = contactBean.getAllContacts();
+        Contact contact = contacts.isEmpty() ? new Contact() : contacts.get(0);
+        contact.setPhone(phone);
+        contact.setEmail(email);
+        contact.setAddress(address);
+        
+        boolean updated = contactBean.updateContact(contact);
+        System.out.println("Contact update result: " + updated);
+        response.sendRedirect("dashboard");
+    }
 }

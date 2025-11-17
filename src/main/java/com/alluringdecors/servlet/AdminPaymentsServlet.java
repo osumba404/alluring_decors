@@ -108,7 +108,7 @@ public class AdminPaymentsServlet extends HttpServlet {
             payment.setNotes(notes);
             
             paymentBean.recordPayment(payment);
-            response.sendRedirect("payments");
+            response.sendRedirect("dashboard");
         }
     }
 }

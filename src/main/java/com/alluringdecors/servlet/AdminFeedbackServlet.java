@@ -30,6 +30,29 @@ public class AdminFeedbackServlet extends HttpServlet {
         String action = request.getParameter("action");
         String ajax = request.getParameter("ajax");
         
+        if ("view".equals(action)) {
+            int feedbackId = Integer.parseInt(request.getParameter("id"));
+            Feedback feedback = feedbackBean.getFeedbackById(feedbackId);
+            
+            response.setContentType("application/json;charset=UTF-8");
+            if (feedback != null) {
+                String submittedAt = feedback.getSubmittedAt() != null ? 
+                    feedback.getSubmittedAt().format(DateTimeFormatter.ofPattern("MMM dd, yyyy 'at' HH:mm")) : "Unknown";
+                
+                response.getWriter().print("{");
+                response.getWriter().print("\"feedbackId\":" + feedback.getFeedbackId() + ",");
+                response.getWriter().print("\"name\":\"" + (feedback.getName() != null ? feedback.getName().replace("\"", "\\\"") : "") + "\",");
+                response.getWriter().print("\"email\":\"" + (feedback.getEmail() != null ? feedback.getEmail() : "") + "\",");
+                response.getWriter().print("\"type\":\"" + (feedback.getType() != null ? feedback.getType().replace("\"", "\\\"") : "") + "\",");
+                response.getWriter().print("\"message\":\"" + (feedback.getMessage() != null ? feedback.getMessage().replace("\"", "\\\"").replace("\n", "\\n") : "") + "\",");
+                response.getWriter().print("\"submittedAt\":\"" + submittedAt + "\"");
+                response.getWriter().print("}");
+            } else {
+                response.getWriter().print("{}");
+            }
+            return;
+        }
+        
         if ("delete".equals(action)) {
             int feedbackId = Integer.parseInt(request.getParameter("id"));
             feedbackBean.deleteFeedback(feedbackId);

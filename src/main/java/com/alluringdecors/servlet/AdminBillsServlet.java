@@ -1,7 +1,9 @@
 package com.alluringdecors.servlet;
 
 import com.alluringdecors.bean.BillBean;
+import com.alluringdecors.bean.ServiceRequestBean;
 import com.alluringdecors.model.Bill;
+import com.alluringdecors.model.ServiceRequest;
 import com.alluringdecors.model.User;
 
 import javax.servlet.ServletException;
@@ -19,11 +21,13 @@ import java.util.List;
 public class AdminBillsServlet extends HttpServlet {
     
     private BillBean billBean;
+    private ServiceRequestBean serviceRequestBean;
     
     @Override
     public void init() throws ServletException {
         super.init();
         billBean = new BillBean();
+        serviceRequestBean = new ServiceRequestBean();
     }
     
     @Override
@@ -43,6 +47,53 @@ public class AdminBillsServlet extends HttpServlet {
         }
         
         String ajax = request.getParameter("ajax");
+        String action = request.getParameter("action");
+        
+        if ("getApprovedRequests".equals(action)) {
+            List<ServiceRequest> approvedRequests = serviceRequestBean.getApprovedRequests();
+            System.out.println("Found " + approvedRequests.size() + " approved requests");
+            
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().print("[");
+            
+            for (int i = 0; i < approvedRequests.size(); i++) {
+                ServiceRequest req = approvedRequests.get(i);
+                System.out.println("Request " + i + ": ID=" + req.getRequestId() + ", Code=" + req.getRequestCode() + ", Client=" + req.getClientName());
+                if (i > 0) response.getWriter().print(",");
+                response.getWriter().print("{");
+                response.getWriter().print("\"requestId\":" + req.getRequestId() + ",");
+                response.getWriter().print("\"requestCode\":\"" + (req.getRequestCode() != null ? req.getRequestCode() : "REQ" + req.getRequestId()) + "\",");
+                response.getWriter().print("\"clientName\":\"" + (req.getClientName() != null ? req.getClientName() : "Unknown Client") + "\",");
+                response.getWriter().print("\"location\":\"" + (req.getLocation() != null ? req.getLocation() : "No Location") + "\",");
+                response.getWriter().print("\"areaSqft\":" + (req.getAreaSqft() != null ? req.getAreaSqft() : "0"));
+                response.getWriter().print("}");
+            }
+            
+            response.getWriter().print("]");
+            return;
+        }
+        
+        if ("getBills".equals(action)) {
+            List<Bill> bills = billBean.getAllBills();
+            
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().print("[");
+            
+            for (int i = 0; i < bills.size(); i++) {
+                Bill bill = bills.get(i);
+                if (i > 0) response.getWriter().print(",");
+                response.getWriter().print("{");
+                response.getWriter().print("\"billId\":" + bill.getBillId() + ",");
+                response.getWriter().print("\"billNumber\":\"" + (bill.getBillNumber() != null ? bill.getBillNumber() : "BILL" + bill.getBillId()) + "\",");
+                response.getWriter().print("\"requestCode\":\"" + (bill.getRequestCode() != null ? bill.getRequestCode() : "N/A") + "\",");
+                response.getWriter().print("\"clientName\":\"" + (bill.getClientName() != null ? bill.getClientName() : "Unknown Client") + "\",");
+                response.getWriter().print("\"totalAmount\":" + (bill.getTotalAmount() != null ? bill.getTotalAmount() : "0"));
+                response.getWriter().print("}");
+            }
+            
+            response.getWriter().print("]");
+            return;
+        }
         
         if ("true".equals(ajax)) {
             List<Bill> bills = billBean.getAllBills();
@@ -96,17 +147,21 @@ public class AdminBillsServlet extends HttpServlet {
         String action = request.getParameter("action");
         
         if ("create".equals(action)) {
-            int requestId = Integer.parseInt(request.getParameter("requestId"));
+            String requestCode = request.getParameter("requestCode");
             BigDecimal totalAmount = new BigDecimal(request.getParameter("totalAmount"));
             String notes = request.getParameter("notes");
             
-            Bill bill = new Bill();
-            bill.setRequestId(requestId);
-            bill.setTotalAmount(totalAmount);
-            bill.setNotes(notes);
-            
-            billBean.createBill(bill);
-            response.sendRedirect("bills");
+            // Get request ID from request code
+            ServiceRequest serviceRequest = serviceRequestBean.getRequestByCode(requestCode);
+            if (serviceRequest != null) {
+                Bill bill = new Bill();
+                bill.setRequestId(serviceRequest.getRequestId());
+                bill.setTotalAmount(totalAmount);
+                bill.setNotes(notes);
+                
+                billBean.createBill(bill);
+            }
+            response.sendRedirect("dashboard");
         }
     }
 }
