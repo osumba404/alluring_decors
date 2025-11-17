@@ -15,7 +15,7 @@ public class PaymentBean {
                     "FROM payments p " +
                     "JOIN bills b ON p.bill_id = b.bill_id " +
                     "JOIN service_requests sr ON b.request_id = sr.request_id " +
-                    "ORDER BY p.created_at DESC";
+                    "ORDER BY p.paid_at DESC";
         
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -31,22 +31,15 @@ public class PaymentBean {
     }
     
     public boolean recordPayment(Payment payment) {
-        String sql = "INSERT INTO payments (bill_id, total_billed_amount, total_paid_amount, due_amount, balance_amount, date_paid, payment_method, remarks) " +
-                    "SELECT ?, b.total_amount, ?, (b.total_amount - ?), " +
-                    "CASE WHEN (b.total_amount - ?) <= 0 THEN 0 ELSE (b.total_amount - ?) END, ?, 'Cash', ? " +
-                    "FROM bills b WHERE b.bill_id = ?";
+        String sql = "INSERT INTO payments (bill_id, amount, method, notes) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, payment.getBillId());
-            stmt.setBigDecimal(2, payment.getTotalPaidAmount());
-            stmt.setBigDecimal(3, payment.getTotalPaidAmount());
-            stmt.setBigDecimal(4, payment.getTotalPaidAmount());
-            stmt.setBigDecimal(5, payment.getTotalPaidAmount());
-            stmt.setDate(6, Date.valueOf(payment.getDatePaid()));
-            stmt.setString(7, payment.getRemarks());
-            stmt.setInt(8, payment.getBillId());
+            stmt.setBigDecimal(2, payment.getAmount());
+            stmt.setString(3, payment.getMethod());
+            stmt.setString(4, payment.getNotes());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -59,21 +52,16 @@ public class PaymentBean {
         Payment payment = new Payment();
         payment.setPaymentId(rs.getInt("payment_id"));
         payment.setBillId(rs.getInt("bill_id"));
-        payment.setTotalBilledAmount(rs.getBigDecimal("total_billed_amount"));
-        payment.setTotalPaidAmount(rs.getBigDecimal("total_paid_amount"));
-        payment.setDueAmount(rs.getBigDecimal("due_amount"));
-        payment.setBalanceAmount(rs.getBigDecimal("balance_amount"));
-        payment.setPaymentMethod(rs.getString("payment_method"));
-        payment.setRemarks(rs.getString("remarks"));
+        payment.setAmount(rs.getBigDecimal("amount"));
+        payment.setMethod(rs.getString("method"));
+        payment.setReferenceNo(rs.getString("reference_no"));
+        payment.setReceiptUrl(rs.getString("receipt_url"));
+        payment.setNotes(rs.getString("notes"));
+        payment.setRecordedBy(rs.getInt("recorded_by"));
         
-        Date datePaid = rs.getDate("date_paid");
-        if (datePaid != null) {
-            payment.setDatePaid(datePaid.toLocalDate());
-        }
-        
-        Timestamp createdAt = rs.getTimestamp("created_at");
-        if (createdAt != null) {
-            payment.setCreatedAt(createdAt.toLocalDateTime());
+        Timestamp paidAt = rs.getTimestamp("paid_at");
+        if (paidAt != null) {
+            payment.setPaidAt(paidAt.toLocalDateTime());
         }
         
         payment.setBillNumber(rs.getString("bill_number"));

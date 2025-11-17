@@ -83,6 +83,26 @@ public class AdminRequestsServlet extends HttpServlet {
                 response.getWriter().write("{\"error\":\"Request not found\"}");
             }
             return;
+        } else if ("getApproved".equals(action)) {
+            List<ServiceRequest> approvedRequests = requestBean.getAllRequests().stream()
+                .filter(r -> r.getStatusId() == 3) // Only approved requests
+                .collect(Collectors.toList());
+            
+            response.setContentType("application/json;charset=UTF-8");
+            StringBuilder json = new StringBuilder("[");
+            for (int i = 0; i < approvedRequests.size(); i++) {
+                ServiceRequest req = approvedRequests.get(i);
+                if (i > 0) json.append(",");
+                json.append("{");
+                json.append("\"requestId\":").append(req.getRequestId()).append(",");
+                json.append("\"requestCode\":\"").append(req.getRequestCode() != null ? req.getRequestCode() : "N/A").append("\",");
+                json.append("\"clientName\":\"").append(req.getClientName() != null ? req.getClientName() : "N/A").append("\",");
+                json.append("\"areaSqft\":").append(req.getAreaSqft() != null ? req.getAreaSqft() : 0);
+                json.append("}");
+            }
+            json.append("]");
+            response.getWriter().write(json.toString());
+            return;
         }
         
         List<ServiceRequest> allRequests = requestBean.getAllRequests();

@@ -60,15 +60,15 @@ public class AdminPaymentsServlet extends HttpServlet {
                 response.getWriter().println("<tr><td colspan='10' style='text-align:center; padding: 2rem; color: #666;'>No payments found.</td></tr>");
             } else {
                 for (Payment payment : payments) {
-                    String datePaid = payment.getDatePaid() != null ? payment.getDatePaid().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "N/A";
+                    String datePaid = payment.getPaidAt() != null ? payment.getPaidAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "N/A";
                     response.getWriter().println(
                         "<tr><td>" + payment.getPaymentId() + "</td><td><code>" + payment.getBillNumber() + "</code></td>" +
                         "<td>" + (payment.getClientName() != null ? payment.getClientName() : "N/A") + "</td>" +
-                        "<td>KES " + payment.getTotalBilledAmount() + "</td>" +
-                        "<td><strong>KES " + payment.getTotalPaidAmount() + "</strong></td>" +
-                        "<td>KES " + payment.getDueAmount() + "</td>" +
-                        "<td>KES " + payment.getBalanceAmount() + "</td>" +
-                        "<td>" + datePaid + "</td><td>" + payment.getPaymentMethod() + "</td>" +
+                        "<td>KES " + payment.getAmount() + "</td>" +
+                        "<td><strong>KES " + payment.getAmount() + "</strong></td>" +
+                        "<td>KES 0</td>" +
+                        "<td>KES 0</td>" +
+                        "<td>" + datePaid + "</td><td>" + payment.getMethod() + "</td>" +
                         "<td><button class='action-btn view' onclick='viewPayment(" + payment.getPaymentId() + ")'><i class='fas fa-eye'></i> View</button> " +
                         "<button class='action-btn' onclick='editPayment(" + payment.getPaymentId() + ")'><i class='fas fa-edit'></i> Edit</button> " +
                         "<button class='action-btn delete' onclick='deletePayment(" + payment.getPaymentId() + ")'><i class='fas fa-trash'></i> Delete</button></td></tr>"
@@ -99,15 +99,13 @@ public class AdminPaymentsServlet extends HttpServlet {
         
         if ("create".equals(action)) {
             int billId = Integer.parseInt(request.getParameter("billId"));
-            BigDecimal paidAmount = new BigDecimal(request.getParameter("paidAmount"));
-            LocalDate datePaid = LocalDate.parse(request.getParameter("datePaid"));
-            String remarks = request.getParameter("remarks");
+            BigDecimal amount = new BigDecimal(request.getParameter("amount"));
+            String notes = request.getParameter("notes");
             
             Payment payment = new Payment();
             payment.setBillId(billId);
-            payment.setTotalPaidAmount(paidAmount);
-            payment.setDatePaid(datePaid);
-            payment.setRemarks(remarks);
+            payment.setAmount(amount);
+            payment.setNotes(notes);
             
             paymentBean.recordPayment(payment);
             response.sendRedirect("payments");

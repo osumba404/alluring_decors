@@ -14,7 +14,7 @@ public class BillBean {
         String sql = "SELECT b.*, sr.client_name, sr.request_code, sr.location as service_domain " +
                     "FROM bills b " +
                     "JOIN service_requests sr ON b.request_id = sr.request_id " +
-                    "ORDER BY b.bill_date DESC";
+                    "ORDER BY b.generated_at DESC";
         
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -30,9 +30,7 @@ public class BillBean {
     }
     
     public boolean createBill(Bill bill) {
-        String sql = "INSERT INTO bills (request_id, bill_number, area_sqft, rate_per_sqft, total_amount, description, status) " +
-                    "SELECT ?, ?, sr.area_sqft, ?, (sr.area_sqft * ?), ?, 'Generated' " +
-                    "FROM service_requests sr WHERE sr.request_id = ?";
+        String sql = "INSERT INTO bills (request_id, bill_number, total_amount, notes) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -41,10 +39,8 @@ public class BillBean {
             
             stmt.setInt(1, bill.getRequestId());
             stmt.setString(2, billNumber);
-            stmt.setBigDecimal(3, bill.getRatePerSqft());
-            stmt.setBigDecimal(4, bill.getRatePerSqft());
-            stmt.setString(5, bill.getDescription());
-            stmt.setInt(6, bill.getRequestId());
+            stmt.setBigDecimal(3, bill.getTotalAmount());
+            stmt.setString(4, bill.getNotes());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -58,15 +54,16 @@ public class BillBean {
         bill.setBillId(rs.getInt("bill_id"));
         bill.setRequestId(rs.getInt("request_id"));
         bill.setBillNumber(rs.getString("bill_number"));
-        bill.setAreaSqft(rs.getBigDecimal("area_sqft"));
-        bill.setRatePerSqft(rs.getBigDecimal("rate_per_sqft"));
         bill.setTotalAmount(rs.getBigDecimal("total_amount"));
-        bill.setDescription(rs.getString("description"));
-        bill.setStatus(rs.getString("status"));
+        bill.setTaxAmount(rs.getBigDecimal("tax_amount"));
+        bill.setDiscountAmount(rs.getBigDecimal("discount_amount"));
+        bill.setNetAmount(rs.getBigDecimal("net_amount"));
+        bill.setNotes(rs.getString("notes"));
+        bill.setPaid(rs.getBoolean("is_paid"));
         
-        Timestamp billDate = rs.getTimestamp("bill_date");
-        if (billDate != null) {
-            bill.setBillDate(billDate.toLocalDateTime());
+        Timestamp generatedAt = rs.getTimestamp("generated_at");
+        if (generatedAt != null) {
+            bill.setGeneratedAt(generatedAt.toLocalDateTime());
         }
         
         bill.setClientName(rs.getString("client_name"));

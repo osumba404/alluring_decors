@@ -20,7 +20,7 @@ i.fas, i.far, i.fab {
 }
 
 .sidebar {
-    width: 280px;
+    width: 210px;
     background: var(--white);
     border-right: 1px solid var(--border);
     box-shadow: var(--shadow-light);
@@ -29,11 +29,11 @@ i.fas, i.far, i.fab {
 }
 
 .sidebar.collapsed {
-    width: 70px;
+    width: 53px;
 }
 
 .sidebar-header {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.1rem;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@ i.fas, i.far, i.fab {
 }
 
 .sidebar-title {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--primary);
     transition: opacity 0.3s ease;
@@ -56,10 +56,10 @@ i.fas, i.far, i.fab {
     background: none;
     border: none;
     color: var(--primary);
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 8px;
+    padding: 0.38rem;
+    border-radius: 6px;
     transition: all 0.3s ease;
 }
 
@@ -68,17 +68,18 @@ i.fas, i.far, i.fab {
 }
 
 .sidebar-menu {
-    padding: 1rem 0;
+    padding: 0.75rem 0;
 }
 
 .sidebar-item {
     display: block;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.1rem;
     color: var(--text);
     text-decoration: none;
     transition: all 0.3s ease;
-    border-left: 3px solid transparent;
+    border-left: 2px solid transparent;
     font-family: serif !important;
+    font-size: 0.75rem;
 }
 
 .sidebar-item:hover {
@@ -88,11 +89,11 @@ i.fas, i.far, i.fab {
 }
 
 .sidebar-item-icon {
-    width: 20px;
+    width: 15px;
     display: inline-block;
-    margin-right: 1rem;
+    margin-right: 0.75rem;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 0.83rem;
 }
 
 .sidebar-item-icon i {
@@ -109,65 +110,66 @@ i.fas, i.far, i.fab {
 }
 
 .sidebar.collapsed .sidebar-item {
-    padding: 1rem 1.25rem;
+    padding: 0.75rem 0.94rem;
     text-align: center;
 }
 
 .main-content {
     flex: 1;
-    padding: 2rem;
+    padding: 1.5rem;
     background: var(--bg);
 }
 
 .dashboard-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2.25rem;
 }
 
 .dashboard-title {
-    font-size: 2.5rem;
+    font-size: 1.88rem;
     color: var(--primary);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.38rem;
     font-family: serif !important;
 }
 
 .dashboard-subtitle {
     color: #666;
-    font-size: 1.1rem;
+    font-size: 0.83rem;
     font-family: serif !important;
 }
 
 .admin-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    gap: 1.5rem;
 }
 
 .admin-card {
     background: var(--white);
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+    border-radius: 11px;
+    box-shadow: 0 3px 11px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
     border: 2px solid transparent;
 }
 
 .admin-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(212, 160, 23, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 9px 23px rgba(212, 160, 23, 0.2);
     border-color: #D4A017;
 }
 
 .admin-card h4 {
     color: var(--primary);
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.98rem;
     font-family: serif !important;
 }
 
 .admin-card p {
     color: #666;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.1rem;
     font-family: serif !important;
+    font-size: 0.75rem;
 }
 
 .admin-card a {
@@ -203,7 +205,7 @@ i.fas, i.far, i.fab {
     text-rendering: auto !important;
     -webkit-font-smoothing: antialiased !important;
     color: #164e31 !important;
-    font-size: 1.1rem !important;
+    font-size: 0.83rem !important;
 }
 
 .sidebar-item:hover .sidebar-item-icon i.fas {

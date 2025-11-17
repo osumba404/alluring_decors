@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/navbar-override.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin-sidebar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin-scale-new.css">
     <style>
         /* Modern Modal Styles */
         .modal {
@@ -31,43 +32,43 @@
             background: linear-gradient(135deg, #F8F5F0 0%, #ffffff 100%);
             margin: 3% auto;
             padding: 0;
-            border-radius: 20px;
+            border-radius: 15px;
             width: 90%;
-            max-width: 650px;
+            max-width: 488px;
             position: relative;
-            box-shadow: 0 25px 50px rgba(22, 78, 49, 0.3);
+            box-shadow: 0 19px 38px rgba(22, 78, 49, 0.3);
             animation: slideIn 0.4s ease;
             overflow: hidden;
-            border: 3px solid #D4A017;
+            border: 2px solid #D4A017;
         }
         
         .modal-header {
             background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%);
             color: #D4A017;
-            padding: 25px 30px;
-            border-bottom: 3px solid #D4A017;
+            padding: 19px 23px;
+            border-bottom: 2px solid #D4A017;
             position: relative;
         }
         
         .modal-header h3 {
             margin: 0;
-            font-size: 1.8rem;
+            font-size: 1.35rem;
             font-weight: 600;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .close {
             position: absolute;
-            right: 20px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #D4A017;
-            font-size: 32px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -82,27 +83,27 @@
         }
         
         .modal-body {
-            padding: 30px;
+            padding: 23px;
         }
         
         .modal .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 19px;
         }
         
         .modal .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #164e31;
-            font-size: 1.1rem;
+            font-size: 0.83rem;
         }
         
         .modal input, .modal textarea, .modal select {
             width: 100%;
-            padding: 15px 20px;
+            padding: 11px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 1rem;
+            border-radius: 9px;
+            font-size: 0.75rem;
             transition: all 0.3s ease;
             background: #ffffff;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
@@ -124,13 +125,13 @@
             background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%);
             border: none;
             color: #164e31;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            padding: 11px 23px;
+            border-radius: 9px;
+            font-size: 0.83rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.3);
+            box-shadow: 0 6px 15px rgba(212, 160, 23, 0.3);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -145,14 +146,14 @@
             background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%);
             border: none;
             color: #164e31;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.68rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-right: 8px;
-            box-shadow: 0 4px 12px rgba(212, 160, 23, 0.3);
+            margin-right: 6px;
+            box-shadow: 0 3px 9px rgba(212, 160, 23, 0.3);
         }
         
         .action-btn:hover {
@@ -222,18 +223,19 @@
         .admin-table th {
             background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%);
             color: #D4A017;
-            padding: 18px 15px;
+            padding: 14px 11px;
             text-align: left;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: 0.9rem;
+            font-size: 0.68rem;
         }
         
         .admin-table td {
-            padding: 15px;
+            padding: 11px;
             border-bottom: 1px solid #f0f0f0;
             transition: background 0.3s ease;
+            font-size: 0.75rem;
         }
         
         .admin-table tr:hover {
@@ -245,14 +247,14 @@
             background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%);
             border: none;
             color: #164e31;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 1rem;
+            padding: 9px 18px;
+            border-radius: 9px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.3);
-            margin-left: 20px;
+            box-shadow: 0 6px 15px rgba(212, 160, 23, 0.3);
+            margin-left: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -266,8 +268,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
+            margin-bottom: 23px;
+            padding: 15px 0;
             border-bottom: 2px solid #f0f0f0;
         }
         
@@ -282,7 +284,7 @@
         }
     </style>
 </head>
-<body>
+<body class="admin-page">
     <jsp:include page="includes/navbar.jsp" />
 
     <div class="admin-layout">
@@ -1083,6 +1085,28 @@
                 closeModal();
             }
         });
+        
+        function showAddBillForm() {
+            openModal('Generate Bill', 
+                '<form method="post" action="/alluring-decors/admin/bills">' +
+                '<input type="hidden" name="action" value="create">' +
+                '<div class="form-group"><label>Request ID:</label><input type="number" name="requestId" required placeholder="Enter approved request ID"></div>' +
+                '<div class="form-group"><label>Total Amount:</label><input type="number" name="totalAmount" step="0.01" required></div>' +
+                '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="3" required></textarea></div>' +
+                '<button type="submit" class="btn-primary">Generate Bill</button></form>'
+            );
+        }
+        
+        function showAddPaymentForm() {
+            openModal('Record Payment', 
+                '<form method="post" action="/alluring-decors/admin/payments">' +
+                '<input type="hidden" name="action" value="create">' +
+                '<div class="form-group"><label>Bill ID:</label><select name="billId" required><option value="">Select Bill</option></select></div>' +
+                '<div class="form-group"><label>Amount:</label><input type="number" name="amount" step="0.01" required></div>' +
+                '<div class="form-group"><label>Notes:</label><textarea name="notes" rows="2" placeholder="Payment notes..."></textarea></div>' +
+                '<button type="submit" class="btn-primary">Record Payment</button></form>'
+            );
+        }
         
         // Initialize on page load
         window.addEventListener('load', function() {

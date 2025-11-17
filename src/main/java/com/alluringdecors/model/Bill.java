@@ -2,17 +2,20 @@ package com.alluringdecors.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Bill {
     private int billId;
     private int requestId;
     private String billNumber;
     private BigDecimal totalAmount;
-    private BigDecimal areaSqft;
-    private BigDecimal ratePerSqft;
-    private String description;
-    private LocalDateTime billDate;
-    private String status;
+    private BigDecimal taxAmount;
+    private BigDecimal discountAmount;
+    private BigDecimal netAmount;
+    private LocalDateTime generatedAt;
+    private LocalDate dueDate;
+    private String notes;
+    private boolean isPaid;
     
     // Service request details for display
     private String clientName;
@@ -33,20 +36,26 @@ public class Bill {
     public BigDecimal getTotalAmount() { return totalAmount; }
     public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
     
-    public BigDecimal getAreaSqft() { return areaSqft; }
-    public void setAreaSqft(BigDecimal areaSqft) { this.areaSqft = areaSqft; }
+    public BigDecimal getTaxAmount() { return taxAmount; }
+    public void setTaxAmount(BigDecimal taxAmount) { this.taxAmount = taxAmount; }
     
-    public BigDecimal getRatePerSqft() { return ratePerSqft; }
-    public void setRatePerSqft(BigDecimal ratePerSqft) { this.ratePerSqft = ratePerSqft; }
+    public BigDecimal getDiscountAmount() { return discountAmount; }
+    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
     
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public BigDecimal getNetAmount() { return netAmount; }
+    public void setNetAmount(BigDecimal netAmount) { this.netAmount = netAmount; }
     
-    public LocalDateTime getBillDate() { return billDate; }
-    public void setBillDate(LocalDateTime billDate) { this.billDate = billDate; }
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
+    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
     
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public LocalDate getDueDate() { return dueDate; }
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
+    
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+    
+    public boolean isPaid() { return isPaid; }
+    public void setPaid(boolean isPaid) { this.isPaid = isPaid; }
     
     public String getClientName() { return clientName; }
     public void setClientName(String clientName) { this.clientName = clientName; }

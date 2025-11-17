@@ -1,0 +1,36 @@
+/* Admin Dashboard Scale Override - 0.75x */
+.admin-layout {
+    transform: scale(0.75);
+    transform-origin: top left;
+    width: 133.33%;
+    height: 133.33%;
+}
+
+/* Ensure proper scaling for all admin elements */
+.admin-layout * {
+    box-sizing: border-box;
+}
+
+/* Fix viewport issues */
+body.admin-page {
+    overflow-x: auto;
+}
+
+/* Scale modals */
+.modal .modal-content {
+    transform: scale(0.75);
+    transform-origin: center;
+}
+
+/* Scale tables */
+.admin-table {
+    transform: scale(0.75);
+    transform-origin: top left;
+    margin-bottom: 2rem;
+}
+
+/* Scale buttons */
+.action-btn, .header-action-btn, .btn-primary {
+    transform: scale(0.75);
+    transform-origin: center;
+}

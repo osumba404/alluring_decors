@@ -59,14 +59,14 @@ public class AdminBillsServlet extends HttpServlet {
                 response.getWriter().println("<tr><td colspan='10' style='text-align:center; padding: 2rem; color: #666;'>No bills found.</td></tr>");
             } else {
                 for (Bill bill : bills) {
-                    String date = bill.getBillDate() != null ? bill.getBillDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "N/A";
+                    String date = bill.getGeneratedAt() != null ? bill.getGeneratedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "N/A";
                     response.getWriter().println(
                         "<tr><td>" + bill.getBillId() + "</td><td><code>" + bill.getBillNumber() + "</code></td>" +
                         "<td>" + (bill.getClientName() != null ? bill.getClientName() : "N/A") + "</td>" +
                         "<td>" + (bill.getRequestCode() != null ? bill.getRequestCode() : "N/A") + "</td>" +
-                        "<td>" + bill.getAreaSqft() + "</td><td>KES " + bill.getRatePerSqft() + "</td>" +
+                        "<td>N/A</td><td>N/A</td>" +
                         "<td><strong>KES " + bill.getTotalAmount() + "</strong></td><td>" + date + "</td>" +
-                        "<td><span style='background: #28a745; color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;'>" + bill.getStatus() + "</span></td>" +
+                        "<td><span style='background: #28a745; color: white; padding: 4px 12px; border-radius: 12px; font-weight: 600;'>" + (bill.isPaid() ? "Paid" : "Pending") + "</span></td>" +
                         "<td><button class='action-btn view' onclick='viewBill(" + bill.getBillId() + ")'><i class='fas fa-eye'></i> View</button> " +
                         "<button class='action-btn' onclick='editBill(" + bill.getBillId() + ")'><i class='fas fa-edit'></i> Edit</button> " +
                         "<button class='action-btn delete' onclick='deleteBill(" + bill.getBillId() + ")'><i class='fas fa-trash'></i> Delete</button></td></tr>"
@@ -97,13 +97,13 @@ public class AdminBillsServlet extends HttpServlet {
         
         if ("create".equals(action)) {
             int requestId = Integer.parseInt(request.getParameter("requestId"));
-            BigDecimal ratePerSqft = new BigDecimal(request.getParameter("ratePerSqft"));
-            String description = request.getParameter("description");
+            BigDecimal totalAmount = new BigDecimal(request.getParameter("totalAmount"));
+            String notes = request.getParameter("notes");
             
             Bill bill = new Bill();
             bill.setRequestId(requestId);
-            bill.setRatePerSqft(ratePerSqft);
-            bill.setDescription(description);
+            bill.setTotalAmount(totalAmount);
+            bill.setNotes(notes);
             
             billBean.createBill(bill);
             response.sendRedirect("bills");

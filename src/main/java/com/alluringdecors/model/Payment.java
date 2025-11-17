@@ -7,14 +7,13 @@ import java.time.LocalDateTime;
 public class Payment {
     private int paymentId;
     private int billId;
-    private BigDecimal totalBilledAmount;
-    private BigDecimal totalPaidAmount;
-    private BigDecimal dueAmount;
-    private BigDecimal balanceAmount;
-    private LocalDate datePaid;
-    private LocalDateTime createdAt;
-    private String paymentMethod = "Cash"; // Only cash payments accepted
-    private String remarks;
+    private BigDecimal amount;
+    private LocalDateTime paidAt;
+    private String method = "cash";
+    private String referenceNo;
+    private String receiptUrl;
+    private String notes;
+    private int recordedBy;
     
     // Bill details for display
     private String billNumber;
@@ -29,29 +28,26 @@ public class Payment {
     public int getBillId() { return billId; }
     public void setBillId(int billId) { this.billId = billId; }
     
-    public BigDecimal getTotalBilledAmount() { return totalBilledAmount; }
-    public void setTotalBilledAmount(BigDecimal totalBilledAmount) { this.totalBilledAmount = totalBilledAmount; }
+    public BigDecimal getAmount() { return amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
     
-    public BigDecimal getTotalPaidAmount() { return totalPaidAmount; }
-    public void setTotalPaidAmount(BigDecimal totalPaidAmount) { this.totalPaidAmount = totalPaidAmount; }
+    public LocalDateTime getPaidAt() { return paidAt; }
+    public void setPaidAt(LocalDateTime paidAt) { this.paidAt = paidAt; }
     
-    public BigDecimal getDueAmount() { return dueAmount; }
-    public void setDueAmount(BigDecimal dueAmount) { this.dueAmount = dueAmount; }
+    public String getMethod() { return method; }
+    public void setMethod(String method) { this.method = method; }
     
-    public BigDecimal getBalanceAmount() { return balanceAmount; }
-    public void setBalanceAmount(BigDecimal balanceAmount) { this.balanceAmount = balanceAmount; }
+    public String getReferenceNo() { return referenceNo; }
+    public void setReferenceNo(String referenceNo) { this.referenceNo = referenceNo; }
     
-    public LocalDate getDatePaid() { return datePaid; }
-    public void setDatePaid(LocalDate datePaid) { this.datePaid = datePaid; }
+    public String getReceiptUrl() { return receiptUrl; }
+    public void setReceiptUrl(String receiptUrl) { this.receiptUrl = receiptUrl; }
     
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
     
-    public String getPaymentMethod() { return paymentMethod; }
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
-    
-    public String getRemarks() { return remarks; }
-    public void setRemarks(String remarks) { this.remarks = remarks; }
+    public int getRecordedBy() { return recordedBy; }
+    public void setRecordedBy(int recordedBy) { this.recordedBy = recordedBy; }
     
     public String getBillNumber() { return billNumber; }
     public void setBillNumber(String billNumber) { this.billNumber = billNumber; }
