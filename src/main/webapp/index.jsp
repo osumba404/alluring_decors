@@ -9,7 +9,7 @@
     <title>Alluring Decors - Transforming Spaces, Creating Dreams</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/fontawesome-fix.css">
+    <link rel="stylesheet" href="css/modern-ui.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -47,31 +47,48 @@
             </c:if>
         </section>
 
-        <section class="services-preview">
-            <h3>Our Service Domains</h3>
+        <section class="services-preview slide-up">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <h3 style="position: relative; display: inline-block;">Our Service Domains</h3>
+                <p style="color: var(--text-light); font-size: 1.1rem; margin-top: 1rem;">Comprehensive interior and exterior design solutions</p>
+            </div>
             <div class="services-grid">
                 <c:forEach var="domain" items="${domains}" varStatus="status">
                     <c:if test="${status.index < 4}">
-                        <div class="service-card" onclick="window.location.href='${pageContext.request.contextPath}/services/view-services?domainId=${domain.domainId}&domainName=${domain.name}'">
-                            <c:if test="${not empty domain.iconUrl}">
-                                <img src="${domain.iconUrl}" alt="${domain.name}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 15px 15px 0 0;">
-                            </c:if>
-                            <c:if test="${empty domain.iconUrl}">
-                                <div style="width: 100%; height: 200px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; border-radius: 15px 15px 0 0;">
-                                    <i class="fas fa-home"></i>
+                        <div class="service-card slide-up" onclick="window.location.href='${pageContext.request.contextPath}/services/view-services?domainId=${domain.domainId}&domainName=${domain.name}'" style="cursor: pointer; position: relative; overflow: hidden;">
+                            <div style="position: relative; overflow: hidden; border-radius: 15px 15px 0 0;">
+                                <c:if test="${not empty domain.iconUrl}">
+                                    <img src="${domain.iconUrl}" alt="${domain.name}" style="width: 100%; height: 220px; object-fit: cover; transition: transform var(--transition-normal);">
+                                </c:if>
+                                <c:if test="${empty domain.iconUrl}">
+                                    <div style="width: 100%; height: 220px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                </c:if>
+                                <div style="position: absolute; top: 1rem; right: 1rem; background: rgba(0,0,0,0.7); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                                    ${domain.serviceCount} Services
                                 </div>
-                            </c:if>
-                            <div style="padding: 1.5rem;">
-                                <h4>${domain.name}</h4>
-                                <p>${domain.description}</p>
-                                <p style="color: var(--accent); font-weight: 600; margin-top: 1rem;">${domain.serviceCount} Services Available</p>
+                            </div>
+                            <div style="padding: 2rem 1.5rem;">
+                                <h4 style="margin-bottom: 1rem; font-size: 1.3rem;">${domain.name}</h4>
+                                <p style="color: var(--text-light); line-height: 1.6; margin-bottom: 1.5rem;">${domain.description}</p>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span style="color: var(--accent); font-weight: 600; font-size: 0.9rem;">
+                                        <i class="fas fa-arrow-right"></i> Explore Services
+                                    </span>
+                                    <div style="width: 40px; height: 40px; background: var(--gradient-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </c:if>
                 </c:forEach>
             </div>
-            <div style="text-align: center; margin-top: 2rem;">
-                <a href="${pageContext.request.contextPath}/services" style="background: var(--gradient-primary); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 8px; font-weight: 600;">View All Services</a>
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="${pageContext.request.contextPath}/services" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.1rem;">
+                    <i class="fas fa-th-large"></i> View All Services
+                </a>
             </div>
         </section>
 
