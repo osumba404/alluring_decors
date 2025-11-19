@@ -1,15 +1,5 @@
 # Alluring Decors - eProject Report
 
-## Acknowledgements
-
-We extend our heartfelt gratitude to:
-- **Academic Supervisors** for their guidance and support throughout the project development
-- **Industry Mentors** who provided valuable insights into interior design business processes
-- **Beta Testers** who helped identify and resolve critical issues
-- **Open Source Community** for the frameworks and libraries that made this project possible
-
----
-
 ## eProject Synopsis
 
 **Project Title:** Alluring Decors - Interior & Exterior Design Management System
