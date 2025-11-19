@@ -284,6 +284,403 @@ Users (1) ──────── (M) Service_Requests (M) ──────�
 
 ---
 
+## Detailed Technical Specifications
+
+### Frontend Architecture
+
+#### JSP Pages Structure
+```
+webapp/
+├── index.jsp (Homepage with hero carousel)
+├── about.jsp (Company information)
+├── contact.jsp (Contact details)
+├── projects.jsp (Project portfolio)
+├── services.jsp (Service domains)
+├── view-services.jsp (Domain-specific services)
+├── view-service.jsp (Individual service details)
+├── feedback.jsp (Client feedback form)
+├── faq.jsp (Frequently asked questions)
+├── login.jsp (User authentication)
+├── register.jsp (User registration)
+├── request-service.jsp (Service request form)
+├── client-dashboard.jsp (Client portal)
+└── admin/ (Administrative pages)
+    ├── admin-dashboard.jsp
+    ├── admin-users.jsp
+    ├── admin-services.jsp
+    ├── admin-requests.jsp
+    ├── admin-projects.jsp
+    ├── admin-content.jsp
+    └── admin-feedback.jsp
+```
+
+#### CSS Framework
+- **Modern UI CSS:** Custom responsive framework
+- **Component-based styling:** Modular CSS architecture
+- **Animation system:** Intersection Observer API for scroll animations
+- **Color scheme:** Professional green and gold palette
+- **Typography:** Inter and Playfair Display fonts
+
+#### JavaScript Features
+- **Hero carousel:** Auto-advancing image slider
+- **Form validation:** Client-side input validation
+- **Interactive animations:** Hover effects and transitions
+- **AJAX functionality:** Dynamic content loading
+- **Search filters:** Real-time filtering for services and FAQs
+
+### Backend Architecture
+
+#### Servlet Structure
+```
+com.alluringdecors.servlet/
+├── Authentication/
+│   ├── LoginServlet.java
+│   ├── RegisterServlet.java
+│   └── LogoutServlet.java
+├── Client/
+│   ├── ClientDashboardServlet.java
+│   ├── RequestServiceServlet.java
+│   ├── ServicesServlet.java
+│   └── ProjectsServlet.java
+├── Admin/
+│   ├── AdminDashboardServlet.java
+│   ├── AdminUsersServlet.java
+│   ├── AdminServicesServlet.java
+│   ├── AdminRequestsServlet.java
+│   ├── AdminProjectsServlet.java
+│   └── AdminContentServlet.java
+└── Public/
+    ├── HomeServlet.java
+    ├── ContactServlet.java
+    ├── FeedbackServlet.java
+    └── FaqServlet.java
+```
+
+#### Bean Classes (Data Access Layer)
+```
+com.alluringdecors.bean/
+├── UserBean.java (User management)
+├── ServiceBean.java (Service operations)
+├── DomainBean.java (Service domains)
+├── ServiceRequestBean.java (Request handling)
+├── ProjectBean.java (Project portfolio)
+├── BillBean.java (Billing system)
+├── PaymentBean.java (Payment tracking)
+├── FeedbackBean.java (Client feedback)
+├── FaqBean.java (FAQ management)
+├── ContentBean.java (CMS operations)
+├── HeroBean.java (Homepage banners)
+└── ContactBean.java (Contact information)
+```
+
+#### Model Classes (Entity Objects)
+```
+com.alluringdecors.model/
+├── User.java
+├── Service.java
+├── Domain.java
+├── ServiceRequest.java
+├── Project.java
+├── Bill.java
+├── Payment.java
+├── Feedback.java
+├── Faq.java
+├── Hero.java
+└── Contact.java
+```
+
+### Database Schema Details
+
+#### Complete Table Structure
+
+**1. Users Table**
+```sql
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(20),
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('client', 'admin') DEFAULT 'client',
+    registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
+);
+```
+
+**2. Domains Table**
+```sql
+CREATE TABLE domains (
+    domain_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    icon_url VARCHAR(255),
+    is_active BOOLEAN DEFAULT TRUE
+);
+```
+
+**3. Services Table**
+```sql
+CREATE TABLE services (
+    service_id INT PRIMARY KEY AUTO_INCREMENT,
+    domain_id INT,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    base_price DECIMAL(10,2),
+    price_per_sqft DECIMAL(8,2) NOT NULL,
+    unit VARCHAR(20) DEFAULT 'sqft',
+    is_active BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (domain_id) REFERENCES domains(domain_id)
+);
+```
+
+**4. Service Requests Table**
+```sql
+CREATE TABLE service_requests (
+    request_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    service_id INT,
+    location TEXT NOT NULL,
+    area_sqft DECIMAL(8,2),
+    description TEXT,
+    status ENUM('pending', 'approved', 'ongoing', 'completed', 'cancelled') DEFAULT 'pending',
+    requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (service_id) REFERENCES services(service_id)
+);
+```
+
+**5. Projects Table**
+```sql
+CREATE TABLE projects (
+    project_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    client_name VARCHAR(100),
+    location VARCHAR(200),
+    thumbnail_url VARCHAR(500),
+    status ENUM('ongoing', 'completed', 'upcoming') DEFAULT 'ongoing',
+    start_date DATE,
+    end_date DATE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**6. Bills Table**
+```sql
+CREATE TABLE bills (
+    bill_id INT PRIMARY KEY AUTO_INCREMENT,
+    request_id INT NOT NULL,
+    bill_number VARCHAR(30) UNIQUE NOT NULL,
+    total_amount DECIMAL(12,2) NOT NULL,
+    tax_amount DECIMAL(10,2) DEFAULT 0.00,
+    discount_amount DECIMAL(10,2) DEFAULT 0.00,
+    net_amount DECIMAL(12,2) NOT NULL,
+    generated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    due_date DATE,
+    is_paid BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (request_id) REFERENCES service_requests(request_id)
+);
+```
+
+**7. Content Management Tables**
+```sql
+CREATE TABLE content_sections (
+    section_id INT PRIMARY KEY AUTO_INCREMENT,
+    section_key VARCHAR(50) UNIQUE NOT NULL,
+    title VARCHAR(100),
+    content TEXT NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE heroes (
+    hero_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    subtitle VARCHAR(255),
+    body_text TEXT NOT NULL,
+    background_image VARCHAR(500),
+    primary_button VARCHAR(100),
+    primary_button_link VARCHAR(500),
+    secondary_button VARCHAR(100),
+    secondary_button_link VARCHAR(500),
+    display_order INT DEFAULT 1,
+    is_active BOOLEAN DEFAULT TRUE
+);
+```
+
+### Security Implementation
+
+#### Authentication System
+- **Password Hashing:** BCrypt algorithm for secure password storage
+- **Session Management:** HttpSession for user state management
+- **Role-based Access:** Admin and client role separation
+- **CSRF Protection:** Token-based form validation
+- **SQL Injection Prevention:** PreparedStatement usage
+
+#### Authorization Filters
+```java
+// Authentication filter for protected routes
+public class AuthFilter implements Filter {
+    // Validates user sessions and redirects unauthorized access
+}
+
+// Admin authorization filter
+public class AdminFilter implements Filter {
+    // Ensures only admin users access admin functionality
+}
+```
+
+### File Upload System
+
+#### Image Management
+- **Upload Directory:** `/webapp/uploads/`
+- **Supported Formats:** JPEG, PNG, GIF
+- **File Size Limit:** 5MB per image
+- **Naming Convention:** Timestamp-based unique filenames
+- **Storage Structure:**
+  ```
+  uploads/
+  ├── domains/ (Service domain icons)
+  ├── projects/ (Project thumbnails)
+  └── heroes/ (Homepage banners)
+  ```
+
+### Error Handling & Logging
+
+#### Exception Management
+- **Custom Exception Classes:** Business logic specific exceptions
+- **Global Error Pages:** User-friendly error displays
+- **Logging Framework:** Java Util Logging for system monitoring
+- **Audit Trail:** Database logging for critical operations
+
+#### Validation System
+- **Client-side Validation:** JavaScript form validation
+- **Server-side Validation:** Java Bean Validation
+- **Data Sanitization:** Input cleaning and XSS prevention
+- **Business Rule Validation:** Custom validation logic
+
+### Performance Optimization
+
+#### Database Optimization
+- **Connection Pooling:** Efficient database connection management
+- **Prepared Statements:** Query optimization and security
+- **Indexing Strategy:** Optimized database indexes
+- **Query Optimization:** Efficient SQL queries
+
+#### Frontend Optimization
+- **CSS Minification:** Compressed stylesheets
+- **Image Optimization:** Compressed and responsive images
+- **Lazy Loading:** On-demand content loading
+- **Caching Strategy:** Browser and server-side caching
+
+### Testing Strategy
+
+#### Unit Testing
+- **Bean Testing:** Data access layer validation
+- **Servlet Testing:** HTTP request/response testing
+- **Model Testing:** Entity object validation
+- **Utility Testing:** Helper function verification
+
+#### Integration Testing
+- **Database Integration:** CRUD operation testing
+- **Servlet Integration:** End-to-end workflow testing
+- **File Upload Testing:** Image upload functionality
+- **Authentication Testing:** Login/logout flow validation
+
+### Deployment Configuration
+
+#### Server Requirements
+- **Java Version:** JDK 8 or higher
+- **Application Server:** Apache Tomcat 9.0+
+- **Database:** MySQL 8.0+ or MariaDB 10.4+
+- **Memory:** Minimum 2GB RAM
+- **Storage:** 10GB available space
+
+#### Configuration Files
+```
+WEB-INF/
+├── web.xml (Servlet configuration)
+├── lib/ (JAR dependencies)
+└── classes/ (Compiled Java classes)
+```
+
+#### Environment Setup
+1. **Database Configuration:**
+   ```java
+   // DatabaseUtil.java
+   private static final String URL = "jdbc:mysql://localhost:3306/alluring_decors";
+   private static final String USERNAME = "root";
+   private static final String PASSWORD = "password";
+   ```
+
+2. **Tomcat Deployment:**
+   - Copy WAR file to `webapps/` directory
+   - Configure database connection
+   - Set file upload permissions
+   - Configure SSL (optional)
+
+### Future Enhancements
+
+#### Planned Features
+1. **Mobile Application:** Native Android/iOS apps
+2. **Payment Gateway:** Online payment integration
+3. **Real-time Chat:** Client-admin communication
+4. **Email Notifications:** Automated status updates
+5. **Advanced Analytics:** Business intelligence dashboard
+6. **Multi-language Support:** Internationalization
+7. **API Development:** RESTful web services
+8. **Cloud Integration:** AWS/Azure deployment
+
+#### Scalability Considerations
+- **Microservices Architecture:** Service decomposition
+- **Load Balancing:** Multiple server instances
+- **Database Sharding:** Horizontal scaling
+- **CDN Integration:** Global content delivery
+- **Caching Layer:** Redis/Memcached implementation
+
+---
+
+**Project Status:** Completed ✅  
+**Version:** 1.0  
+**Last Updated:** November 2025dates
+
+#### 5. Billing Module
+**Location:** `com.alluringdecors.servlet.AdminBillsServlet`
+**Purpose:** Bill generation and payment tracking
+**Key Classes:**
+- `BillBean.java` - Billing operations
+- `PaymentBean.java` - Payment processing
+
+#### 6. Project Portfolio Module
+**Location:** `com.alluringdecors.servlet.ProjectsServlet`, `AdminProjectsServlet`
+**Purpose:** Project showcase and management
+**Key Classes:**
+- `ProjectBean.java` - Project CRUD operations
+- Image upload and management
+
+#### 7. Communication Module
+**Location:** `com.alluringdecors.servlet.FeedbackServlet`, `FaqServlet`
+**Purpose:** Client feedback and FAQ management
+**Key Classes:**
+- `FeedbackBean.java` - Feedback processing
+- `FaqBean.java` - FAQ management
+
+### Development Setup
+1. **Prerequisites:** Java 8+, Apache Tomcat 9+, MySQL 8+
+2. **Database Setup:** Import `alluring_decors.sql`
+3. **Configuration:** Update database connection in `DatabaseUtil.java`
+4. **Deployment:** Deploy WAR file to Tomcat webapps directory
+
+### API Endpoints
+- `/login` - User authentication
+- `/services` - Service browsing
+- `/request-service` - Service request submission
+- `/admin/*` - Administrative functions
+- `/client/dashboard` - Client dashboard
+
+---
+
 **Project Status:** Completed ✅  
 **Version:** 1.0  
 **Last Updated:** November 2025
