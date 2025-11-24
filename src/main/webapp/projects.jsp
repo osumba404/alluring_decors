@@ -51,147 +51,109 @@
         <!-- Ongoing Projects -->
         <section class="project-section" data-category="ongoing" style="padding: 2rem 5%; max-width: 1200px; margin: 0 auto;">
             <div style="text-align: center; margin-bottom: 3rem;">
-                <h2 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                    <i class="fas fa-hammer" style="color: var(--accent);"></i>
+                <h2 style="color: #164e31; margin-bottom: 1rem; font-size: 2.5rem;">
+                    <i class="fas fa-hammer" style="color: #D4A017;"></i>
                     Ongoing Projects
                 </h2>
-                <p style="color: var(--text-light);">Projects currently in progress</p>
+                <p style="color: #666;">Projects currently in progress</p>
             </div>
             
-            <div class="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
-                <c:choose>
-                    <c:when test="${not empty ongoingProjects}">
-                        <c:forEach var="project" items="${ongoingProjects}">
-                            <div class="project-card slide-up" style="background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--border-light); transition: all var(--transition-normal); position: relative;">
-                                <div style="position: relative; overflow: hidden;">
-                                    <c:choose>
-                                        <c:when test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
-                                            <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 250px; object-fit: cover; transition: transform var(--transition-normal);" onerror="this.parentElement.innerHTML='<div style=\"width: 100%; height: 250px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;\"><i class=\"fas fa-image\"></i></div>'">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div style="width: 100%; height: 250px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-                                                <i class="fas fa-image"></i>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <div style="position: absolute; top: 1rem; right: 1rem; background: var(--warning); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
-                                        <i class="fas fa-clock"></i> In Progress
-                                    </div>
+            <c:choose>
+                <c:when test="${not empty ongoingProjects}">
+                    <c:forEach var="project" items="${ongoingProjects}" varStatus="status">
+                        <div class="project-row" style="display: flex; align-items: center; margin-bottom: 4rem; background: white; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); overflow: hidden; min-height: 400px; ${status.index % 2 == 1 ? 'flex-direction: row-reverse;' : ''}">
+                            <div class="project-image" style="flex: 1; height: 400px;">
+                                <c:choose>
+                                    <c:when test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
+                                        <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%); display: flex; align-items: center; justify-content: center; color: #D4A017; font-size: 4rem;">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="project-content" style="flex: 1; padding: 3rem; display: flex; flex-direction: column; justify-content: center;">
+                                <h4 style="color: #164e31; font-size: 2rem; margin-bottom: 1rem;">${project.title}</h4>
+                                <p style="color: #666; font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">${project.shortDescription}</p>
+                                <div style="margin-bottom: 1.5rem;">
+                                    <p style="margin-bottom: 0.5rem;"><strong style="color: #164e31;">Client:</strong> <span style="color: #666;">${project.clientName}</span></p>
+                                    <p style="margin-bottom: 0.5rem;"><strong style="color: #164e31;">Location:</strong> <span style="color: #666;">${project.location}</span></p>
+                                    <c:if test="${project.startDate != null}">
+                                        <p><strong style="color: #164e31;">Started:</strong> <span style="color: #666;">${project.startDate}</span></p>
+                                    </c:if>
                                 </div>
-                                
-                                <div style="padding: 2rem;">
-                                    <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">${project.title}</h4>
-                                    <p style="color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.6;">${project.shortDescription}</p>
-                                    
-                                    <div style="display: grid; gap: 0.5rem; margin-bottom: 1.5rem;">
-                                        <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                                            <i class="fas fa-user" style="color: var(--accent);"></i>
-                                            <span><strong>Client:</strong> ${project.clientName}</span>
-                                        </div>
-                                        <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                                            <i class="fas fa-map-marker-alt" style="color: var(--accent);"></i>
-                                            <span><strong>Location:</strong> ${project.location}</span>
-                                        </div>
-                                        <c:if test="${project.startDate != null}">
-                                            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                                                <i class="fas fa-calendar" style="color: var(--accent);"></i>
-                                                <span><strong>Started:</strong> ${project.startDate}</span>
-                                            </div>
-                                        </c:if>
-                                    </div>
-                                    
-                                    <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="viewProjectDetails(${project.projectId})">
-                                        <i class="fas fa-eye"></i> View Details
-                                    </button>
+                                <div style="display: flex; gap: 1rem;">
+                                    <button style="background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); color: #164e31; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="viewProjectDetails(${project.projectId})">More Details</button>
+                                    <span style="background: #fff3cd; color: #856404; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600;">In Progress</span>
                                 </div>
                             </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: var(--white); border-radius: 20px; box-shadow: var(--shadow-md);">
-                            <div style="width: 80px; height: 80px; background: var(--gradient-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">
-                                <i class="fas fa-hammer"></i>
-                            </div>
-                            <h4 style="color: var(--primary); margin-bottom: 1rem;">No Ongoing Projects</h4>
-                            <p style="color: var(--text-light); margin-bottom: 2rem;">We currently have no ongoing projects. Check back soon for updates!</p>
-                            <a href="${pageContext.request.contextPath}/request-service" class="btn btn-primary">Start Your Project</a>
                         </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <div style="text-align: center; padding: 4rem; background: white; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                        <i class="fas fa-tools" style="font-size: 4rem; color: #D4A017; margin-bottom: 1rem;"></i>
+                        <h4 style="color: #164e31; margin-bottom: 1rem;">No Ongoing Projects</h4>
+                        <p style="color: #666;">We currently have no ongoing projects. Check back soon for updates!</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </section>
 
         <!-- Accomplished Projects -->
         <section class="project-section" data-category="accomplished" style="padding: 2rem 5%; max-width: 1200px; margin: 2rem auto;">
             <div style="text-align: center; margin-bottom: 3rem;">
-                <h2 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                <h2 style="color: #164e31; margin-bottom: 1rem; font-size: 2.5rem;">
+                    <i class="fas fa-check-circle" style="color: #28a745;"></i>
                     Completed Projects
                 </h2>
-                <p style="color: var(--text-light);">Our portfolio of successful transformations</p>
+                <p style="color: #666;">Our portfolio of successful transformations</p>
             </div>
             
-            <div class="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
-                <c:choose>
-                    <c:when test="${not empty accomplishedProjects}">
-                        <c:forEach var="project" items="${accomplishedProjects}">
-                            <div class="project-card slide-up" style="background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--border-light); transition: all var(--transition-normal); position: relative;">
-                                <div style="position: relative; overflow: hidden;">
-                                    <c:choose>
-                                        <c:when test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
-                                            <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 250px; object-fit: cover; transition: transform var(--transition-normal);" onerror="this.parentElement.innerHTML='<div style=\"width: 100%; height: 250px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;\"><i class=\"fas fa-image\"></i></div>'">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div style="width: 100%; height: 250px; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-                                                <i class="fas fa-image"></i>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <div style="position: absolute; top: 1rem; right: 1rem; background: var(--success); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
-                                        <i class="fas fa-check"></i> Completed
-                                    </div>
+            <c:choose>
+                <c:when test="${not empty accomplishedProjects}">
+                    <c:forEach var="project" items="${accomplishedProjects}" varStatus="status">
+                        <div class="project-row" style="display: flex; align-items: center; margin-bottom: 4rem; background: white; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); overflow: hidden; min-height: 400px; ${status.index % 2 == 1 ? 'flex-direction: row-reverse;' : ''}">
+                            <div class="project-image" style="flex: 1; height: 400px;">
+                                <c:choose>
+                                    <c:when test="${project.thumbnailUrl != null && !empty project.thumbnailUrl}">
+                                        <img src="${project.thumbnailUrl}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #164e31 0%, #1a5a38 100%); display: flex; align-items: center; justify-content: center; color: #D4A017; font-size: 4rem;">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="project-content" style="flex: 1; padding: 3rem; display: flex; flex-direction: column; justify-content: center;">
+                                <h4 style="color: #164e31; font-size: 2rem; margin-bottom: 1rem;">${project.title}</h4>
+                                <p style="color: #666; font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">${project.shortDescription}</p>
+                                <div style="margin-bottom: 1.5rem;">
+                                    <p style="margin-bottom: 0.5rem;"><strong style="color: #164e31;">Client:</strong> <span style="color: #666;">${project.clientName}</span></p>
+                                    <p style="margin-bottom: 0.5rem;"><strong style="color: #164e31;">Location:</strong> <span style="color: #666;">${project.location}</span></p>
+                                    <c:if test="${project.startDate != null}">
+                                        <p><strong style="color: #164e31;">Completed:</strong> <span style="color: #666;">${project.startDate}</span></p>
+                                    </c:if>
                                 </div>
-                                
-                                <div style="padding: 2rem;">
-                                    <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">${project.title}</h4>
-                                    <p style="color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.6;">${project.shortDescription}</p>
-                                    
-                                    <div style="display: grid; gap: 0.5rem; margin-bottom: 1.5rem;">
-                                        <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                                            <i class="fas fa-user" style="color: var(--accent);"></i>
-                                            <span><strong>Client:</strong> ${project.clientName}</span>
-                                        </div>
-                                        <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                                            <i class="fas fa-map-marker-alt" style="color: var(--accent);"></i>
-                                            <span><strong>Location:</strong> ${project.location}</span>
-                                        </div>
-                                        <c:if test="${project.startDate != null}">
-                                            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                                                <i class="fas fa-calendar-check" style="color: var(--success);"></i>
-                                                <span><strong>Completed:</strong> ${project.startDate}</span>
-                                            </div>
-                                        </c:if>
-                                    </div>
-                                    
-                                    <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="viewProjectDetails(${project.projectId})">
-                                        <i class="fas fa-eye"></i> View Details
-                                    </button>
+                                <div style="display: flex; gap: 1rem;">
+                                    <button style="background: linear-gradient(135deg, #D4A017 0%, #f4c430 100%); color: #164e31; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="viewProjectDetails(${project.projectId})">More Details</button>
+                                    <span style="background: #d4edda; color: #155724; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 600;">Completed</span>
                                 </div>
                             </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: var(--white); border-radius: 20px; box-shadow: var(--shadow-md);">
-                            <div style="width: 80px; height: 80px; background: var(--gradient-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: white; font-size: 2rem;">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <h4 style="color: var(--primary); margin-bottom: 1rem;">No Completed Projects Yet</h4>
-                            <p style="color: var(--text-light); margin-bottom: 2rem;">We're working hard on our first projects. Stay tuned for our amazing portfolio!</p>
-                            <a href="${pageContext.request.contextPath}/contact" class="btn btn-primary">Get In Touch</a>
                         </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <div style="text-align: center; padding: 4rem; background: white; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                        <i class="fas fa-check-circle" style="font-size: 4rem; color: #D4A017; margin-bottom: 1rem;"></i>
+                        <h4 style="color: #164e31; margin-bottom: 1rem;">No Completed Projects Yet</h4>
+                        <p style="color: #666;">We're working hard on our first projects. Stay tuned for our amazing portfolio!</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </section>
     </main>
 
