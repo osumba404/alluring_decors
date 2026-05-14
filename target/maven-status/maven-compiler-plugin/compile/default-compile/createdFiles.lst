@@ -6,6 +6,7 @@ com\alluringdecors\servlet\HomeServlet.class
 com\alluringdecors\model\Hero.class
 com\alluringdecors\model\Payment.class
 com\alluringdecors\servlet\ProjectsServlet.class
+com\alluringdecors\bean\PaymentBean.class
 com\alluringdecors\servlet\AdminRequestsServlet.class
 com\alluringdecors\bean\BillBean.class
 com\alluringdecors\servlet\ServicesServlet.class

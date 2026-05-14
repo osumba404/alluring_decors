@@ -1,0 +1,81 @@
+/* Navigation Bar Override */
+.navbar {
+    background: #164e31 !important;
+    padding: 1rem 2rem !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+}
+
+.nav-brand h1 {
+    color: white !important;
+    margin: 0 !important;
+}
+
+.nav-brand a {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.nav-menu {
+    display: flex !important;
+    list-style: none !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.nav-menu li {
+    margin: 0 !important;
+}
+
+.nav-menu a {
+    color: white !important;
+    text-decoration: none !important;
+    padding: 1rem 1.5rem !important;
+    display: block !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    font-weight: 500 !important;
+    background: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.nav-menu a:hover {
+    color: #D4A017 !important;
+    background: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.nav-menu a:hover::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 1.5rem !important;
+    right: 1.5rem !important;
+    height: 2px !important;
+    background: #D4A017 !important;
+    animation: slideIn 0.3s ease !important;
+}
+
+.nav-menu a.active {
+    color: #D4A017 !important;
+}
+
+.nav-menu a.active::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 1.5rem !important;
+    right: 1.5rem !important;
+    height: 2px !important;
+    background: #D4A017 !important;
+}
+
+@keyframes slideIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
