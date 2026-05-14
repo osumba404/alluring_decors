@@ -1,0 +1,217 @@
+/* Universal serif font enforcement */
+* {
+    font-family: serif !important;
+}
+
+/* Ensure Font Awesome icons display properly */
+i.fas, i.far, i.fab {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900;
+    font-style: normal;
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Admin Dashboard Sidebar */
+.admin-layout {
+    display: flex;
+    min-height: calc(100vh - 80px);
+}
+
+.sidebar {
+    width: 210px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.sidebar.collapsed {
+    width: 53px;
+}
+
+.sidebar-header {
+    padding: 1.5rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+    transition: opacity 0.3s ease;
+    font-family: serif !important;
+}
+
+.sidebar.collapsed .sidebar-title {
+    opacity: 0;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.38rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+    background: var(--bg);
+}
+
+.sidebar-menu {
+    padding: 0.75rem 0;
+}
+
+.sidebar-item {
+    display: block;
+    padding: 0.75rem 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 2px solid transparent;
+    font-family: serif !important;
+    font-size: 0.75rem;
+}
+
+.sidebar-item:hover {
+    background: var(--bg);
+    border-left-color: var(--accent);
+    color: var(--primary);
+}
+
+.sidebar-item-icon {
+    width: 15px;
+    display: inline-block;
+    margin-right: 0.75rem;
+    text-align: center;
+    font-size: 0.83rem;
+}
+
+.sidebar-item-icon i {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900;
+}
+
+.sidebar-item-text {
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-item-text {
+    opacity: 0;
+}
+
+.sidebar.collapsed .sidebar-item {
+    padding: 0.75rem 0.94rem;
+    text-align: center;
+}
+
+.main-content {
+    flex: 1;
+    padding: 1.5rem;
+    background: var(--bg);
+}
+
+.dashboard-header {
+    margin-bottom: 2.25rem;
+}
+
+.dashboard-title {
+    font-size: 1.88rem;
+    color: var(--primary);
+    margin-bottom: 0.38rem;
+    font-family: serif !important;
+}
+
+.dashboard-subtitle {
+    color: #666;
+    font-size: 0.83rem;
+    font-family: serif !important;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 11px;
+    box-shadow: 0 3px 11px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.admin-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 9px 23px rgba(212, 160, 23, 0.2);
+    border-color: #D4A017;
+}
+
+.admin-card h4 {
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+    font-size: 0.98rem;
+    font-family: serif !important;
+}
+
+.admin-card p {
+    color: #666;
+    margin-bottom: 1.1rem;
+    font-family: serif !important;
+    font-size: 0.75rem;
+}
+
+.admin-card a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    font-family: serif !important;
+}
+
+.admin-card a:hover {
+    color: var(--primary);
+}
+
+/* Active sidebar item */
+.sidebar-item.active {
+    background: linear-gradient(90deg, rgba(212, 160, 23, 0.1) 0%, rgba(212, 160, 23, 0.05) 100%);
+    border-left-color: #D4A017;
+    color: #164e31;
+    font-weight: 600;
+}
+
+.sidebar-item.active .sidebar-item-icon {
+    color: #D4A017;
+}
+
+/* Ensure sidebar icons are visible */
+.sidebar-item-icon i.fas {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    display: inline-block !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    color: #164e31 !important;
+    font-size: 0.83rem !important;
+}
+
+.sidebar-item:hover .sidebar-item-icon i.fas {
+    color: #D4A017 !important;
+}
+
+.sidebar-item.active .sidebar-item-icon i.fas {
+    color: #D4A017 !important;
+}

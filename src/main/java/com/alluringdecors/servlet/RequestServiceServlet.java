@@ -58,15 +58,21 @@ public class RequestServiceServlet extends HttpServlet {
 
         ServiceRequest serviceRequest = new ServiceRequest();
         serviceRequest.setUserId(user.getUserId());
-        serviceRequest.setName(user.getFullName());
+        serviceRequest.setClientName(user.getFullName());
         serviceRequest.setEmail(user.getEmail());
         serviceRequest.setPhone(user.getPhone());
         serviceRequest.setDomain(domain);
+        serviceRequest.setLocation("Not Specified");
+        serviceRequest.setStatusId(1);
         serviceRequest.setDescription(description);
         serviceRequest.setRemarks(""); // Empty remarks for client requests
 
         if (serviceRequestBean.createServiceRequest(serviceRequest)) {
-            response.sendRedirect("home?success=Service request submitted successfully");
+            String redirectUrl = "request-service?success=Service request submitted successfully";
+            if (domain != null && !domain.isEmpty()) {
+                redirectUrl += "&domain=" + java.net.URLEncoder.encode(domain, "UTF-8");
+            }
+            response.sendRedirect(redirectUrl);
         } else {
             request.setAttribute("error", "Failed to submit request");
             request.setAttribute("loggedInUser", user);

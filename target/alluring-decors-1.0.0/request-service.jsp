@@ -34,6 +34,11 @@
                                 ${param.error}
                             </div>
                         </c:if>
+                        <c:if test="${not empty param.success}">
+                            <div class="success-message" style="background: #d4edda; color: #155724; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                ${param.success}
+                            </div>
+                        </c:if>
 
                         <div class="form-group">
                             <label for="name">Full Name</label>

@@ -1,0 +1,28 @@
+/* FontAwesome Fix - Override all conflicting styles */
+.fas, .far, .fab, .fa, .fal, .fad, .fat, .fass {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+}
+
+.fas::before, .far::before, .fab::before, .fa::before, .fal::before, .fad::before, .fat::before, .fass::before {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+}
+
+/* Ensure icons are not affected by global font overrides */
+i[class^="fa"], i[class*=" fa"] {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+}
+
+i[class^="fa"]::before, i[class*=" fa"]::before {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}

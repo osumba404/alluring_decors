@@ -1,0 +1,56 @@
+/* Navbar Override */
+.navbar {
+    background: #164e31 !important;
+    padding: 1rem 2rem !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.nav-brand h1 {
+    color: white !important;
+}
+
+.nav-brand a {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.nav-menu {
+    display: flex !important;
+    list-style: none !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.nav-menu a {
+    color: white !important;
+    text-decoration: none !important;
+    padding: 1rem 1.5rem !important;
+    position: relative !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    transform: none !important;
+}
+
+.nav-menu a::before {
+    display: none !important;
+}
+
+.nav-menu a:hover {
+    color: #D4A017 !important;
+    background: transparent !important;
+}
+
+.nav-menu a:hover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 2px;
+    background: #D4A017;
+}
